@@ -1,0 +1,54 @@
+{
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "rnstl && expo start",
+    "android": "rnstl && expo start --android",
+    "ios": "rnstl && expo start --ios",
+    "eject": "expo eject",
+    "lint": "tslint src/**/*.ts",
+    "tsc": "tsc",
+    "clean": "rimraf build",
+    "build": "rnstl && npm run clean && npm run tsc --",
+    "watch": "rnstl && npm run build -- -w",
+    "watchAndRunAndroid": "concurrently \"npm run watch\" \"npm run android\"",
+    "buildRunAndroid": "npm run build && npm run watchAndRunAndroid ",
+    "watchAndRunIOS": "concurrently \"npm run watch\" \"npm run ios\"",
+    "buildRunIOS": "npm run build && npm run watchAndRunIOS ",
+    "watchAndStart": "concurrently \"npm run watch\" \"npm run start\"",
+    "buildAndStart": "npm run build && npm run watchAndStart "
+  },
+  "config": {
+    "react-native-storybook-loader": {
+      "searchDir": ["./src/vendor/sproutch"],
+      "pattern": "**/story.native.tsx",
+      "outputFile": "./src/storybook/storyLoader.js"
+    }
+  },
+  "dependencies": {
+    "expo": "^31.0.2",
+    "react": "16.5.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
+    "react-native-vector-icons": "^6.1.0"
+  },
+  "devDependencies": {
+    "@storybook/react-native": "^4.1.4",
+    "@types/jest": "^23.3.10",
+    "@types/react": "^16.7.18",
+    "@types/react-dom": "^16.0.11",
+    "@types/react-native": "^0.57.23",
+    "@types/react-native-vector-icons": "^4.6.4",
+    "@types/react-test-renderer": "^16.0.3",
+    "@types/storybook__react-native": "^3.0.3",
+    "babel-preset-expo": "^5.0.0",
+    "concurrently": "^4.1.0",
+    "deepmerge": "^3.0.0",
+    "react-native-storybook-loader": "^1.8.0",
+    "reactxp": "^1.5.0",
+    "rimraf": "^2.6.2",
+    "space-lift": "^0.8.7",
+    "ts-jest": "^23.10.5",
+    "tslint": "^5.12.0",
+    "typescript": "^3.2.2"
+  },
+  "private": true
+}

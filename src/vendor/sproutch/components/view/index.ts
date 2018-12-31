@@ -1,0 +1,1 @@
+export { default as View } from '~/lib/sproutch/components/view/View'
