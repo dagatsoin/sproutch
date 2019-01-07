@@ -5,12 +5,18 @@
 // https://github.com/elderfo/react-native-storybook-loader.git
 
 function loadStories() {
-  require('../vendor/sproutch/components/paper/story.native');
+  require('../components/linearGradient/story.native');
+  require('../components/paper/story.native');
+  require('../components/spiner/story.native');
+  require('../components/tab/story.native');
   
 }
 
 const stories = [
-  '../vendor/sproutch/components/paper/story.native',
+  '../components/linearGradient/story.native',
+  '../components/paper/story.native',
+  '../components/spiner/story.native',
+  '../components/tab/story.native',
   
 ];
 

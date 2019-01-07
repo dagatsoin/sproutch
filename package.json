@@ -15,29 +15,48 @@
     "watchAndRunIOS": "concurrently \"npm run watch\" \"npm run ios\"",
     "buildRunIOS": "npm run build && npm run watchAndRunIOS ",
     "watchAndStart": "concurrently \"npm run watch\" \"npm run start\"",
-    "buildAndStart": "npm run build && npm run watchAndStart "
+    "buildAndStart": "npm run build && npm run watchAndStart ",
+    "storybook": "start-storybook -p 6006 -c .storybook",
+    "build-storybook": "build-storybook",
+    "deploy-storybook": "storybook-to-ghpages",
+    "postinstall": "rndebugger-open --expo"
   },
   "config": {
     "react-native-storybook-loader": {
-      "searchDir": ["./src/vendor/sproutch"],
+      "searchDir": [
+        "./src"
+      ],
       "pattern": "**/story.native.tsx",
       "outputFile": "./src/storybook/storyLoader.js"
     }
   },
   "dependencies": {
-    "expo": "^31.0.2",
+    "awesome-typescript-loader": "^5.2.1",
+    "expo": "^32.0.0",
+    "jss": "^9.8.7",
     "react": "16.5.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
-    "react-native-vector-icons": "^6.1.0"
+    "react-art": "^16.7.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+    "react-native-debugger-open": "^0.3.17",
+    "react-native-linear-gradient": "^2.5.3",
+    "react-native-vector-icons": "^6.1.0",
+    "react-native-web": "^0.10.0-alpha.1"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^4.1.6",
+    "@storybook/addon-knobs": "^4.1.6",
+    "@storybook/addon-links": "^4.1.6",
+    "@storybook/addon-ondevice-knobs": "^4.1.4",
+    "@storybook/addon-ondevice-notes": "^4.1.4",
+    "@storybook/addons": "^4.1.6",
+    "@storybook/react": "^4.1.6",
     "@storybook/react-native": "^4.1.4",
     "@types/jest": "^23.3.10",
     "@types/react": "^16.7.18",
     "@types/react-dom": "^16.0.11",
     "@types/react-native": "^0.57.23",
-    "@types/react-native-vector-icons": "^4.6.4",
     "@types/react-test-renderer": "^16.0.3",
+    "@types/storybook__addon-knobs": "^4.0.0",
     "@types/storybook__react-native": "^3.0.3",
     "babel-preset-expo": "^5.0.0",
     "concurrently": "^4.1.0",
@@ -45,7 +64,6 @@
     "react-native-storybook-loader": "^1.8.0",
     "reactxp": "^1.5.0",
     "rimraf": "^2.6.2",
-    "space-lift": "^0.8.7",
     "ts-jest": "^23.10.5",
     "tslint": "^5.12.0",
     "typescript": "^3.2.2"

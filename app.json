@@ -3,7 +3,7 @@
     "name": "rn-storybook",
     "slug": "rn-storybook",
     "privacy": "public",
-    "sdkVersion": "31.0.0",
+    "sdkVersion": "32.0.0",
     "platforms": [
       "ios",
       "android"

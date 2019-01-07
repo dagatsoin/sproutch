@@ -1,2 +1,2 @@
-import App from './src'
+import App from './src/storybook'
 export default App
