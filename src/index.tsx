@@ -1,2 +1,2 @@
-import Storybook from './storybook'
-export default Storybook
+export * from './styles'
+export * from './components'

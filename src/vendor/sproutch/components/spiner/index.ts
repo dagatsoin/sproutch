@@ -1,1 +1,0 @@
-export { default as Spiner } from '~/lib/sproutch/components/spiner/Spiner'
