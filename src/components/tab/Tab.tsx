@@ -15,8 +15,9 @@ export type TabProps = {
   ) => JSX.Element
   label?: string
   isActive?: boolean
-  hasTwoLines?: boolean,
+  hasTwoLines?: boolean
   isDisable?: boolean
+  mustGrow?: boolean
   palette?: 'primary' | 'secondary' | ''
   notification?: boolean
   style?: Partial<TabStyle>
@@ -31,6 +32,7 @@ class Tab extends React.Component<TabProps> {
       isActive = false,
       isDisable = false,
       hasTwoLines = false,
+      mustGrow = false,
       palette,
       style,
       onClick,
@@ -48,6 +50,7 @@ class Tab extends React.Component<TabProps> {
               hasTwoLines,
               isDisable,
               isActive,
+              mustGrow,
               hasIcon: !!renderIcon,
               hasLabel: !!label,
             }

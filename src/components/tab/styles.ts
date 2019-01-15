@@ -30,6 +30,7 @@ export const tabStyle = function({
   palette?: 'primary' | 'secondary' |  '',
   style?: Partial<TabStyleOverride>,
   options?: {
+    mustGrow: boolean,
     hasTwoLines: boolean,
     hasIcon: boolean,
     hasLabel: boolean,
@@ -67,9 +68,15 @@ export const tabStyle = function({
     root: Styles.createViewStyle({
       height: tabHeight,
       minWidth: tabMinWidth,
-      maxWidth: tabMaxWidth,
-      flex: 1,
+      maxWidth: !!options && options.mustGrow 
+      ? undefined
+      : tabMaxWidth,
+      flexGrow: 1,
+      flexShrink: !!options && options.mustGrow
+        ? 0
+        : 1,
       position: 'relative',
+      paddingHorizontal: 16,
       paddingVertical: !!options && options.hasTwoLines
           ? twoLinesPadding
           : undefined,
@@ -123,8 +130,6 @@ export const tabStyle = function({
         ? theme.spacing
         : 0,
 
-      height: 14,
-        
       textAlign: 'center',
       fontSize: 14,
 
@@ -146,7 +151,6 @@ export const tabStyle = function({
       height: 2,
 
       backgroundColor: cursorColor,
-      // borderStyle: 'solid',
 
       ...!!options && options.isDisable && options.isActive && {
         right: 0,
@@ -187,7 +191,6 @@ export const tabsBarStyle = function({
     wrapper: Styles.createViewStyle({
       flexDirection: 'row',
       overflow: 'visible',
-      //flex: 1,
 
       paddingHorizontal: !!options && options.isScrollEnabled
         ? 52
