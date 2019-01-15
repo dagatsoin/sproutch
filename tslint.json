@@ -78,8 +78,8 @@
         "quotemark": [false, "simple", "jsx-simple"],
         "radix": true,
         "semicolon": [true, "never"],
+        "strict-type-predicates": true,
         "switch-default": true,
-
         "trailing-comma": [false],
 
         "triple-equals": [ true, "allow-null-check" ],

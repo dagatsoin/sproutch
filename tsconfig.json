@@ -26,10 +26,11 @@
         "sproutch": ["./src/vendor/sproutch"]
       },
       "types": [
+        "node",
         "react",
         "react-dom",
         "react-native"
-      ],
+      ]
   },
   "files": [
     "src/index.tsx",

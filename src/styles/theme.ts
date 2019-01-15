@@ -193,7 +193,12 @@ export const defaultTheme: Theme<Status, {}> = {
   },
 }
 
-export function override(overrides: any, compName: string, rule: string) {
+type Overridable = 
+  | 'progressBar'
+  | 'tab'
+  | 'tabs'
+
+export function override<C extends Overridable, T>(overrides: any, compName: C, rule: keyof T) {
   return overrides && overrides[ compName ] && overrides[ compName ][ rule ]
     ? overrides[ compName ][ rule ]
     : undefined
