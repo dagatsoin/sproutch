@@ -32,7 +32,10 @@ const Center = (storyFn) => (
       flexGrow: 1,
       flexWrap: 'wrap',
       flexDirection: 'row',
-      justifyContent: 'space-around'
+      justifyContent: 'space-around',
+      display: 'flex',
+      height: '100vh',
+      alignItems: 'center'
     }}>
     {storyFn()}
   </div>
