@@ -1,11 +1,11 @@
 import React from 'react'
 import Tab, { TabProps } from './Tab'
 import { UserInterface, ScrollView, Styles, Platform } from 'reactxp'
-import { LayoutInfo } from 'reactxp/dist/common/Types';
+import ReactDOM from 'react-dom'
 
+import { ThemeContext } from '../../styles/theme'
 import { View } from '../view'
 import { tabsBarStyle, TabsBarStyle } from './styles'
-import { ThemeContext } from '../../styles/theme';
 
 type Props = {
   hasTwoLines?: boolean,
@@ -28,6 +28,7 @@ export default class Tabs extends React.PureComponent<Props, State> {
   rootRef: ScrollView
   cursorRef: View
   tabsRefs: Tab[] = []
+  wrapperRef: View
   valueToIndex = new Map<any, number>()
   
   get children() {
@@ -47,24 +48,29 @@ export default class Tabs extends React.PureComponent<Props, State> {
         )
   }
 
+  async getTabsWidth() {
+    if (this.tabsRefs.length === 0) return 0
+    const firstTabRect = await UserInterface.measureLayoutRelativeToAncestor(this.tabsRefs[0], this.rootRef)
+    const lastTabRect = await UserInterface.measureLayoutRelativeToAncestor(this.tabsRefs[this.tabsRefs.length - 1], this.rootRef)
+    return lastTabRect.x + lastTabRect.width - firstTabRect.x
+  }
+
   async componentDidMount() {
-    const rootRect = await UserInterface.measureLayoutRelativeToWindow(this.rootRef)
-    Promise.all(this.tabsRefs.map(UserInterface.measureLayoutRelativeToWindow) as any[])
-      .then(r => {
-        const tabsWidth = r.reduce((sum: number, rect: LayoutInfo) => sum + rect.width, 0)
-        
-        const marginBottom = Platform.getType() === 'web' && this.state.isScrollEnabled
-          ? rootRect.height
-          : - (rootRect.height - (this.props.hasTwoLines
-            ? 72
-            : 48
-          ))
+    try{
+      const rootRect = await UserInterface.measureLayoutRelativeToWindow(this.rootRef)
+      const tabsWidth = await this.getTabsWidth()
+      const isScrollEnabled = tabsWidth > rootRect.width
+      const marginBottom = Platform.getType() === 'web' && isScrollEnabled
+        ? (ReactDOM.findDOMNode(this.rootRef) as HTMLDivElement).clientHeight - (ReactDOM.findDOMNode(this.rootRef) as HTMLDivElement).offsetHeight
+        : 0
 
         this.setState({ 
-          isScrollEnabled: tabsWidth > rootRect.width,
-          marginBottom
-         }) 
+        isScrollEnabled,
+        marginBottom
       })
+    } catch(e) {
+      console.error(e)
+    }
   }
 
 /*
@@ -93,27 +99,30 @@ export default class Tabs extends React.PureComponent<Props, State> {
     return (
       <ThemeContext.Consumer>
         {theme => {
-          const { isScrollEnabled: scrollEnabled } = this.state
+          const { isScrollEnabled } = this.state
           const stylesheet = tabsBarStyle({
             theme,
             palette,
             style,
             options: {
               hasTwoLines,
+              isScrollEnabled
             }
           })
           return (
-            <View>
+            <View style={stylesheet.root}>
               <ScrollView
                 ref={(comp: ScrollView) => this.rootRef = comp}
-                scrollEnabled={ scrollEnabled }
+                scrollEnabled={ isScrollEnabled }
                 horizontal={true}
-                vertical={true}
+                vertical={false}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 style={Styles.createScrollViewStyle({marginBottom: this.state.marginBottom})}
               >
-                <View style={stylesheet.root}>
+                <View
+                  style={stylesheet.wrapper}
+                  ref={view => this.wrapperRef = view}>
                   {this.children}
                 </View>
               </ScrollView>

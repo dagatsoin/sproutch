@@ -11,6 +11,7 @@ export type TabStyle = {
 
 export type TabsBarStyle = {
   root: StyleObject<ViewStyle>
+  wrapper: StyleObject<ViewStyle>
 }
 
 export type TabStyleOverride = TabStyle & {
@@ -36,10 +37,6 @@ export const tabStyle = function({
     isDisable: boolean,
   }
 }): TabStyle {
-
-  // Variables
-  // ========================================================================
-
   const tabHeight = options && options.hasTwoLines
     ? 72
     : 48
@@ -47,10 +44,6 @@ export const tabStyle = function({
   const tabMaxWidth = 360
 
   const iconSize = 3 * theme.spacing
-
-  const tabBackgroundColor = palette === undefined || palette === ''
-    ? theme.palette.primary.main
-    : theme.palette.background.default
 
   const tabColor = palette === undefined || palette === ''
     ? fade(theme.palette.primary.contrastText, 0.7)
@@ -91,8 +84,6 @@ export const tabStyle = function({
           : 'row',
 
       cursor: 'pointer',
-
-      backgroundColor: tabBackgroundColor,
 
       ...override(theme.overrides, 'tab', 'container'),
 
@@ -166,22 +157,41 @@ export const tabStyle = function({
 }
 
 export const tabsBarStyle = function({
- /* theme,
   palette,
-  style = {},
-  options,*/
+  theme,
+ /*  style = {},*/
+  options,
 }: {
   theme: Theme<any, any>,
   palette?: 'primary' | 'secondary' |  '',
   style?: Partial<TabStyleOverride>,
   options?: {
-    hasTwoLines: boolean,
+    hasTwoLines?: boolean,
+    isScrollEnabled?: boolean
   }
 }): TabsBarStyle {
+  const tabHeight = options && options.hasTwoLines
+    ? 72
+    : 48
+  
+  const tabBackgroundColor = palette === undefined || palette === ''
+  ? theme.palette.primary.main
+  : theme.palette.background.default
+
   return {
     root: Styles.createViewStyle({
+      height: tabHeight,
+      flex: 1,
+      backgroundColor: tabBackgroundColor,
+    }),
+    wrapper: Styles.createViewStyle({
       flexDirection: 'row',
       overflow: 'visible',
+      //flex: 1,
+
+      paddingHorizontal: !!options && options.isScrollEnabled
+        ? 52
+        : 0,
     })
   }
 }

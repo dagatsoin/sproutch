@@ -2,10 +2,10 @@ import React from 'react'
 import { ScrollView, StyleSheet as RNStyles } from 'react-native'
 import { Platform } from 'reactxp'
 import { Font } from 'expo'
+import { getStorybookUI, configure, addDecorator } from '@storybook/react-native'
 
 import { ThemeContext, getTheme } from '../'
 import './rn-addons'
-import { getStorybookUI, configure, addDecorator } from '@storybook/react-native'
 import { loadStories } from './storyLoader'
 
 const styles = RNStyles.create({
@@ -13,7 +13,10 @@ const styles = RNStyles.create({
     flexGrow: 1,
     flexWrap: 'wrap',
     flexDirection: 'row',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
+    display: 'flex',
+    flex: 1,
+    alignItems: 'center'
   }
 })
 
