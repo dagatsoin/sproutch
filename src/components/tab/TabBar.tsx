@@ -109,7 +109,7 @@ class Tabs extends React.PureComponent<Props, State> {
     const tabs = Array
       .from(this.tabsRefs.values())
       .filter(this.isTabOutsideOnLeft)
-      
+
     return tabs.length
       ? tabs.reduce((farest, tab) => {
         if (farest === undefined) {
@@ -145,15 +145,15 @@ class Tabs extends React.PureComponent<Props, State> {
   }
 
   isTabOutsideOnRight = (tab: Tab) => {
-    const { currentScroll, isScrollEnabled } = this.state
+    const { currentScroll } = this.state
     return !!tab.layout && !!this.barLayout &&
-      tab.layout.x + tab.layout.width - currentScroll > this.barLayout.x + this.barLayout.width - this.getStyles(isScrollEnabled).paddingHorizontal * 2
+      tab.layout.x + tab.layout.width - currentScroll > this.barLayout.x + this.barLayout.width
   }
 
   isTabOutsideOnLeft = (tab: Tab) => {
-    const { currentScroll, isScrollEnabled } = this.state
+    const { currentScroll } = this.state
     return !!tab.layout && !!this.barLayout &&
-      tab.layout.x - currentScroll < this.barLayout.x - this.getStyles(isScrollEnabled).paddingHorizontal
+      tab.layout.x - currentScroll < this.barLayout.x
   }
 
   getTabsWidth() {
@@ -300,7 +300,7 @@ class Tabs extends React.PureComponent<Props, State> {
       .reduce((length, tab) => length + tab.layout.width, 0)
 
     /* 4 */
-    const delta = (tabsBarLengthToNextTabEnd - this.state.currentScroll) - (this.barLayout!.width - this.getStyles(true).paddingHorizontal * 2)
+    const delta = (tabsBarLengthToNextTabEnd - this.state.currentScroll) - (this.barLayout!.width)
     this.scrollTo(this.state.currentScroll + delta + 1)
   }, 200, true)
 
@@ -320,11 +320,8 @@ class Tabs extends React.PureComponent<Props, State> {
     if (firstEntirelyDisplayedTab === undefined) return
 
     /* 2 */
-    const firstTabDisplayedIndex = Array.from(this.tabsRefs.values()).findIndex(tab => tab.props.id === firstEntirelyDisplayedTab.props.id)
-    const tabToDisplayIndex = firstTabDisplayedIndex > 1
-      ? firstTabDisplayedIndex - 1
-      : firstTabDisplayedIndex
-      
+    const tabToDisplayIndex = Array.from(this.tabsRefs.values()).findIndex(tab => tab.props.id === firstEntirelyDisplayedTab.props.id)
+
     /* 3 */
     const tabsBarLengthToNextTabEnd = tabs
       .slice(0, tabToDisplayIndex)
@@ -332,7 +329,8 @@ class Tabs extends React.PureComponent<Props, State> {
   
     /* 4 */
     const delta = tabs[tabToDisplayIndex].layout.width - (tabsBarLengthToNextTabEnd + tabs[tabToDisplayIndex].layout.width - this.state.currentScroll)
-    this.scrollTo(this.state.currentScroll - delta - 1)
+    console.log(this.state.currentScroll, delta)
+    this.scrollTo(this.state.currentScroll - delta)
   }, 200, true)
 
   private scrollTo(position: number) {
