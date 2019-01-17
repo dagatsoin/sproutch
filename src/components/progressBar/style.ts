@@ -25,7 +25,7 @@ export default function({
       overflow: 'hidden',
       flex: 1,
       minHeight: theme.spacing, // initial height
-      ...override(theme.overrides, 'progressBar', 'container'),
+      ...override<'progressBar', ProgressBarOverride>(theme.overrides, 'progressBar', 'root'),
       ...style.root as object
     }),
     top: Styles.createViewStyle({
@@ -35,7 +35,7 @@ export default function({
       left: 0,
       bottom: 0,
       right: 0,
-      ...override(theme.overrides, 'progressBar', 'top'),
+      ...override<'progressBar', ProgressBarOverride>(theme.overrides, 'progressBar', 'top'),
       ...style.top as object
     }),
     fill: Styles.createViewStyle({
@@ -46,13 +46,13 @@ export default function({
       bottom: 0,
       transformOrigin: 'left',
       backgroundColor: theme.palette[palette].main,
-      ...override(theme.overrides, 'progressBar', 'fill'),
+      ...override<'progressBar', ProgressBarOverride>(theme.overrides, 'progressBar', 'fill'),
       ...style.fill as object
     }),
     background: Styles.createViewStyle({
       flex: 1,
       backgroundColor: theme.palette.background.appBar,
-      ...override(theme.overrides, 'progressBar', 'background'),
+      ...override<'progressBar', ProgressBarOverride>(theme.overrides, 'progressBar', 'background'),
       ...style.background as object
     }),
   }

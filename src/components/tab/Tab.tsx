@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { GestureView, Types } from 'reactxp'
-import { StyleRuleSet, StyleRuleSetRecursive } from 'reactxp/dist/common/Types'
+import { Types } from 'reactxp'
+import { StyleRuleSet, StyleRuleSetRecursive, LayoutInfo } from 'reactxp/dist/common/Types'
 
 import  { tabStyle, TabStyle } from './styles'
 import { TextStyle } from '../../styles/createStyleSheet';
@@ -22,9 +22,21 @@ export type TabProps = {
   notification?: boolean
   style?: Partial<TabStyle>
   onClick?: (index: string) => void
+  onUnmount?: () => void
 } & Types.ViewProps
 
 class Tab extends React.Component<TabProps> {
+  private _layout: LayoutInfo
+
+  get layout(): LayoutInfo {
+    return this._layout
+  }
+
+  componentWillUnmount() {
+    const { onUnmount = () => {} } = this.props
+    onUnmount()
+  }
+
   render() {
     const {
       renderIcon,
@@ -35,14 +47,12 @@ class Tab extends React.Component<TabProps> {
       mustGrow = false,
       palette,
       style,
-      onClick,
-      id: tabIndex,
     } = this.props
 
     return (
       <ThemeContext.Consumer>
         {theme => {
-          const stylesheet = tabStyle({
+          const styles = tabStyle({
             theme,
             palette,
             style,
@@ -57,19 +67,35 @@ class Tab extends React.Component<TabProps> {
           })
           const { ref } = this.props
           return (
-            <GestureView
+            <View
               ref={view => ref && ((ref as Function)(view))}
-              onTap={() => (onClick ? onClick(tabIndex) : null)}
-              style={stylesheet.root}
+              onLayout={this.onLayout.bind(this)}
+              style={[styles.root, styles.content]}
             >
-              {renderIcon && renderIcon(stylesheet.icon)}
-              {label && <Text style={stylesheet.label}>{label}</Text>}
-              {isActive && <View style={stylesheet.cursor} />}
-            </GestureView>
+             
+                {renderIcon && renderIcon(styles.icon)}
+                {label && <Text style={styles.label}>{label}</Text>}
+                {isActive && <View style={styles.cursor} />}
+             
+            </View>
           )
         }}
       </ThemeContext.Consumer>
     )
+  }
+
+  private onLayout(layout: LayoutInfo) {
+    const { onLayout = () => null } = this.props
+    if (
+      this._layout !== undefined &&
+      this._layout.height === layout.height &&
+      this._layout.width === layout.width &&
+      this._layout.x === layout.x &&
+      this._layout.y === layout.y
+    ) return
+
+    this._layout = layout
+    onLayout(layout)
   }
 }
 export default Tab

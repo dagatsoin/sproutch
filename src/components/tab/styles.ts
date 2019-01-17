@@ -4,6 +4,7 @@ import { fade } from '../../styles/colorManipulator'
 
 export type TabStyle = {
   root: StyleObject<ViewStyle>
+  content: StyleObject<ViewStyle>
   icon: StyleObject<TextStyle>
   label: StyleObject<TextStyle>
   cursor: StyleObject<ViewStyle>
@@ -12,10 +13,19 @@ export type TabStyle = {
 export type TabsBarStyle = {
   root: StyleObject<ViewStyle>
   wrapper: StyleObject<ViewStyle>
+  leftIndicator: StyleObject<ViewStyle>
+  rightIndicator: StyleObject<ViewStyle>,
+  paddingHorizontal: number
 }
 
 export type TabStyleOverride = TabStyle & {
-  container: StyleObject<ViewStyle>
+  root: StyleObject<ViewStyle>
+  hasIcon: StyleObject<TextStyle>
+  hasLabel: StyleObject<TextStyle>
+}
+
+export type TabBarStyleOverride = TabStyle & {
+  root: StyleObject<ViewStyle>
   hasIcon: StyleObject<TextStyle>
   hasLabel: StyleObject<TextStyle>
 }
@@ -68,14 +78,21 @@ export const tabStyle = function({
     root: Styles.createViewStyle({
       height: tabHeight,
       minWidth: tabMinWidth,
-      maxWidth: !!options && options.mustGrow 
-      ? undefined
-      : tabMaxWidth,
-      flexGrow: 1,
-      flexShrink: !!options && options.mustGrow
-        ? 0
-        : 1,
-      position: 'relative',
+      maxWidth: tabMaxWidth,
+      ...(!!options && options.mustGrow
+        ? {
+          flexGrow: undefined,
+          flexShrink: undefined
+        }
+        : {
+          flex: 1
+        }),
+
+      ...override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'root'),
+      ...style.root as object,
+    }),
+    content: Styles.createViewStyle({
+      flex: 1,
       paddingHorizontal: 16,
       paddingVertical: !!options && options.hasTwoLines
           ? twoLinesPadding
@@ -92,28 +109,24 @@ export const tabStyle = function({
 
       cursor: 'pointer',
 
-      ...override(theme.overrides, 'tab', 'container'),
-
-      ...style.root as object,
-
       ...!!options && options.hasIcon
-        ? override(theme.overrides, 'tab', 'hasIcon')
+        ? override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'hasIcon')
         : style.hasIcon as object,
 
       ...!!options && options.hasLabel
-        ? override(theme.overrides, 'tab', 'hasLabel')
+        ? override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'hasLabel')
         : style.hasLabel as object
     }),
     icon: Styles.createTextStyle({
       
       justifyContent: 'center',
-      
-      fontSize: iconSize,
 
       ...!!options && options.hasLabel && {
         margin: 0
       },
       
+      fontSize: iconSize,
+      textAlign: 'center',
       color: tabColor,
 
       ...!!options && options.isActive && {
@@ -163,7 +176,7 @@ export const tabStyle = function({
 export const tabsBarStyle = function({
   palette,
   theme,
- /*  style = {},*/
+  style = {},
   options,
 }: {
   theme: Theme<any, any>,
@@ -182,19 +195,35 @@ export const tabsBarStyle = function({
   ? theme.palette.primary.main
   : theme.palette.background.default
 
+  const paddingHorizontal = !!options && options.isScrollEnabled
+  ? 52
+  : 0
+
   return {
     root: Styles.createViewStyle({
       height: tabHeight,
       flex: 1,
       backgroundColor: tabBackgroundColor,
+      paddingHorizontal,
+      ...override<'tabs', TabBarStyleOverride>(theme.overrides, 'tabs', 'root'),
+      ...style.root as object,
     }),
     wrapper: Styles.createViewStyle({
       flexDirection: 'row',
       overflow: 'visible',
-
-      paddingHorizontal: !!options && options.isScrollEnabled
-        ? 52
-        : 0,
-    })
+    }),
+    leftIndicator: Styles.createViewStyle({
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      bottom: 0,
+    }),
+    rightIndicator: Styles.createViewStyle({
+      position: 'absolute',
+      right: 0,
+      top: 0,
+      bottom: 0,
+    }),
+    paddingHorizontal,
   }
 }
