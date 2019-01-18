@@ -1,20 +1,22 @@
-import { StyleObject, TextStyle, ViewStyle, Styles } from '../../styles/createStyleSheet'
+import { StyleObject, TextStyle, ViewStyle, Styles, ScrollViewStyle } from '../../styles/createStyleSheet'
 import { Theme, override } from '../../styles/theme'
 import { fade } from '../../styles/colorManipulator'
+import { Platform } from 'reactxp';
 
 export type TabStyle = {
   root: StyleObject<ViewStyle>
   content: StyleObject<ViewStyle>
   icon: StyleObject<TextStyle>
   label: StyleObject<TextStyle>
-  cursor: StyleObject<ViewStyle>
 }
 
 export type TabsBarStyle = {
+  cursor: StyleObject<ViewStyle>
   root: StyleObject<ViewStyle>
   wrapper: StyleObject<ViewStyle>
   leftIndicator: StyleObject<ViewStyle>
-  rightIndicator: StyleObject<ViewStyle>,
+  scrollView: StyleObject<ScrollViewStyle>
+  rightIndicator: StyleObject<ViewStyle>
   paddingHorizontal: number
 }
 
@@ -70,15 +72,17 @@ export const tabStyle = function({
 
   const twoLinesPadding = theme.spacing * 1.5
 
-  const cursorColor = palette === undefined || palette === ''
-    ? theme.palette.secondary.main
-    : theme.palette[palette].main
-
   return {
     root: Styles.createViewStyle({
       height: tabHeight,
       minWidth: tabMinWidth,
       maxWidth: tabMaxWidth,
+
+      ...override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'root'),
+      ...style.root as object,
+    }),
+    content: Styles.createViewStyle({
+      flex: 1,
       ...(!!options && options.mustGrow
         ? {
           flexGrow: undefined,
@@ -86,13 +90,8 @@ export const tabStyle = function({
         }
         : {
           flex: 1
-        }),
-
-      ...override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'root'),
-      ...style.root as object,
-    }),
-    content: Styles.createViewStyle({
-      flex: 1,
+        }
+      ),
       paddingHorizontal: 16,
       paddingVertical: !!options && options.hasTwoLines
           ? twoLinesPadding
@@ -156,20 +155,6 @@ export const tabStyle = function({
         color: tabDisabledColor
       }
     }),
-    cursor: {
-      position: 'absolute',
-      bottom: 0,
-      right: 0,
-      left: 0,
-      height: 2,
-
-      backgroundColor: cursorColor,
-
-      ...!!options && options.isDisable && options.isActive && {
-        right: 0,
-        left: 0
-      }
-    },
   }
 }
 
@@ -199,6 +184,10 @@ export const tabsBarStyle = function({
   ? 52
   : 0
 
+  const cursorColor = palette === undefined || palette === ''
+  ? theme.palette.secondary.main
+  : theme.palette[palette].main
+
   return {
     root: Styles.createViewStyle({
       height: tabHeight,
@@ -224,6 +213,21 @@ export const tabsBarStyle = function({
       top: 0,
       bottom: 0,
     }),
+    cursor: Styles.createViewStyle({  
+      position: 'absolute',
+      width: 1,
+      top: tabHeight - 2,
+      right: 0,
+      left: 0,
+      height: 2,
+      
+      backgroundColor: cursorColor,
+    }),
+    scrollView: Styles.createScrollViewStyle({
+      marginBottom: -20,
+      ...(Platform.getType() === 'web' && { display: 'inline-flex'}) // To get the tab width fit their content
+    }),
+    // Custom values
     paddingHorizontal,
   }
 }
