@@ -12,13 +12,15 @@ export default function({
     hasIcon = false,
     isDisable = false,
     hasTwoLines = false,
-    palette = '' as ''
+    palette = '' as '',
+    activeTabId = '0'
   }) {
     return (
       <>
         <Tabs
           hasTwoLines={boolean('Has two lines', hasTwoLines)}
           palette={select('Palette', ['primary', 'secondary', ''], palette)}
+          activeTabId={select('Tab', ['0', '1', '2', '3', '4', '5'], activeTabId)}
           renderLeftIndicator={() => (
             <View style={{
               flex: 1,

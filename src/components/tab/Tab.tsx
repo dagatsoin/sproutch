@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Types } from 'reactxp'
+import { Types, GestureView } from 'reactxp'
 import { StyleRuleSet, StyleRuleSetRecursive, LayoutInfo } from 'reactxp/dist/common/Types'
 
 import  { tabStyle, TabStyle } from './styles'
@@ -65,18 +65,20 @@ class Tab extends React.Component<TabProps> {
               hasLabel: !!label,
             }
           })
-          const { ref } = this.props
+          const { id, onClick, ref } = this.props
           return (
             <View
-              ref={view => ref && ((ref as Function)(view))}
               onLayout={this.onLayout.bind(this)}
-              style={[styles.root, styles.content]}
+              style={styles.root}
+              ref={view => ref && ((ref as Function)(view))}
             >
-             
-                {renderIcon && renderIcon(styles.icon)}
-                {label && <Text style={styles.label}>{label}</Text>}
-                {isActive && <View style={styles.cursor} />}
-             
+              <GestureView
+                style={styles.content}
+                onTap={() => !!onClick && onClick(id)}
+              >
+                  {renderIcon && renderIcon(styles.icon)}
+                  {label && <Text style={styles.label}>{label}</Text>}
+              </GestureView>
             </View>
           )
         }}
