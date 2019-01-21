@@ -94,6 +94,8 @@ type Status = {
   warning: PaletteColor
 }
 
+export type DefaultTheme = Theme<Status, {}>
+
 export const lightBackground = {
   statusBar: colors.grey[300],
   appBar: colors.grey[100],
@@ -163,7 +165,7 @@ export function getTheme<B, O>(config: ThemeConfig<B, O>): Theme<Status & B, O> 
   ) as Theme<Status & B, O> // fixme: why need to force the output type?
 }
 
-export const defaultTheme: Theme<Status, {}> = {
+export const defaultTheme: DefaultTheme = {
   shape: {
     borderRadius: 4,
   },

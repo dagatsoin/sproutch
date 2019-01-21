@@ -1,6 +1,6 @@
 import React from 'react'
 import Tab, { TabProps } from './Tab'
-import { ScrollView, Types, GestureView, Styles, Animated } from 'reactxp'
+import { ScrollView, Types, GestureView, Styles, Animated, Platform } from 'reactxp'
 import { LayoutInfo } from 'reactxp/dist/common/Types'
 
 import { Theme } from '../../styles/theme'
@@ -15,9 +15,34 @@ type Props = {
   palette: 'primary' | 'secondary' | ''
   style?: Partial<TabsBarStyle>
   children: JSX.Element | JSX.Element[]
+  customCursorAnimation?: CustomAnimation
+  renderCustomCursor?: (tabLayout: LayoutInfo, barLayout: LayoutInfo, theme: Theme<any, any>) => JSX.Element | JSX.Element[]
   renderLeftIndicator?: () => JSX.Element | JSX.Element[]
   renderRightIndicator?: () => JSX.Element | JSX.Element[]
 } & InjectedTheme<Theme<any, any>>
+
+export type CustomAnimation = (cursorValues: AnimatedValues, targetLayout: LayoutInfo, theme: Theme<any, any>) => {
+  opacity?: Types.Animated.CompositeAnimation
+  translateX?: Types.Animated.CompositeAnimation
+  translateY?: Types.Animated.CompositeAnimation
+  rotateX?: Types.Animated.CompositeAnimation
+  rotateY?: Types.Animated.CompositeAnimation
+  rotateZ?: Types.Animated.CompositeAnimation
+  scaleX?: Types.Animated.CompositeAnimation
+  scaleY?: Types.Animated.CompositeAnimation
+}
+
+type AnimatableKey = 
+  | 'opacity'
+  | 'translateX'
+  | 'translateY'
+  | 'rotateX'
+  | 'rotateY'
+  | 'rotateZ'
+  | 'scaleX'
+  | 'scaleY'
+
+type AnimatedValues = { [key in AnimatableKey]: Animated.Value }
 
 type State = {
   activeIdFromProps?: string
@@ -44,16 +69,19 @@ class Tabs extends React.PureComponent<Props, State> {
   private tabsRefs: Map<string, Tab> = new Map()
   private currentScroll = 0
   private cursorAnimatedValues = {
-    translateX: Animated.createValue(0.0),
-    scaleX: Animated.createValue(0.0)
+    opacity: Animated.createValue(0),
+    translateX: Animated.createValue(0),
+    translateY: Animated.createValue(0),
+    rotateX: Animated.createValue(0),
+    rotateY: Animated.createValue(0),
+    rotateZ: Animated.createValue(0),
+    scaleX: Animated.createValue(0),
+    scaleY: Animated.createValue(0),
   }
   private animatedStyle: Types.AnimatedViewStyleRuleSet
-  private cursorAnimation: {
-    translateX: Types.Animated.CompositeAnimation
-    scaleX: Types.Animated.CompositeAnimation
-  }
+  private cursorAnimation: { [key in AnimatableKey]: Types.Animated.CompositeAnimation }
 
-  static cursorTransitionTiming = 200
+  static cursorTransitionDuration = 200
 
   get children() {
     const { hasTwoLines, palette } = this.props
@@ -139,9 +167,37 @@ class Tabs extends React.PureComponent<Props, State> {
   }
 
   componentDidMount(){
-    const { scaleX, translateX } = this.cursorAnimatedValues
+    const rotateX = this.cursorAnimatedValues.rotateX.interpolate({
+        inputRange: [0, 1],
+        outputRange: Platform.getType() === 'web'
+          ? [0, 360]
+          : ['0deg', '360deg']
+      })
+    const rotateY = this.cursorAnimatedValues.rotateY.interpolate({
+        inputRange: [0, 1],
+        outputRange: Platform.getType() === 'web'
+          ? [0, 360]
+          : ['0deg', '360deg']
+      })
+    const rotateZ = this.cursorAnimatedValues.rotateZ.interpolate({
+        inputRange: [0, 1],
+        outputRange: Platform.getType() === 'web'
+          ? [0, 360]
+          : ['0deg', '360deg']
+      })
+    
     this.animatedStyle = Styles.createAnimatedViewStyle({
-      transform: [{ translateX }, { scaleX }]
+      transform: [
+        { translateX: this.cursorAnimatedValues.translateX },
+        { translateY: this.cursorAnimatedValues.translateY },
+        { rotateX },
+        { rotateY },
+        Platform.getType() !== 'web'
+            ? { rotateZ }
+            : undefined as any, // waiting for ReactXP to fix the rotateZ issue for web
+        { scaleX: this.cursorAnimatedValues.scaleX },
+        { scaleY: this.cursorAnimatedValues.scaleY },
+      ].filter(t => !!t)
     })
     this.setState({ activeTabId: this.props.activeTabId || this.firstTabId })
   }
@@ -176,32 +232,56 @@ class Tabs extends React.PureComponent<Props, State> {
     )
   }
 
-  componentDidUpdate() {
-    this.updateCursorPosition()
+  componentDidUpdate(_prevProps: Props, prevState: State) {
+    // Prevent cursor animation when scrolling with with arrows
+    if (this.state.activeTabId !== prevState.activeTabId) this.updateCursorPosition()
   }
 
   private updateCursorPosition() {
     if (!this.isLayoutReady) return 
     if (!!this.cursorAnimation) {
-      this.cursorAnimation.translateX.stop()
-      this.cursorAnimation.scaleX.stop()
+      Object.keys(this.cursorAnimation).forEach(key => this.cursorAnimation[key].stop())
     }
-    const translateX = this.activeTab!.layout.x + this.activeTab!.layout.width * .5
-    const scaleX = this.activeTab!.layout.width
-    this.cursorAnimation = this.getAnimation(translateX, scaleX, Tabs.cursorTransitionTiming)
-    this.cursorAnimation.translateX.start()
-    this.cursorAnimation.scaleX.start()
+    
+    this.cursorAnimation = this.getAnimation(
+      {
+        opacity: 1,
+        translateX: this.activeTab!.layout.x + this.activeTab!.layout.width * .5,
+        translateY: 0,
+        rotateX: 0,
+        rotateY: 0,
+        rotateZ: 0,
+        scaleX: this.activeTab!.layout.width,
+        scaleY: 2,
+      },
+    )
+    Object.keys(this.cursorAnimation).forEach(key => this.cursorAnimation[key].start())
   }
 
   private renderCursor(style: TabsBarStyle) {
    return this.isLayoutReady
-      ? (
-        <View
-          style={[style.cursor]}
-          animated={this.animatedStyle}
-        />
-      )
+      ? this.props.renderCustomCursor
+        ? this.renderCustomCursor(style)
+        : (
+          <View
+            style={[style.cursor]}
+            animated={this.animatedStyle}
+          />
+        )
       : <></>
+  }
+
+  private renderCustomCursor(style: TabsBarStyle) {
+    if (!this.props.renderCustomCursor) return <></>
+    const customCursor = this.props.renderCustomCursor(this.activeTab!.layout, this.barLayout!, this.props.theme!) as React.ReactElement<View>
+    return React.cloneElement(
+      customCursor,
+      {
+        ...customCursor.props,
+        style: [style.cursor, (customCursor.props as any).style],
+        animated: this.animatedStyle
+      } as any
+    )
   }
   
   private renderInScrollView(
@@ -401,7 +481,9 @@ class Tabs extends React.PureComponent<Props, State> {
 
   private scrollTo(position: number, animated = true) {
     const value = this.limit(position)
-    this.scrollViewRef!.setScrollLeft(value, animated)
+    this.scrollViewRef ?
+      this.scrollViewRef.setScrollLeft(value, animated)
+      : 0
     this.currentScroll = value
   }
 
@@ -456,26 +538,93 @@ class Tabs extends React.PureComponent<Props, State> {
     this.setState({ activeTabId })
   }
 
-  private getAnimation(translateX: number, scaleX: number, duration: number) {
+  private getAnimation({
+    opacity,
+    translateX,
+    translateY,
+    rotateX,
+    rotateY,
+    rotateZ,
+    scaleX,
+    scaleY,
+  }: { [key in AnimatableKey]: number }) {
+    const customAnimation = this.props.customCursorAnimation
+      ? this.props.customCursorAnimation(this.cursorAnimatedValues, this.activeTab!.layout, this.props.theme!)
+      : {}
+
     return {
-      translateX: Animated
+      opacity: customAnimation.opacity || Animated
         .timing(
-          this.cursorAnimatedValues.translateX,
+          this.cursorAnimatedValues.opacity,
           {
-            toValue: translateX,
-            duration,
-            easing: Animated.Easing.InOut()
+            toValue: opacity,
+            duration: Tabs.cursorTransitionDuration,
+            easing: Animated.Easing.InOut(),
           }
         ),
-      scaleX: Animated
-      .timing(
-        this.cursorAnimatedValues.scaleX,
-        {
-          toValue: scaleX,
-          duration,
-          easing: Animated.Easing.InOut()
-        }
-      ),
+      translateX: customAnimation.translateX || Animated
+          .timing(
+            this.cursorAnimatedValues.translateX,
+            {
+              toValue: translateX,
+              duration: Tabs.cursorTransitionDuration,
+              easing: Animated.Easing.InOut(),
+            }
+          ),
+      translateY: customAnimation.translateY || Animated
+        .timing(
+          this.cursorAnimatedValues.translateY,
+          {
+            toValue: translateY,
+            duration: Tabs.cursorTransitionDuration,
+            easing: Animated.Easing.InOut(),
+          }
+        ),
+      rotateX: customAnimation.rotateX || Animated
+        .timing(
+          this.cursorAnimatedValues.rotateX,
+          {
+            toValue: rotateX,
+            duration: Tabs.cursorTransitionDuration,
+            easing: Animated.Easing.InOut(),
+          }
+        ),
+      rotateY: customAnimation.rotateY || Animated
+        .timing(
+          this.cursorAnimatedValues.rotateY,
+          {
+            toValue: rotateY,
+            duration: Tabs.cursorTransitionDuration,
+            easing: Animated.Easing.InOut(),
+          }
+        ),
+      rotateZ: customAnimation.rotateZ || Animated
+        .timing(
+          this.cursorAnimatedValues.rotateZ,
+          {
+            toValue: rotateZ,
+            duration: Tabs.cursorTransitionDuration,
+            easing: Animated.Easing.InOut(),
+          }
+        ),
+      scaleX: customAnimation.scaleX || Animated
+        .timing(
+          this.cursorAnimatedValues.scaleX,
+          {
+            toValue: scaleX,
+            duration: Tabs.cursorTransitionDuration,
+            easing: Animated.Easing.InOut(),
+          }
+        ),
+      scaleY: customAnimation.scaleY || Animated
+        .timing(
+          this.cursorAnimatedValues.scaleY,
+          {
+            toValue: scaleY,
+            duration: Tabs.cursorTransitionDuration,
+            easing: Animated.Easing.InOut(),
+          }
+        )
     }
   }
 }
