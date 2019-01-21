@@ -52,6 +52,7 @@ type State = {
   hasLeftScrollIndicator: boolean
   hasRightScrollIndicator: boolean
   maxScroll: number
+  areTabsStale: boolean
 }
 
 class Tabs extends React.PureComponent<Props, State> {
@@ -62,6 +63,7 @@ class Tabs extends React.PureComponent<Props, State> {
     hasLeftScrollIndicator: false,
     hasRightScrollIndicator: false,
     maxScroll: 0,
+    areTabsStale: true, // a flag to know if tabs content has changed
   }
 
   private barLayout?: LayoutInfo
@@ -345,7 +347,8 @@ class Tabs extends React.PureComponent<Props, State> {
   }
 
   private onTabLayout() {
-    this.nap()
+    if (this.isLayoutReady && this.state.scrollStateIsReady) this.setState({areTabsStale: true}, this.nap)
+    else this.nap()
   }
 
   private onLayout(barLayout: LayoutInfo) {
@@ -378,7 +381,7 @@ class Tabs extends React.PureComponent<Props, State> {
   private nap() {
     if (!this.isLayoutReady && !this.state.scrollStateIsReady) {
       // wait
-    } else if (this.isLayoutReady && !this.state.scrollStateIsReady) {
+    } else if (this.isLayoutReady && !this.state.scrollStateIsReady || this.state.areTabsStale) {
       this.setScrollState()
     } else if (this.isLayoutReady && this.state.scrollStateIsReady) {
       this.rollLeft(this.props.activeTabId || this.firstTabId)
@@ -396,7 +399,7 @@ class Tabs extends React.PureComponent<Props, State> {
       ? tabsWidth - this.barLayout.width + this.getStyles(isScrollEnabled).paddingHorizontal * 2
       : 0
 
-    this.setState({ isScrollEnabled, maxScroll, hasRightScrollIndicator, scrollStateIsReady: true }, this.nap)
+    this.setState({ isScrollEnabled, maxScroll, hasRightScrollIndicator, scrollStateIsReady: true, areTabsStale: false }, this.nap)
   }
 
   /**

@@ -5,7 +5,6 @@ import { Platform } from 'reactxp';
 
 export type TabStyle = {
   root: StyleObject<ViewStyle>
-  content: StyleObject<ViewStyle>
   icon: StyleObject<TextStyle>
   label: StyleObject<TextStyle>
 }
@@ -78,20 +77,8 @@ export const tabStyle = function({
       minWidth: tabMinWidth,
       maxWidth: tabMaxWidth,
 
-      ...override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'root'),
-      ...style.root as object,
-    }),
-    content: Styles.createViewStyle({
-      flex: 1,
-      ...(!!options && options.mustGrow
-        ? {
-          flexGrow: undefined,
-          flexShrink: undefined
-        }
-        : {
-          flex: 1
-        }
-      ),
+      ...(!!options && !options.mustGrow && { flex: 1 }),
+
       paddingHorizontal: 16,
       paddingVertical: !!options && options.hasTwoLines
           ? twoLinesPadding
@@ -108,13 +95,17 @@ export const tabStyle = function({
 
       cursor: 'pointer',
 
-      ...!!options && options.hasIcon
-        ? override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'hasIcon')
-        : style.hasIcon as object,
+      ...override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'root'),
 
+      ...!!options && options.hasIcon
+      ? override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'hasIcon')
+      : style.hasIcon as object,
+      
       ...!!options && options.hasLabel
-        ? override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'hasLabel')
-        : style.hasLabel as object
+      ? override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'hasLabel')
+      : style.hasLabel as object,
+
+      ...style.root as object,
     }),
     icon: Styles.createTextStyle({
       
