@@ -1,5 +1,5 @@
 import React from 'react'
-import Tab, { TabProps } from './Tab'
+import { TabProps } from './Tab'
 import { ScrollView, Types, GestureView, Styles, Animated, Platform } from 'reactxp'
 import { LayoutInfo } from 'reactxp/dist/common/Types'
 
@@ -14,7 +14,7 @@ type Props = {
   hasTwoLines?: boolean
   palette: 'primary' | 'secondary' | ''
   style?: Partial<TabsBarStyle>
-  children: JSX.Element | JSX.Element[]
+  children: (setProps: (id: string) => Partial<TabProps>) => JSX.Element
   customCursorAnimation?: CustomAnimation
   renderCustomCursor?: (tabLayout: LayoutInfo, barLayout: LayoutInfo, theme: Theme<any, any>) => JSX.Element | JSX.Element[]
   renderLeftIndicator?: () => JSX.Element | JSX.Element[]
@@ -44,30 +44,81 @@ type AnimatableKey =
 
 type AnimatedValues = { [key in AnimatableKey]: Animated.Value }
 
+type SAMModel = {
+  tabsState: TabState[]
+  tabsWidth: number
+}
+
 type State = {
   activeIdFromProps?: string
   activeTabId: string
   isScrollEnabled: boolean
-  scrollStateIsReady: boolean
   hasLeftScrollIndicator: boolean
   hasRightScrollIndicator: boolean
+}
+
+type ControlState =
+ | 'stale'
+ | 'isLayoutReady'
+
+type MutationType = 
+ | 'registerTab'
+ | 'removeTab'
+ | 'setLayout'
+
+type PayloadLayout = TabState
+
+type PayloadRegisterTab = TabState
+
+type PayloadRemoveTab = { id: string }
+
+type PayloadType =
+ | PayloadLayout
+ | PayloadRegisterTab
+ | PayloadRemoveTab
+
+type Proposal<T extends PayloadType> = {
+  mutation: MutationType
+  payload: T
+}
+
+type TabState = {
+  isStale: boolean
+  id: string
+  layout?: LayoutInfo
+}
+
+type TabLayout = {
+  id: string
+  layout: LayoutInfo
+}
+
+type TabsLayout = {
+  barLayout?: LayoutInfo
+  currentScroll: number
   maxScroll: number
+  tabsState: TabLayout[]
 }
 
 class Tabs extends React.PureComponent<Props, State> {
   state: State = {
     activeTabId: '',
     isScrollEnabled: false,
-    scrollStateIsReady: false,
     hasLeftScrollIndicator: false,
     hasRightScrollIndicator: false,
-    maxScroll: 0,
   }
 
-  private barLayout?: LayoutInfo
+  private layout: TabsLayout = {
+    currentScroll: 0,
+    maxScroll: 0,
+    tabsState: []
+  }
+
   private scrollViewRef?: ScrollView
-  private tabsRefs: Map<string, Tab> = new Map()
-  private currentScroll = 0
+  private SAMmodel: SAMModel = {
+    tabsWidth: 0,
+    tabsState: []
+  }
   private cursorAnimatedValues = {
     opacity: Animated.createValue(0),
     translateX: Animated.createValue(0),
@@ -80,83 +131,27 @@ class Tabs extends React.PureComponent<Props, State> {
   }
   private animatedStyle: Types.AnimatedViewStyleRuleSet
   private cursorAnimation: { [key in AnimatableKey]: Types.Animated.CompositeAnimation }
-
+  private controlState: ControlState = 'stale'
   static cursorTransitionDuration = 200
 
-  get children() {
-    const { hasTwoLines, palette } = this.props
-    const { activeTabId, isScrollEnabled } = this.state
-    return React.Children
-      .map(
-        this.props.children,
-        (child: React.ReactElement<TabProps>) =>
-          React.cloneElement(
-            child,
-            {
-              ref: (tab: Tab) => this.tabsRefs.set(child.props.id, tab),
-              onUnmount: () => this.tabsRefs.delete(child.props.id),
-              onLayout: this.onTabLayout.bind(this), // each layout change of a tab will trigger a remeasure of the tab bar
-              onClick: this.onClickTab.bind(this),
-              isActive: child.props.id === activeTabId,
-              mustGrow: isScrollEnabled,
-              hasTwoLines,
-              palette
-            }
-          )
-        )
-  }
-
-  get firstTabId() {
-    return (React.Children.toArray(this.props.children)[0] as React.ReactElement<TabProps>).props.id
-  }
-
-  get lastTabId() {
-    const count = React.Children.count(this.props.children)
-
-    return count > 0
-      ? (React.Children.toArray(this.props.children)[count - 1] as React.ReactElement<TabProps>).props.id
-      : ''
-  }
-
-  /**
-   * Find the last tab on the right which is completely visible.
-   */
-  get lastEntirelyDisplayedTab(): Tab | undefined {
-    return Array
-      .from(this.tabsRefs.values())
-      .reverse()
-      .find(t => !this.isTabOutsideOnRight(t))
-  }
-
-    /**
-   * Find the last tab on the left which is completely visible.
-   */
-  get firstEntirelyDisplayedTab(): Tab | undefined {
-    return Array
-    .from(this.tabsRefs.values())
-    .reverse()
-    .find(this.isTabOutsideOnLeft)
-}
-
-  get firstTab(): Tab | undefined {
-    return this.tabsRefs.get(this.firstTabId)
-  }
-
-  get lastTab(): Tab | undefined {
-    return this.tabsRefs.get(this.lastTabId)
-  }
-  
-  get activeTab(): Tab | undefined  {
-    return this.tabsRefs.get(this.state.activeTabId)
+  get activeTab(): TabState | undefined  {
+    return this.SAMmodel.tabsState.find(s => s.id === this.state.activeTabId)
   }
 
   get paddingHorizontal(): number {
     return this.getStyles(this.state.isScrollEnabled).paddingHorizontal
   }
 
+  get isLayoutReady() {
+    return (
+      this.layout.barLayout !== undefined &&
+      this.SAMmodel.tabsState.length > 0 &&
+      this.SAMmodel.tabsState.every(tab => !tab.isStale)
+    )
+  }
+
   static getDerivedStateFromProps(nextProps: Props, state: State) {
     const hasActiveTabFromPropsChanged = nextProps.activeTabId !== state.activeIdFromProps
-  
     return {
       ...state,
       activeIdFromProps: nextProps.activeTabId,
@@ -199,7 +194,10 @@ class Tabs extends React.PureComponent<Props, State> {
         { scaleY: this.cursorAnimatedValues.scaleY },
       ].filter(t => !!t)
     })
-    this.setState({ activeTabId: this.props.activeTabId || this.firstTabId })
+    const firstTabId = getFirstTabId(this.SAMmodel)
+    if (!!this.props.activeTabId || !!firstTabId) {
+      this.setState({ activeTabId: this.props.activeTabId || firstTabId! })
+    }
   }
 
   render() {
@@ -214,7 +212,7 @@ class Tabs extends React.PureComponent<Props, State> {
     const tabs = (
       <View style={styles.wrapper}>
         { this.renderCursor(styles) }
-        {this.children}
+        {this.props.children(this.bindTab.bind(this))}
       </View>
     )
 
@@ -234,11 +232,32 @@ class Tabs extends React.PureComponent<Props, State> {
 
   componentDidUpdate(_prevProps: Props, prevState: State) {
     // Prevent cursor animation when scrolling with with arrows
-    if (this.state.activeTabId !== prevState.activeTabId) this.updateCursorPosition()
+    if ((this.state.activeTabId !== prevState.activeTabId) && this.controlState === 'isLayoutReady') {
+      this.scrollToTab(this.state.activeTabId)
+      this.updateCursorPosition()
+    }
+  }
+
+  /**
+   * This function inject some additional props into the child.
+   */
+  private bindTab(id: string): Partial<TabProps>  {
+    const { hasTwoLines, palette } = this.props
+    const { activeTabId, isScrollEnabled } = this.state
+
+    return {
+      onWillMount: this.registerTab.bind(this),
+      onTabLayout: this.setTabLayout.bind(this),
+      onUnmount: this.removeTab.bind(this),
+      onClick: this.onClickTab.bind(this),
+      isActive: id === activeTabId,
+      mustGrow: isScrollEnabled,
+      hasTwoLines,
+      palette
+    }
   }
 
   private updateCursorPosition() {
-    if (!this.isLayoutReady) return 
     if (!!this.cursorAnimation) {
       Object.keys(this.cursorAnimation).forEach(key => this.cursorAnimation[key].stop())
     }
@@ -246,12 +265,12 @@ class Tabs extends React.PureComponent<Props, State> {
     this.cursorAnimation = this.getAnimation(
       {
         opacity: 1,
-        translateX: this.activeTab!.layout.x + this.activeTab!.layout.width * .5,
+        translateX: this.activeTab!.layout!.x + this.activeTab!.layout!.width * .5,
         translateY: 0,
         rotateX: 0,
         rotateY: 0,
         rotateZ: 0,
-        scaleX: this.activeTab!.layout.width,
+        scaleX: this.activeTab!.layout!.width,
         scaleY: 2,
       },
     )
@@ -259,7 +278,7 @@ class Tabs extends React.PureComponent<Props, State> {
   }
 
   private renderCursor(style: TabsBarStyle) {
-   return this.isLayoutReady
+   return this.controlState === 'isLayoutReady'
       ? this.props.renderCustomCursor
         ? this.renderCustomCursor(style)
         : (
@@ -273,7 +292,7 @@ class Tabs extends React.PureComponent<Props, State> {
 
   private renderCustomCursor(style: TabsBarStyle) {
     if (!this.props.renderCustomCursor) return <></>
-    const customCursor = this.props.renderCustomCursor(this.activeTab!.layout, this.barLayout!, this.props.theme!) as React.ReactElement<View>
+    const customCursor = this.props.renderCustomCursor(this.activeTab!.layout!, this.layout.barLayout!, this.props.theme!) as React.ReactElement<View>
     return React.cloneElement(
       customCursor,
       {
@@ -285,7 +304,7 @@ class Tabs extends React.PureComponent<Props, State> {
   }
   
   private renderInScrollView(
-    children: JSX.Element | JSX.Element[],
+    tabs: JSX.Element | JSX.Element[],
     styles: TabsBarStyle,
     isScrollEnabled: boolean,
     hasLeftScrollIndicator: boolean,
@@ -305,7 +324,7 @@ class Tabs extends React.PureComponent<Props, State> {
           onScroll={this.onScroll.bind(this)}
           style={styles.scrollView}
         >
-          {children}
+          {tabs}
         </ScrollView>
       </>
     )
@@ -325,78 +344,158 @@ class Tabs extends React.PureComponent<Props, State> {
       })
   }
 
-  private isTabOutsideOnRight = (tab: Tab) => {
-    const offsetBorderRight = this.getTabRightOffset(tab)
-    return offsetBorderRight > 0
-  }
-
-  private isTabOutsideOnLeft = (tab: Tab) => {
-    const offsetBorderLeft = this.getTabLeftOffset(tab)
-    return offsetBorderLeft < 0
-  }
-
-  private getTabsWidth() {
-    if (this.tabsRefs.size === 0) return 0
-    const firstTabRect = (this.firstTab as any as Tab).layout
-    const lastTabRect = (this.lastTab as any as Tab).layout
-    return !!firstTabRect && !!lastTabRect // Tabs are not mounted yet
-      ? Math.round(lastTabRect.x + lastTabRect.width - firstTabRect.x) // Some weird float value may happen. Round for consistency.
-      : 0
-  }
-
-  private onTabLayout() {
-    this.nap()
-  }
-
   private onLayout(barLayout: LayoutInfo) {
     // Prevent infine onLayout loop
     if(
-      this.barLayout !== undefined &&
-      barLayout.height === this.barLayout.height &&
-      barLayout.width === this.barLayout.width &&
-      barLayout.x === this.barLayout.x &&
-      barLayout.y === this.barLayout.y
+      this.layout.barLayout !== undefined &&
+      barLayout.height === this.layout.barLayout.height &&
+      barLayout.width === this.layout.barLayout.width &&
+      barLayout.x === this.layout.barLayout.x &&
+      barLayout.y === this.layout.barLayout.y
     ) return
 
-    this.barLayout = barLayout
-    this.nap()
+    this.layout.barLayout = barLayout
+    this.computeState()
   }
 
-  private get isLayoutReady() {
-    return (
-      this.barLayout !== undefined &&
-      Array.from(this.tabsRefs.values()).every(tab => !!tab.layout)
-    )
-  }
-  /*
-   * this Next Action Predicate is a little state machine to handle the mounting and measurment
-   * phases:
-   * 1 - the tabs are mounted
-   * 2 - state
-   * 3 - remove the scroll bar on web and center on the initial tab.
-   */
-  private nap() {
-    if (!this.isLayoutReady && !this.state.scrollStateIsReady) {
-      // wait
-    } else if (this.isLayoutReady && !this.state.scrollStateIsReady) {
-      this.setScrollState()
-    } else if (this.isLayoutReady && this.state.scrollStateIsReady) {
-      this.rollLeft(this.props.activeTabId || this.firstTabId)
+  private computeState() {
+    /*
+     * Compute control state
+     */
+
+    if (this.controlState === 'stale') {
+      // The component has just been mounted or some tabs has moved.
+      // Wait for all tabs to be rendered
+      if (this.isLayoutReady) {
+        this.controlState = 'isLayoutReady'
+      }
+    } else if (this.controlState === 'isLayoutReady') {
+      // Bar and tabs layouts are ready.
+      // A tab has been removed while setting the scroll layout. Go back to `stale` state
+      if (!this.isLayoutReady) {
+        this.controlState = 'stale'
+      }
+    }
+    /**
+     * Update the view
+     */
+    this.layout.tabsState = this.SAMmodel.tabsState
+        .filter(s => !s.isStale)
+        .map(({id, layout}) => ({id, layout: layout!}))
+
+    if (this.controlState === 'isLayoutReady' && this.activeTab) {
       this.updateCursorPosition()
+    }
+
+    /*
+     * What to do next?
+     */
+    
+    switch(this.controlState) {
+      default:
+      case 'stale':
+        // The component has just been mounted or some tabs has moved.
+        // Wait for all tabs to be rendered
+        break
+
+      case 'isLayoutReady':
+        // Bar and tabs layouts are ready.
+        // Now, state if the scroll mode is needed
+        this.setScrollState()
+        break
     }
   }
 
+  /*
+   * ACTIONS
+   */
+
+  /**
+   * Register a tab
+   */
+  private registerTab(id: string) {
+    this.present({
+      mutation: 'registerTab',
+      payload: { id }
+    } as Proposal<PayloadRegisterTab>)
+  } 
+
+  /**
+   * Remove a tab
+   */
+  private removeTab(id: string) {
+    this.present({
+      mutation: 'removeTab',
+      payload: { id }
+    } as Proposal<PayloadRemoveTab>)
+  } 
+
+  /*
+   * A tab wants to update its layout
+   */
+  private setTabLayout(payload: { id: string, layout: LayoutInfo }) {
+    this.present({
+      mutation: 'setLayout',
+      payload
+    } as Proposal<PayloadLayout>)
+  }
+
+  /*
+   * MUTATIONS
+   */
+  private present(proposal: Proposal<any>) {
+    if (proposal.mutation === 'registerTab') {
+      const payload = proposal.payload as PayloadRegisterTab
+      // The tabs are still valid. Register a tab now will stale the layout.
+      // Remove existing tab if needed
+      this.SAMmodel.tabsState = this.SAMmodel.tabsState.filter(t => t.id !== payload.id)
+      // Let add this tab
+      this.SAMmodel.tabsState.push({id: payload.id, isStale: true})
+      this.computeState()
+    } else if (proposal.mutation === 'setLayout') {
+      const payload = proposal.payload as PayloadLayout
+      if (!payload.layout) return
+      if (this.isLayoutReady) {
+        // The tabs are still ready.
+        this.SAMmodel.tabsState = this.SAMmodel.tabsState.map(ref => {
+          if (ref.id === payload.id) return payload
+          return ({...ref })
+        })
+      } else {
+        // Let set this tab has ready
+        const tab = this.SAMmodel.tabsState.find(ref => ref.id === payload.id)
+        if (tab) {
+          tab.isStale = false
+          tab.layout = payload.layout
+        }
+        this.SAMmodel.tabsWidth = getTabsWidth(this.SAMmodel)
+      }    
+      this.computeState()
+    } else if (proposal.mutation === 'removeTab') {
+      // removeTab is also happen during stale control state while refreshing a tab.
+      // In this case, it is the registerTab mutation which handle this case.
+      if (this.controlState === 'stale') return 
+      const payload = proposal.payload as PayloadRemoveTab
+      this.SAMmodel.tabsState = this.SAMmodel.tabsState
+        .filter(s => s.id !== payload.id)
+      this.SAMmodel.tabsWidth = getTabsWidth(this.SAMmodel)
+      this.computeState()
+    }
+    // Always sort the tabs state by ID
+    this.SAMmodel.tabsState.sort((a, b) => {
+      return a.id.toUpperCase() < b.id.toUpperCase()
+        ? -1
+        : 1
+    })
+  }
+
   private setScrollState() {
-    if (this.barLayout === undefined) return 
-
-    const tabsWidth = this.getTabsWidth()
-    const isScrollEnabled = tabsWidth > this.barLayout.width
+    const isScrollEnabled = this.SAMmodel.tabsWidth > this.layout.barLayout!.width
     const hasRightScrollIndicator = isScrollEnabled
-    const maxScroll = isScrollEnabled
-      ? tabsWidth - this.barLayout.width + this.getStyles(isScrollEnabled).paddingHorizontal * 2
+    this.layout.maxScroll = isScrollEnabled
+      ? this.SAMmodel.tabsWidth - this.layout.barLayout!.width + this.getStyles(isScrollEnabled).paddingHorizontal * 2
       : 0
-
-    this.setState({ isScrollEnabled, maxScroll, hasRightScrollIndicator, scrollStateIsReady: true }, this.nap)
+    this.setState({ isScrollEnabled, hasRightScrollIndicator })
   }
 
   /**
@@ -408,19 +507,17 @@ class Tabs extends React.PureComponent<Props, State> {
    */
   private rollRight = debounce((id?: string) => {
     /* 1 */
-    const tabs = Array.from(this.tabsRefs.values())
-    const lastEntirelyDisplayedTab = this.lastEntirelyDisplayedTab
-
+    const lastEntirelyDisplayedTab = getLastEntirelyDisplayedTab(this.layout, this.paddingHorizontal)
     if (lastEntirelyDisplayedTab === undefined) return
-    
+
     /* 2 */
-    const tabId = id || lastEntirelyDisplayedTab.props.id
-    const nextTabIndex = tabs.findIndex(tab => tab.props.id === tabId) + 1
-    const nextTab = tabs[nextTabIndex]
+    const tabId = id || lastEntirelyDisplayedTab.id
+    const nextTabIndex = this.SAMmodel.tabsState.findIndex(tab => tab.id === tabId) + 1
+    const nextTab = this.SAMmodel.tabsState[nextTabIndex]
     if (!nextTab) return // that was the last tab
 
-     /* 3 */
-     this.scrollToTab(nextTab.props.id)
+    /* 3 */
+    this.scrollToTab(nextTab.id)
   }, 200, true)
 
   /**
@@ -432,24 +529,23 @@ class Tabs extends React.PureComponent<Props, State> {
    */
   private rollLeft = debounce((id?: string) => {
     /* 1 */
-    const tabs = Array.from(this.tabsRefs.values())
-    const firstEntirelyDisplayedTab = this.firstEntirelyDisplayedTab
+    const firstEntirelyDisplayedTab = getFirstEntirelyDisplayedTab(this.layout)
 
     if (firstEntirelyDisplayedTab === undefined) return
 
     /* 2 */
-    const tabId = id || firstEntirelyDisplayedTab.props.id
-    const previousTabIndex = tabs.findIndex(tab => tab.props.id === tabId)
-    const previousTab = tabs[previousTabIndex]
+    const tabId = id || firstEntirelyDisplayedTab.id
+    const previousTabIndex = this.SAMmodel.tabsState.findIndex(tab => tab.id === tabId)
+    const previousTab = this.SAMmodel.tabsState[previousTabIndex]
     if (!previousTab) return // that was the last tab
 
      /* 3 */
-    this.scrollToTab(previousTab.props.id)
+    this.scrollToTab(previousTab.id)
   }, 200, true)
 
   private scrollToTab(id: string) {
     const offset = this.getTabOffset(id)  
-    this.scrollTo(this.currentScroll + offset)
+    this.scrollTo(this.layout.currentScroll + offset)
   }
 
   /**
@@ -458,11 +554,11 @@ class Tabs extends React.PureComponent<Props, State> {
    * Otherwize the tab is overflowing from the right side.
    */
   private getTabOffset(id: string) {
-    const tab = this.tabsRefs.get(id)
+    const tab = this.layout.tabsState.find(t => t.id === id)
     if (tab === undefined) return 0
     else {
-      const offsetBorderLeft = this.getTabLeftOffset(tab)
-      const offsetBorderRight = this.getTabRightOffset(tab)
+      const offsetBorderLeft = getTabLeftOffset(tab, this.layout)
+      const offsetBorderRight = getTabRightOffset(tab, this.layout, this.paddingHorizontal)
       if (offsetBorderLeft < 0) {
         return offsetBorderLeft
       } else if(offsetBorderRight > 0) {
@@ -471,28 +567,19 @@ class Tabs extends React.PureComponent<Props, State> {
     }
   }
 
-  private getTabLeftOffset(tab: Tab) {
-    return tab.layout.x - this.currentScroll - this.barLayout!.x
-  }
-
-  private getTabRightOffset(tab: Tab) {
-    return (tab.layout.x + tab.layout.width + this.paddingHorizontal - this.currentScroll) - (this.barLayout!.x + this.barLayout!.width - this.paddingHorizontal)
-  }
-
   private scrollTo(position: number, animated = true) {
     const value = this.limit(position)
     this.scrollViewRef ?
       this.scrollViewRef.setScrollLeft(value, animated)
       : 0
-    this.currentScroll = value
+    this.layout.currentScroll = value
   }
 
   private onScroll(_newScrollTop: number, newScrollLeft: number) {
-    const maxScroll = this.state.maxScroll
-    this.currentScroll = newScrollLeft
+    this.layout.currentScroll = newScrollLeft
     this.setState({ 
       hasLeftScrollIndicator: newScrollLeft > 0,
-      hasRightScrollIndicator: newScrollLeft < maxScroll,
+      hasRightScrollIndicator: newScrollLeft < this.layout.maxScroll,
     })
   }
 
@@ -529,7 +616,7 @@ class Tabs extends React.PureComponent<Props, State> {
   }
 
   private limit(value: number = 0) {
-    return Math.min(this.state.maxScroll, Math.max(0, (value)))
+    return Math.min(this.layout.maxScroll, Math.max(0, (value)))
   }
 
   private onClickTab(activeTabId: string) {
@@ -549,7 +636,7 @@ class Tabs extends React.PureComponent<Props, State> {
     scaleY,
   }: { [key in AnimatableKey]: number }) {
     const customAnimation = this.props.customCursorAnimation
-      ? this.props.customCursorAnimation(this.cursorAnimatedValues, this.activeTab!.layout, this.props.theme!)
+      ? this.props.customCursorAnimation(this.cursorAnimatedValues, this.activeTab!.layout!, this.props.theme!)
       : {}
 
     return {
@@ -627,6 +714,66 @@ class Tabs extends React.PureComponent<Props, State> {
         )
     }
   }
+}
+
+function getFirstTab(model: SAMModel): TabState | undefined{
+  return model.tabsState[0] || undefined
+}
+
+function getLastTab(model: SAMModel): TabState | undefined {
+  return model.tabsState[model.tabsState.length - 1]
+}
+
+function getFirstTabId(model: SAMModel): string | undefined {
+  const tab = model.tabsState[0]
+  return tab !== undefined
+    ? tab.id
+    : undefined
+}
+
+function getTabsWidth(model: SAMModel): number {
+  if (model.tabsState.length === 0) return 0
+  const firstTabRect = getFirstTab(model)!.layout!
+  const lastTabRect = getLastTab(model)!.layout!
+  return !!firstTabRect && !!lastTabRect // Tabs are not mounted yet
+    ? Math.round(lastTabRect.x + lastTabRect.width - firstTabRect.x) // Some weird float value may happen. Round for consistency.
+    : 0
+}
+
+function getTabRightOffset(tab: TabLayout, tabsLayout: TabsLayout, paddingHorizontal: number): number {
+  return (tab.layout!.x + tab.layout!.width - tabsLayout.currentScroll) - (tabsLayout.barLayout!.x + tabsLayout.barLayout!.width - paddingHorizontal * 2)
+}
+
+function getTabLeftOffset(tab: TabLayout, tabsLayout: TabsLayout) {
+  return tab.layout!.x - tabsLayout.currentScroll - tabsLayout.barLayout!.x
+}
+
+function isTabOutsideOnRight(tabState: TabLayout, tabsLayout: TabsLayout, paddingHorizontal: number) {
+  return getTabRightOffset(tabState, tabsLayout, paddingHorizontal) > 0
+}
+
+function isTabOutsideOnLeft(tabState: TabLayout, tabsLayout: TabsLayout) {
+  return getTabLeftOffset(tabState, tabsLayout) < 0
+}
+
+/**
+ * Find the last tab on the right which is completely visible.
+ */
+function getLastEntirelyDisplayedTab(tabsLayout: TabsLayout, paddingHorizontal): TabLayout | undefined {
+  return tabsLayout.tabsState
+    .slice()
+    .reverse()
+    .find(t => !isTabOutsideOnRight(t, tabsLayout, paddingHorizontal))
+}
+
+  /**
+ * Find the last tab on the left which is completely visible.
+ */
+function getFirstEntirelyDisplayedTab(tabsLayout: TabsLayout): TabLayout | undefined {
+  return tabsLayout.tabsState
+  .slice()
+  .reverse()  
+  .find(t => isTabOutsideOnLeft(t, tabsLayout))
 }
 
 export default withTheme()(Tabs)
