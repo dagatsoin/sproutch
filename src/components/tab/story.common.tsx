@@ -5,6 +5,7 @@ import { Animated, Styles } from 'reactxp'
 import Tab from './Tab'
 import Tabs, { CustomAnimation } from './TabBar'
 import { View } from '../view'
+import { Text } from '../text'
 import { LayoutInfo } from 'reactxp/dist/common/Types';
 import { DefaultTheme } from '../../styles/theme';
 import { fade } from '../../styles/colorManipulator';
@@ -75,6 +76,7 @@ export default function({
                 id="0"
                 label={text('First tab label', firstTabLabel)}
                 isDisable={boolean('Disabled', isDisable)}
+                renderSlot={renderBadge}
                 renderIcon={iconStyle => (
                   <>
                     {boolean('With icon', hasIcon) && (
@@ -223,3 +225,21 @@ const customCursorAnimation: CustomAnimation = (
       ),
     ])
 })
+
+const renderBadge = () => {
+  return (
+    <View
+      style={Styles.createViewStyle({
+        backgroundColor: 'red',
+        borderRadius: 10,
+        width: 16,
+        height: 16,
+        position: 'absolute',
+        top: 0,
+        right: 0
+      })}
+    >
+      <Text style={Styles.createTextStyle({color: 'black', textAlign: 'center'})}>1</Text>
+    </View>
+  )
+}

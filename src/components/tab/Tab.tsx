@@ -25,6 +25,7 @@ export type TabProps = {
   onUnmount?: (id: string) => void
   onTabLayout?: (tab: { id: string, layout: LayoutInfo }) => void
   onWillMount?: (id: string) => void
+  renderSlot?: () => JSX.Element
 }
 
 class Tab extends React.Component<TabProps  & Types.ViewProps> {
@@ -55,6 +56,7 @@ class Tab extends React.Component<TabProps  & Types.ViewProps> {
       hasTwoLines = false,
       mustGrow = false,
       palette,
+      renderSlot,
       style,
     } = this.props
 
@@ -84,6 +86,7 @@ class Tab extends React.Component<TabProps  & Types.ViewProps> {
             >
               {renderIcon && renderIcon(styles.icon)}
               {label && <Text style={styles.label}>{label}</Text>}
+              {renderSlot && renderSlot()}
             </View>
           )
         }}
