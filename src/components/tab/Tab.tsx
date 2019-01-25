@@ -22,19 +22,28 @@ export type TabProps = {
   notification?: boolean
   style?: Partial<TabStyle>
   onClick?: (index: string) => void
-  onUnmount?: () => void
-} & Types.ViewProps
+  onUnmount?: (id: string) => void
+  onTabLayout?: (tab: { id: string, layout: LayoutInfo }) => void
+  onWillMount?: (id: string) => void
+}
 
-class Tab extends React.Component<TabProps> {
-  private _layout: LayoutInfo
+class Tab extends React.Component<TabProps  & Types.ViewProps> {
+  private layout: LayoutInfo
 
-  get layout(): LayoutInfo {
-    return this._layout
+  componentWillMount() {
+    const { onWillMount = () => {} } = this.props
+    onWillMount(this.props.id)
+  }
+
+  componentDidMount() {
+    this.onLayout(this.layout)
   }
 
   componentWillUnmount() {
+    console.log("unmount")
+
     const { onUnmount = () => {} } = this.props
-    onUnmount()
+    onUnmount(this.props.id)
   }
 
   render() {
@@ -65,16 +74,16 @@ class Tab extends React.Component<TabProps> {
               hasLabel: !!label,
             }
           })
-          const { id, onClick, ref } = this.props
+          const { id, onClick } = this.props
+
           return (
             <View
               onLayout={this.onLayout.bind(this)}
               style={styles.root}
-              ref={view => ref && ((ref as Function)(view))}
               onPress={() => !!onClick && onClick(id)}
             >
-                {renderIcon && renderIcon(styles.icon)}
-                {label && <Text style={styles.label}>{label}</Text>}
+              {renderIcon && renderIcon(styles.icon)}
+              {label && <Text style={styles.label}>{label}</Text>}
             </View>
           )
         }}
@@ -83,17 +92,19 @@ class Tab extends React.Component<TabProps> {
   }
 
   private onLayout(layout: LayoutInfo) {
-    const { onLayout = () => null } = this.props
+    const { id, onTabLayout } = this.props
     if (
-      this._layout !== undefined &&
-      this._layout.height === layout.height &&
-      this._layout.width === layout.width &&
-      this._layout.x === layout.x &&
-      this._layout.y === layout.y
+      this.layout !== undefined &&
+      this.layout.height === layout.height &&
+      this.layout.width === layout.width &&
+      this.layout.x === layout.x &&
+      this.layout.y === layout.y
     ) return
-
-    this._layout = layout
-    onLayout(layout)
+    this.layout = layout
+    onTabLayout && onTabLayout({
+      id,
+      layout
+    })
   }
 }
 export default Tab

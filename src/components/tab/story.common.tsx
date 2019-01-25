@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { text, boolean, select } from '@storybook/addon-knobs'
+import { text, boolean, number, select } from '@storybook/addon-knobs'
 import { Animated, Styles } from 'reactxp'
 
 import Tab from './Tab'
@@ -12,12 +12,14 @@ import { fade } from '../../styles/colorManipulator';
 const FontAwesome = require('react-native-vector-icons/FontAwesome')
 
 export default function({
-    label = 'ROCKET',
+    firstTabLabel = 'LARGE ROCKET LABEL',
+    otherTabsLabel = 'ROCKET',
     hasIcon = false,
     isDisable = false,
     hasTwoLines = false,
     palette = '' as '',
     activeTabId = '0',
+    tabNumber = 5,
     customCursor = false,
   }) {
     return (
@@ -65,188 +67,55 @@ export default function({
             </View>
           )}
         >
-          <Tab
-            key={0}
-            id="0"
-            label="Looooonoooooooooog label"
-            isDisable={boolean('Disabled', isDisable)}
-            renderIcon={iconStyle => (
-              <>
-                {boolean('With icon', hasIcon) && (
-                  <FontAwesome.default
-                    style={iconStyle}
-                    name="rocket"
-                    size={30}
-                    color="#900"
-                  />
+        {
+          setProps => (
+            <>
+              <Tab
+                key={0}
+                id="0"
+                label={text('First tab label', firstTabLabel)}
+                isDisable={boolean('Disabled', isDisable)}
+                renderIcon={iconStyle => (
+                  <>
+                    {boolean('With icon', hasIcon) && (
+                      <FontAwesome.default
+                        style={iconStyle}
+                        name="rocket"
+                        size={30}
+                        color="#900"
+                      />
+                    )}
+                  </>
                 )}
-              </>
-            )}
-          />
-          <Tab
-            key={1}
-            id="1"
-            label="Label"
-            renderIcon={iconStyle => (
-              <>
-                {boolean('With icon', hasIcon) && (
-                  <FontAwesome.default
-                    style={iconStyle}
-                    name="check"
-                    size={30}
-                    color="#900"
-                  />
-                )}
-              </>
-            )}
-          />
-          <Tab
-            key={2}
-            id="2"
-            label={text('Label', label)}
-            renderIcon={iconStyle => (
-              <>
-                {boolean('With icon', hasIcon) && (
-                  <FontAwesome.default
-                    style={iconStyle}
-                    name="check"
-                    size={30}
-                    color="#900"
-                  />
-                )}
-              </>
-            )}
-          />
-          <Tab
-            key={3}
-            id="3"
-            label={text('Label', label) + '03'}
-            renderIcon={iconStyle => (
-              <>
-                {boolean('With icon', hasIcon) && (
-                  <FontAwesome.default
-                    style={iconStyle}
-                    name="check"
-                    size={30}
-                    color="#900"
-                  />
-                )}
-              </>
-            )}
-          />
-          <Tab
-            key={4}
-            id="4"
-            label={text('Label', label) + '004'}
-            renderIcon={iconStyle => (
-              <>
-                {boolean('With icon', hasIcon) && (
-                  <FontAwesome.default
-                    style={iconStyle}
-                    name="check"
-                    size={30}
-                    color="#900"
-                  />
-                )}
-              </>
-            )}
-          />
-          <Tab
-            key={5}
-            id="5"
-            label={text('Label', label) + '0005'}
-            renderIcon={iconStyle => (
-              <>
-                {boolean('With icon', hasIcon) && (
-                  <FontAwesome.default
-                    style={iconStyle}
-                    name="check"
-                    size={30}
-                    color="#900"
-                  />
-                )}
-              </>
-            )}
-          />
-          <Tab
-            key={6}
-            id="6"
-            label={text('Label', label) + '00006'}
-            renderIcon={iconStyle => (
-              <>
-                {boolean('With icon', hasIcon) && (
-                  <FontAwesome.default
-                    style={iconStyle}
-                    name="check"
-                    size={30}
-                    color="#900"
-                  />
-                )}
-              </>
-            )}
-          />
-        </Tabs>
-        <Tabs
-          hasTwoLines={boolean('Has two lines', hasTwoLines)}
-          palette={select('Palette', ['primary', 'secondary', ''], palette)}
-          customCursorAnimation={
-            boolean('With custom cursor', customCursor)
-              ? customCursorAnimation
-              : undefined
-          }
-        >
-          <Tab
-            key={0}
-            id="0"
-            label={text('Label', label) + ' 0'}
-            isDisable={boolean('Disabled', isDisable)}
-            renderIcon={iconStyle => (
-              <>
-                {boolean('With icon', hasIcon) && (
-                  <FontAwesome.default
-                    style={iconStyle}
-                    name="rocket"
-                    size={30}
-                    color="#900"
-                  />
-                )}
-              </>
-            )}
-          />
-          <Tab
-            key={1}
-            id="1"
-            label={text('Label', label) + ' 1'}
-            renderIcon={iconStyle => (
-              <>
-                {boolean('With icon', hasIcon) && (
-                  <FontAwesome.default
-                    style={iconStyle}
-                    name="check"
-                    size={30}
-                    color="#900"
-                  />
-                )}
-              </>
-            )}
-          />
-          <Tab
-            key={2}
-            id="2"
-            label={text('Label', label) + ' 2'}
-            renderIcon={iconStyle => (
-              <>
-                {boolean('With icon', hasIcon) && (
-                  <FontAwesome.default
-                    style={iconStyle}
-                    name="check"
-                    size={30}
-                    color="#900"
-                  />
-                )}
-              </>
-            )}
-          />
+                {...setProps('0')}
+              />
+              {
+                Array.from(Array(number('Tab number', tabNumber)))
+                  .map((_, i) => (
+                    <Tab
+                      key={i+1}
+                      id={i+1+''}
+                      label={`${otherTabsLabel} ${i+1}`}
+                      renderIcon={iconStyle => (
+                        <>
+                          {boolean('With icon', hasIcon) && (
+                            <FontAwesome.default
+                              style={iconStyle}
+                              name="check"
+                              size={30}
+                              color="#900"
+                            />
+                          )}
+                        </>
+                      )}
+                      {...setProps(i+1+'')}
+                    />
+                  )
+                )
+              }
+            </>
+          )
+        }
         </Tabs>
       </>
     )

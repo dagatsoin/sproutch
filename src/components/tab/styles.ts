@@ -77,7 +77,11 @@ export const tabStyle = function({
       minWidth: tabMinWidth,
       maxWidth: tabMaxWidth,
 
-      ...(!!options && !options.mustGrow && { flex: 1 }),
+      ...(!!options && !options.mustGrow && { 
+        flexGrow: 1,
+        flexShrink: 1,
+        flexBasis: '100%'
+      }),
 
       paddingHorizontal: 16,
       paddingVertical: !!options && options.hasTwoLines
@@ -128,8 +132,9 @@ export const tabStyle = function({
       }
     }),
     label: Styles.createTextStyle({
+      
       margin: 0,
-      paddingLeft: !!options && options.hasTwoLines && options.hasIcon
+      paddingLeft: !!options && !options.hasTwoLines && options.hasIcon
         ? theme.spacing
         : 0,
 
