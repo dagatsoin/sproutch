@@ -203,6 +203,8 @@ export const tabsBarStyle = function({
       top: 0,
       bottom: 0,
       width: paddingHorizontal,
+
+      cursor: 'pointer',
     }),
     rightIndicator: Styles.createViewStyle({
       position: 'absolute',
@@ -210,6 +212,8 @@ export const tabsBarStyle = function({
       top: 0,
       bottom: 0,
       width: paddingHorizontal,
+
+      cursor: 'pointer',
     }),
     cursor: Styles.createViewStyle({  
       position: 'absolute',
