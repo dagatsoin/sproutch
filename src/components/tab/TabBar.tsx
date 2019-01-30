@@ -1,6 +1,6 @@
 import React from 'react'
 import { TabProps } from './Tab'
-import { ScrollView, Types, GestureView, Styles, Animated, Platform } from 'reactxp'
+import { ScrollView, Types, GestureView, Styles, Animated, Platform, Button } from 'reactxp'
 import { LayoutInfo } from 'reactxp/dist/common/Types'
 
 import { Theme } from '../../styles/theme'
@@ -8,11 +8,12 @@ import { withTheme, InjectedTheme } from '../../styles/withTheme'
 import { View } from '../view'
 import { tabsBarStyle, TabsBarStyle } from './styles'
 import { debounce } from '../../helpers'
+import { Ripple } from '../ripple'
 
 type Props = {
   activeTabId?: string
   hasTwoLines?: boolean
-  palette: 'primary' | 'secondary' | ''
+  palette?: 'primary' | 'secondary'
   style?: Partial<TabsBarStyle>
   children: (setProps: (id: string) => Partial<TabProps>) => JSX.Element
   customCursorAnimation?: CustomAnimation
@@ -585,32 +586,34 @@ class Tabs extends React.PureComponent<Props, State> {
 
   private renderLeftIndicator(styles: TabsBarStyle) {
     const { isScrollEnabled } = this.state
-    const { renderLeftIndicator } = this.props
+    const { palette, renderLeftIndicator } = this.props
 
     return isScrollEnabled && renderLeftIndicator
       ? (
-        <GestureView 
+        <Button 
           style={styles.leftIndicator}
-          onTap={() => this.rollLeft()}
+          onPress={() => this.rollLeft()}
         >
           {renderLeftIndicator()}
-        </GestureView>
+          <Ripple palette={palette}/>
+        </Button>
       )
       : <></>
   }
 
   private renderRightIndicator(styles: TabsBarStyle) {
     const { isScrollEnabled } = this.state
-    const { renderRightIndicator } = this.props
+    const { palette, renderRightIndicator } = this.props
 
     return isScrollEnabled && renderRightIndicator
       ? (
-        <GestureView 
+        <Button 
           style={styles.rightIndicator}
-          onTap={() => this.rollRight()}
+          onPress={() => this.rollRight()}
         >
           {renderRightIndicator()}
-        </GestureView>
+          <Ripple palette={palette}/>
+        </Button>
       )
       : <></>
   }

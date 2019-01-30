@@ -1,5 +1,5 @@
-import { storiesOf } from '@storybook/react'
-import {  withKnobs } from '@storybook/addon-knobs'
+import { storiesOf } from '@storybook/react-native'
+import { withKnobs } from '@storybook/addon-knobs'
 
 import renderFunction from './story.common'
 

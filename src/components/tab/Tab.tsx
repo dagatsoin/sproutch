@@ -3,10 +3,11 @@ import { Types } from 'reactxp'
 import { StyleRuleSet, StyleRuleSetRecursive, LayoutInfo } from 'reactxp/dist/common/Types'
 
 import  { tabStyle, TabStyle } from './styles'
-import { TextStyle } from '../../styles/createStyleSheet';
-import { ThemeContext } from '../../styles/theme';
-import { Text } from '../text';
-import { View } from '../view';
+import { TextStyle } from '../../styles/createStyleSheet'
+import { ThemeContext } from '../../styles/theme'
+import { Text } from '../text'
+import { View } from '../view'
+import { Ripple } from '../ripple'
 
 export type TabProps = {
   id: string
@@ -18,7 +19,7 @@ export type TabProps = {
   hasTwoLines?: boolean
   isDisable?: boolean
   mustGrow?: boolean
-  palette?: 'primary' | 'secondary' | ''
+  palette?: 'primary' | 'secondary'
   notification?: boolean
   style?: Partial<TabStyle>
   onClick?: (index: string) => void
@@ -41,8 +42,6 @@ class Tab extends React.Component<TabProps  & Types.ViewProps> {
   }
 
   componentWillUnmount() {
-    console.log("unmount")
-
     const { onUnmount = () => {} } = this.props
     onUnmount(this.props.id)
   }
@@ -87,6 +86,7 @@ class Tab extends React.Component<TabProps  & Types.ViewProps> {
               {renderIcon && renderIcon(styles.icon)}
               {label && <Text style={styles.label}>{label}</Text>}
               {renderSlot && renderSlot()}
+              <Ripple palette={palette}/>
             </View>
           )
         }}

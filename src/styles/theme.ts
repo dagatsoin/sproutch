@@ -110,6 +110,22 @@ export const darkBackground = {
   paper: colors.grey[800] // #424242
 }
 
+export const darkShadow = {
+  hover: .04,
+  focus: .12,
+  press: .16,
+  selected: .08,
+  activated: .12
+}
+
+export const lightShadow = {
+  hover: .08,
+  focus: .24,
+  press: .32,
+  selected: .16,
+  activated: .24
+}
+
 const defaultTypography: Typography = {
   fontFamily: 'Roboto',
   fontSize: 14,
