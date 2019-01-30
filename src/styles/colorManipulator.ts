@@ -1,5 +1,7 @@
 declare var process
 
+// @credit https://github.com/mui-org/material-ui
+
 /**
  * Returns a number whose value is limited to the given range.
  */
@@ -68,7 +70,7 @@ export function decomposeColor(color: any): any {
     if (['rgb', 'rgba', 'hsl', 'hsla'].indexOf(type) === -1) {
       throw new Error(
         [
-          `Material-UI: unsupported \`${color}\` color.`,
+          `Sproutch: unsupported \`${color}\` color.`,
           'We support the following formats: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla().',
         ].join('\n'),
       );

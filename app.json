@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "rn-storybook",
-    "slug": "rn-storybook",
+    "name": "Sproutch",
+    "slug": "sproutch",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
@@ -24,6 +24,8 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": "[WIP] A cross platform UI kit for web and react native Android/iOS.",
+    "githubUrl": "https://github.com/dagatsoin/sproutch"
   }
 }

@@ -18,16 +18,17 @@ export default function({
     hasIcon = false,
     isDisable = false,
     hasTwoLines = false,
-    palette = '' as '',
+    palette = undefined,
     activeTabId = '0',
     tabNumber = 5,
     customCursor = false,
   }) {
+    const paletteKnob = select('Palette', [ undefined as any, 'primary', 'secondary'], palette)
     return (
       <>
         <Tabs
           hasTwoLines={boolean('Has two lines', hasTwoLines)}
-          palette={select('Palette', ['primary', 'secondary', ''], palette)}
+          palette={paletteKnob || undefined}
           activeTabId={select('Tab', ['0', '1', '2', '3', '4', '5'], activeTabId)}
           customCursorAnimation={
             boolean('With custom cursor', customCursor)
@@ -42,7 +43,6 @@ export default function({
           renderLeftIndicator={() => (
             <View style={{
               flex: 1,
-              paddingLeft: 16,
               alignItems: 'center',
               justifyContent: 'center'
             }}>
@@ -56,7 +56,6 @@ export default function({
           renderRightIndicator={() => (
             <View style={{
               flex: 1,
-              paddingRight: 16,
               alignItems: 'center',
               justifyContent: 'center'
             }}>
