@@ -577,10 +577,10 @@ class Tabs extends React.PureComponent<Props, State> {
   }
 
   private onScroll(_newScrollTop: number, newScrollLeft: number) {
-    this.layout.currentScroll = newScrollLeft
+    this.layout.currentScroll = Math.round(newScrollLeft)
     this.setState({ 
-      hasLeftScrollIndicator: newScrollLeft > 0,
-      hasRightScrollIndicator: newScrollLeft < this.layout.maxScroll,
+      hasLeftScrollIndicator: this.layout.currentScroll > 0,
+      hasRightScrollIndicator: this.layout.currentScroll < this.layout.maxScroll,
     })
   }
 
