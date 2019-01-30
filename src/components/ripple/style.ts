@@ -13,17 +13,23 @@ type RippleStyle = {
 }
 
 export const containerStyle = function({
+  isOnPaper,
   palette,
   theme
 }: {
+  isOnPaper?: boolean
   palette?: 'primary' | 'secondary',
   theme: Theme<any, any>
 }): RootStyle {
   const backgroundColor = palette
     ? theme.palette[palette].main
-    : getLuminance(theme.palette.primary.main) >= .5
-      ? '#000'
-      : '#fff'
+    : isOnPaper
+      ? theme.palette.type === 'light'
+        ? '#000'
+        : '#fff'
+      : getLuminance(theme.palette.primary.main) >= .5
+        ? '#000'
+        : '#fff'
   const opacity = getLuminance(backgroundColor) >= .5
   ? darkShadow.hover
   : lightShadow.hover
@@ -51,6 +57,7 @@ export const containerStyle = function({
 export const rippleStyle = function({
   x,
   y,
+  isOnPaper,
   radius,
   theme,
   palette
@@ -59,13 +66,18 @@ export const rippleStyle = function({
   y: number
   radius: number
   theme: Theme<any, any>
+  isOnPaper?: boolean
   palette?: 'primary' | 'secondary'
 }): RippleStyle {
   const backgroundColor = palette
     ? theme.palette[palette].main
-    : getLuminance(theme.palette.primary.main) >= .5
-      ? '#000'
-      : '#fff'
+    : isOnPaper
+      ? theme.palette.type === 'light'
+        ? '#000'
+        : '#fff'
+      : getLuminance(theme.palette.primary.main) >= .5
+        ? '#000'
+        : '#fff'
   return {
     ripple: Styles.createViewStyle({
       position: 'absolute',

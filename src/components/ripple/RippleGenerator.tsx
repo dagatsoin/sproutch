@@ -9,6 +9,7 @@ import { Types } from '../../styles/createStyleSheet'
 import { Fade } from '../fade'
 
 type Props = {
+  isOnPaper?: boolean
   palette?: 'primary' | 'secondary',
 }
 
@@ -35,11 +36,12 @@ class RippleCreator extends React.PureComponent<Props, State> {
   private removeQueue: Function[] = []
 
   public render() {
-    const { palette } = this.props
+    const { isOnPaper, palette } = this.props
     return (
       <ThemeContext.Consumer>
         { theme => {
           const styleSheet = containerStyle({
+            isOnPaper,
             palette,
             theme
           })
@@ -104,6 +106,7 @@ class RippleCreator extends React.PureComponent<Props, State> {
     const posX = cursorX - radiusFrom
     const posY = cursorY - radiusFrom
     const radiusTo = Math.sqrt(rect.width ** 2 + rect.height ** 2)
+    const { isOnPaper, palette } = this.props
 
     this.setState(
       state => {
@@ -117,7 +120,8 @@ class RippleCreator extends React.PureComponent<Props, State> {
               radiusTo,
               radiusFrom,
               isFading: false,
-              palette: this.props.palette,
+              isOnPaper,
+              palette,
               onRippleEnd: this.onRippleEnd.bind(this)
             },
             ...state.ripplesProps,

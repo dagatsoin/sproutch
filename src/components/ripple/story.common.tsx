@@ -27,6 +27,6 @@ export default () => (
         })}
       >Click! Click!</Text>
     </View>
-    <Ripple/>
+    <Ripple isOnPaper/>
   </Paper>
 )

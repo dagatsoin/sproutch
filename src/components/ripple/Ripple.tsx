@@ -17,6 +17,7 @@ export type RippleProps = {
   y: number
   radiusTo: number
   radiusFrom: number
+  isOnPaper?: boolean
   palette?: 'primary' | 'secondary'
   onRippleEnd: () => void
 }
@@ -59,10 +60,11 @@ class Ripple extends React.PureComponent<RippleProps, {}> {
     return (
       <ThemeContext.Consumer>
         { theme => {
-          const { palette, radiusFrom, x, y } =  this.props
+          const { isOnPaper, palette, radiusFrom, x, y } =  this.props
           const styleSheet = rippleStyle({
             x,
             y,
+            isOnPaper,
             radius: radiusFrom,
             palette,
             theme
