@@ -1,4 +1,3 @@
-import jss, { Rule } from 'jss'
 import * as React from 'react'
 import { findDOMNode } from 'react-dom'
 import {
@@ -7,9 +6,10 @@ import {
   Platform,
   Types,
   View as RNView,
+  Styles,
 } from 'reactxp'
 
-import styles from './style'
+import { imageBackgroundStyle } from './style'
 
 export type ViewProps = {
   backgroundImage?: BackgroundImageProperties,
@@ -21,8 +21,8 @@ export type ViewProps = {
 export type BackgroundImageProperties = {
   uri: string,
   resizeMode: Types.ImageResizeMode
-  borderWidth: number
   capInsets?: {
+    borderWidth: number
     top: number
     right: number
     bottom: number
@@ -31,11 +31,7 @@ export type BackgroundImageProperties = {
 }
 
 export default class View extends React.Component<ViewProps, {}> {
-  private static imageBackgroundContainerStyle: Rule = jss.createRule(styles.imageBackgroundContainer)
-
-  private backgroundImageRef: RNView
   private ninePatchesRef: RNView
-  private imageBackgroundStyle: Rule
 
   public componentDidMount() {
     const { backgroundImage } = this.props
@@ -43,16 +39,10 @@ export default class View extends React.Component<ViewProps, {}> {
     if (backgroundImage !== undefined) {
       const { capInsets } = backgroundImage
 
-      if (Platform.getType() === 'web') {
-        const element = findDOMNode(this.backgroundImageRef) as HTMLElement
-        View.imageBackgroundContainerStyle.applyTo(element)
-      }
-
       if (capInsets !== undefined) {
         if (Platform.getType() === 'web') {
           const element = findDOMNode(this.ninePatchesRef) as HTMLElement
-          this.imageBackgroundStyle = jss.createRule(styles.imageBackground(backgroundImage))
-          this.imageBackgroundStyle.applyTo(element)
+          element.setAttribute('style', imageBackgroundStyle(backgroundImage))
         }
       }
     }
@@ -88,25 +78,12 @@ export default class View extends React.Component<ViewProps, {}> {
 
     return backgroundImage
       ? (
-        <RNView>
-          {this.render9PatchesImage(backgroundImage)}
-          <RNView
-            ref={(comp: RNView) => this.backgroundImageRef = comp}
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              flex: 1,
-            }}
-          >
-            <Image
-              style={{
-                flex: 1,
-              }}
-              resizeMode={backgroundImage.resizeMode}
-              source={backgroundImage.uri}
-            />
-          </RNView>
+        <RNView style={Styles.createViewStyle({flex: 1})}>
+          {
+            backgroundImage.capInsets
+              ? this.render9PatchesImage(backgroundImage)
+              : this.renderBackgroundImage(backgroundImage)
+          }
           {children}
         </RNView>
       )
@@ -126,5 +103,28 @@ export default class View extends React.Component<ViewProps, {}> {
     } else {
       return <></>
     }
+  }
+
+  private renderBackgroundImage(backgroundImage: BackgroundImageProperties) {
+    return (
+      <RNView
+        style={{
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0,
+          display: 'flex',
+        }}
+      >
+        <Image
+          style={{
+            flex: 1,
+          }}
+          resizeMode={backgroundImage.resizeMode}
+          source={backgroundImage.uri}
+        />
+      </RNView>
+    )
   }
 }

@@ -1,29 +1,20 @@
-import { BackgroundImageProperties } from './View'
-
-export default {
-  imageBackgroundContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    zIndex: -1,
-    width: '100%',
-    height: '100%',
-  },
-  imageBackground: ({
-    capInsets,
-    borderWidth,
-    uri,
-  }: BackgroundImageProperties) => ({
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    zIndex: -1,
-    width: '100%',
-    height: '100%',
-    borderWidth: `${borderWidth}px`,
-    borderImageSource: uri,
-    borderImageSlice: capInsets
+export function imageBackgroundStyle({
+  capInsets,
+  uri,
+}: any
+){
+  return `
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-width: ${capInsets.borderWidth}px;
+    border-style: solid;
+    border-image-source: url(${uri});
+    border-image-slice: ${capInsets
       ? `${capInsets.top} ${capInsets.right} ${capInsets.bottom} ${capInsets.left} fill`
-      : undefined
-  })
+      : undefined};
+  `
 }
