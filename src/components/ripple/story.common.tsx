@@ -4,7 +4,7 @@ import { View } from '../view'
 import { Text } from '../text'
 import { Paper } from '../paper'
 import { Ripple } from '.'
-import { Styles } from 'reactxp';
+import { Styles } from 'reactxp'
 
 export default () => (
   <Paper
@@ -17,16 +17,26 @@ export default () => (
     <View
       style={Styles.createViewStyle({
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
       })}
+      onStartShouldSetResponder={() => true}
+      onPress={console.log}
     >
-      <Text
-        style={Styles.createTextStyle({
-          textAlign: 'center'
+      <View
+        style={Styles.createViewStyle({
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center'
         })}
-      >Click! Click!</Text>
+      >
+        <Text
+          style={Styles.createTextStyle({
+            textAlign: 'center'
+          })}
+        >
+          Click! Click!
+        </Text>
+      </View>
+      <Ripple isOnPaper />
     </View>
-    <Ripple isOnPaper/>
   </Paper>
 )

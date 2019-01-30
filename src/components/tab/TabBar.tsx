@@ -590,12 +590,13 @@ class Tabs extends React.PureComponent<Props, State> {
 
     return isScrollEnabled && renderLeftIndicator
       ? (
-        <View 
+        <View
           style={styles.leftIndicator}
           onPress={() => this.rollLeft()}
+          onStartShouldSetResponder={() => true}
         >
           {renderLeftIndicator()}
-          <Ripple palette={palette}/>
+          {/*<Ripple palette={palette}/>*/}
         </View>
       )
       : <></>
@@ -610,9 +611,10 @@ class Tabs extends React.PureComponent<Props, State> {
         <View 
           style={styles.rightIndicator}
           onPress={() => this.rollRight()}
+          onStartShouldSetResponder={() => true}
         >
           {renderRightIndicator()}
-          <Ripple palette={palette}/>
+          {/*<Ripple palette={palette}/>*/}
         </View>
       )
       : <></>

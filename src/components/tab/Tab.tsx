@@ -86,7 +86,7 @@ class Tab extends React.Component<TabProps  & Types.ViewProps> {
               {renderIcon && renderIcon(styles.icon)}
               {label && <Text style={styles.label}>{label}</Text>}
               {renderSlot && renderSlot()}
-              <Ripple palette={palette}/>
+              {/*<Ripple palette={palette}/>*/}
             </View>
           )
         }}
