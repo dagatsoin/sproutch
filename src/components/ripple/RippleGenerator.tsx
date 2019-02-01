@@ -11,6 +11,7 @@ import { Fade } from '../fade'
 type Props = {
   isOnPaper?: boolean
   palette?: 'primary' | 'secondary',
+  onPress?: (e: Types.SyntheticEvent) => void
 }
 
 type State = {
@@ -36,7 +37,7 @@ class RippleCreator extends React.PureComponent<Props, State> {
   private removeQueue: Function[] = []
 
   public render() {
-    const { isOnPaper, palette } = this.props
+    const { isOnPaper, onPress, palette } = this.props
     return (
       <ThemeContext.Consumer>
         { theme => {
@@ -56,6 +57,7 @@ class RippleCreator extends React.PureComponent<Props, State> {
               </Fade>
               <Button
                 disableTouchOpacityAnimation
+                onPress={(e) => onPress && onPress(e)}
                 onHoverStart={() => {
                   this.setState({isHover: true})
                 }}

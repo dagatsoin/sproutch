@@ -81,12 +81,14 @@ class Tab extends React.Component<TabProps  & Types.ViewProps> {
             <View
               onLayout={this.onLayout.bind(this)}
               style={styles.root}
-              onPress={() => !!onClick && onClick(id)}
             >
               {renderIcon && renderIcon(styles.icon)}
               {label && <Text style={styles.label}>{label}</Text>}
               {renderSlot && renderSlot()}
-              {/*<Ripple palette={palette}/>*/}
+              {<Ripple
+                onPress={() => !!onClick && onClick(id)}
+                palette={palette}
+              />}
             </View>
           )
         }}

@@ -592,11 +592,15 @@ class Tabs extends React.PureComponent<Props, State> {
       ? (
         <View
           style={styles.leftIndicator}
-          onPress={() => this.rollLeft()}
           onStartShouldSetResponder={() => true}
         >
           {renderLeftIndicator()}
-          {/*<Ripple palette={palette}/>*/}
+          {
+            <Ripple
+              onPress={() => this.rollLeft()}
+              palette={palette}
+            />
+          }
         </View>
       )
       : <></>
@@ -610,11 +614,15 @@ class Tabs extends React.PureComponent<Props, State> {
       ? (
         <View 
           style={styles.rightIndicator}
-          onPress={() => this.rollRight()}
           onStartShouldSetResponder={() => true}
         >
           {renderRightIndicator()}
-          {/*<Ripple palette={palette}/>*/}
+          {
+            <Ripple
+              onPress={() => this.rollRight()}
+              palette={palette}
+            />
+          }
         </View>
       )
       : <></>
