@@ -1,5 +1,5 @@
 {
-  "name": "sproutch",
+  "name": "@sproutch/sproutch",
   "version": "0.0.1",
   "description": "A cross platform UI kit for web and react native Android/iOS.",
   "author": "Daniel Neveux",
@@ -35,7 +35,7 @@
     "ios": "rnstl && expo start --ios",
     "lint": "tslint --config tslint.prod.json --project .",
     "postinstall": "rndebugger-open --expo",
-    "prepare" : "npm run build",
+    "prepare": "npm run build",
     "pretty-quick": "pretty-quick --staged --pattern \"src/**/*.*(js|jsx|ts|tsx|json|md|css)\"",
     "start": "rnstl && expo start",
     "storybook": "start-storybook -p 6006 -c .storybook",
