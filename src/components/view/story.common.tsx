@@ -29,6 +29,7 @@ export const ninePatches = function() {
         backgroundImage={{
           uri: 'https://i.ibb.co/Yhs3Ff5/btn-bg.png',
           resizeMode: 'cover',
+          borderStyle: 'solid',
           capInsets: {
             borderWidth: 32,
             top: 127,
