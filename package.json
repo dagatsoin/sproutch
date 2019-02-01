@@ -10,14 +10,16 @@
   },
   "files": [
     "lib",
-    "LICENSE"
+    "LICENSE",
+    "src"
   ],
   "license": "MIT",
   "keywords": [
     "reactnative",
     "reactxp",
     "uikit",
-    "materialUI"
+    "material-ui",
+    "material-design"
   ],
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
@@ -33,6 +35,7 @@
     "ios": "rnstl && expo start --ios",
     "lint": "tslint --config tslint.prod.json --project .",
     "postinstall": "rndebugger-open --expo",
+    "prepare" : "npm run build",
     "pretty-quick": "pretty-quick --staged --pattern \"src/**/*.*(js|jsx|ts|tsx|json|md|css)\"",
     "start": "rnstl && expo start",
     "storybook": "start-storybook -p 6006 -c .storybook",
