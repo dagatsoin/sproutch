@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Text } from 'reactxp'
 
 import { Types } from '../../styles/createStyleSheet'
-import { ThemeContext, Theme } from '../../styles/theme'
+import { Theme, ThemeContext } from '../../styles/theme'
 
 type Props = Types.TextProps
 

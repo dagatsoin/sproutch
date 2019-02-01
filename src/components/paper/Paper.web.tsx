@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { findDOMNode } from 'react-dom'
 
-import { shadows } from './style'
-import { ViewStyle, Styles, StyleObject } from '../../styles/createStyleSheet'
+import { StyleObject, Styles, ViewStyle } from '../../styles/createStyleSheet'
 import { View } from '../view'
+import { shadows } from './style'
 
 type Props = {
   elevation?: number

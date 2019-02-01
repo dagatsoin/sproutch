@@ -1,9 +1,4 @@
-import { StyleObject, ViewStyle, Styles } from '../../styles/createStyleSheet'
-import { Theme } from '../../styles/theme'
-
-type RootStyle = {
-  root: StyleObject<ViewStyle>
-}
+import { Styles } from '../../styles/createStyleSheet'
 
 export default Styles.createViewStyle({
   position: 'absolute',

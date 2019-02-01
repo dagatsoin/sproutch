@@ -173,14 +173,6 @@ const defaultPalette: Palette = {
   tonalOffset: 0.2
 }
 
-// As the theme is global, we can prevent a computation for each component
-export function getTheme<B, O>(config: ThemeConfig<B, O>): Theme<Status & B, O> {
-  return deepmerge(
-    defaultTheme,
-    config
-  ) as Theme<Status & B, O> // fixme: why need to force the output type?
-}
-
 export const defaultTheme: DefaultTheme = {
   shape: {
     borderRadius: 4,
@@ -209,6 +201,14 @@ export const defaultTheme: DefaultTheme = {
       contrastText: colors.white, // #fff
     }
   },
+}
+
+// As the theme is global, we can prevent a computation for each component
+export function getTheme<B, O>(config: ThemeConfig<B, O>): Theme<Status & B, O> {
+  return deepmerge(
+    defaultTheme,
+    config
+  ) as Theme<Status & B, O> // fixme: why need to force the output type?
 }
 
 type Overridable = 

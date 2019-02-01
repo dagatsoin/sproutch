@@ -1,14 +1,33 @@
 {
+  "name": "sproutch",
+  "version": "0.0.1",
+  "description": "A cross platform UI kit for web and react native Android/iOS.",
+  "author": "Daniel Neveux",
+  "homepage": "https://dagatsoin.github.io/sproutch/",
+  "bugs": {
+    "url": "https://github.com/dagatsoin/sproutch/issues"
+  },
+  "files": [
+    "lib",
+    "LICENSE"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "reactnative",
+    "reactxp",
+    "uikit",
+    "materialUI"
+  ],
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "rnstl && expo start",
     "android": "rnstl && expo start --android",
     "ios": "rnstl && expo start --ios",
     "eject": "expo eject",
-    "lint": "tslint src/**/*.ts",
+    "lint": "tslint --config tslint.prod.json --project .",
     "tsc": "tsc",
     "clean": "rimraf build",
-    "build": "rnstl && npm run clean && npm run tsc --",
+    "build": "rnstl && npm run clean && npm run lint && npm run tsc --",
     "watch": "rnstl && npm run build -- -w",
     "watchAndRunAndroid": "concurrently \"npm run watch\" \"npm run android\"",
     "buildRunAndroid": "npm run build && npm run watchAndRunAndroid ",
@@ -31,15 +50,11 @@
     }
   },
   "dependencies": {
-    "awesome-typescript-loader": "^5.2.1",
     "expo": "^32.0.0",
-    "react": "16.5.0",
-    "react-art": "^16.7.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
-    "react-native-debugger-open": "^0.3.17",
-    "react-native-linear-gradient": "^2.5.3",
-    "react-native-vector-icons": "^6.1.0",
-    "react-native-web": "^0.10.0-alpha.1"
+    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz"
+  },
+  "peerDependencies": {
+    "react": "16.7.0"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^4.1.6",
@@ -58,15 +73,23 @@
     "@types/react-test-renderer": "^16.0.3",
     "@types/storybook__addon-knobs": "^4.0.0",
     "@types/storybook__react-native": "^3.0.3",
+    "awesome-typescript-loader": "^5.2.1",
     "babel-preset-expo": "^5.0.0",
     "concurrently": "^4.1.0",
+    "core-js": "^2.6.3",
     "deepmerge": "^3.0.0",
+    "react": "16.5.1",
+    "react-art": "^16.7.0",
+    "react-native-debugger-open": "^0.3.17",
+    "react-native-linear-gradient": "^2.5.3",
     "react-native-storybook-loader": "^1.8.0",
+    "react-native-vector-icons": "^6.1.0",
+    "react-native-web": "^0.10.0-alpha.1",
     "reactxp": "^1.5.0",
     "rimraf": "^2.6.2",
     "ts-jest": "^23.10.5",
     "tslint": "^5.12.0",
+    "tslint-react": "^3.6.0",
     "typescript": "^3.2.2"
-  },
-  "private": true
+  }
 }

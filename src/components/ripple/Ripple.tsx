@@ -1,11 +1,11 @@
 import * as React from 'react'
+import { Animated, Styles, Types } from 'reactxp'
 
+import { darkShadow, ThemeContext } from '../../styles/theme'
+import { View } from '../view'
 import { rippleStyle } from './style'
-import { View } from '../view';
-import { ThemeContext, darkShadow } from '../../styles/theme'
-import { Styles, Types, Animated } from 'reactxp';
 
-//const fadeInDuration = 75
+// const fadeInDuration = 75
 const fadeOutDuration = 150
 const scaleDuration = 225
 const easing = Animated.Easing.CubicBezier(.4, 0, .2, 1)
@@ -28,35 +28,35 @@ class Ripple extends React.PureComponent<RippleProps, {}> {
   private animatedStyle: Types.AnimatedViewStyleRuleSet
   private runningAnimation = false
   
-  componentWillMount() {
+  public componentWillMount() {
     this.animatedStyle = Styles.createAnimatedViewStyle({
         transform: [{ scale: this.animatedScale }],
         opacity: this.animatedOpacity
     })
   }
 
-  componentDidMount() {
+  public componentDidMount() {
     const { radiusFrom, radiusTo } = this.props
     this.runningAnimation = true
     Animated
       .timing(
         this.animatedScale,
         {
-          toValue: radiusTo/radiusFrom,
+          toValue: radiusTo / radiusFrom,
           duration: scaleDuration,
           easing
         }
       ).start(this.onAnimateRadiusEnd.bind(this))
   }
 
-  componentWillReceiveProps(newProps: RippleProps) {
+  public componentWillReceiveProps(newProps: RippleProps) {
     const { isFading: fading } = this.props
     if (newProps.isFading !== fading && !this.runningAnimation) {
       this.fadeOut()
     }
   }
 
-  render() {
+  public render() {
     return (
       <ThemeContext.Consumer>
         { theme => {

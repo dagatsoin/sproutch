@@ -1,6 +1,7 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
+    "noUnusedLocals": false,
     "rootDir": "../src",
     "baseUrl": "../src",
   },

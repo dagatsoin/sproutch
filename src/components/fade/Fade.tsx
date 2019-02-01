@@ -1,9 +1,9 @@
 import React from 'react'
 
-import fadeStyle from './style'
+import { Animated, Styles, Types } from 'reactxp'
 import { ViewStyle } from '../../styles/createStyleSheet'
 import { View } from '../view'
-import { Animated, Types, Styles } from 'reactxp';
+import fadeStyle from './style'
 
 type Props = {
   isVisible: boolean
@@ -11,7 +11,7 @@ type Props = {
   duration?: number
   palette?: 'primary' | 'secondary'
   style?: ViewStyle
-  onAnimationEnd?:() => void
+  onAnimationEnd?: () => void
   children: React.ReactNode
 }
 
@@ -20,12 +20,12 @@ type State = {
 }
 
 export default class Fade extends React.Component<Props, State> {
+
+  public state: State = { isVisible: false }
   private animatedOpacity = Animated.createValue(0)
   private animatedStyle: Types.AnimatedViewStyleRuleSet
   private animation: Types.Animated.CompositeAnimation
   private duration: number
-
-  state: State = { isVisible: false }
   
   constructor(props: Props) {
     super(props)
@@ -55,24 +55,26 @@ export default class Fade extends React.Component<Props, State> {
     this.animation = this.getAnimation(opacityTo)
   }
 
-  componentDidMount() {
+  public componentDidMount() {
     if (this.props.isAnimatedOnMount) {
       this.animation.start(this.onAnimationEnd.bind(this))
     }
   }
 
-  render() {
+  public render() {
     const { isVisible } = this.state
     const { children, style } = this.props
     return (
       <View
         style={[fadeStyle, style]}
         animated={this.animatedStyle}
-      >{isVisible && children}</View>
+      >
+        {isVisible && children}
+      </View>
     )
   }
 
-  componentDidUpdate(prevProps: Props, _prevState: State) {
+  public componentDidUpdate(prevProps: Props, _prevState: State) {
     if (this.props.isVisible !== prevProps.isVisible) {
       this.animation.stop()
       this.animation = this.getAnimation(this.props.isVisible
@@ -82,7 +84,7 @@ export default class Fade extends React.Component<Props, State> {
       const childrenShouldBeVisible = this.props.isVisible || (!this.props.isVisible && this.state.isVisible)
       this.setState({
         isVisible: childrenShouldBeVisible
-      }, () => {
+      },            () => {
         this.animation.start(this.onAnimationEnd.bind(this))
       })
     }

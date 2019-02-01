@@ -1,12 +1,12 @@
 import * as React from 'react'
-import { Button, UserInterface, Platform } from 'reactxp'
+import { Button, Platform, UserInterface } from 'reactxp'
 
+import { Types } from '../../styles/createStyleSheet'
+import { ThemeContext } from '../../styles/theme'
+import { Fade } from '../fade'
+import { View } from '../view'
 import Ripple, { RippleProps } from './Ripple'
 import { containerStyle } from './style'
-import { View } from '../view'
-import { ThemeContext } from '../../styles/theme'
-import { Types } from '../../styles/createStyleSheet'
-import { Fade } from '../fade'
 
 type Props = {
   isOnPaper?: boolean
@@ -24,17 +24,17 @@ type State = {
 type RippleInfo = RippleProps & { id: number }
 
 class RippleCreator extends React.PureComponent<Props, State> {
+
+  private static isWeb = Platform.getType() === 'web'
   public  state: State = {
     nextKey: 0,
     ripplesProps: [],
     isHover: false
   }
 
-  static isWeb = Platform.getType() === 'web'
-
   private containerRef: View
   private processingOnPressInHandler = false
-  private removeQueue: Function[] = []
+  private removeQueue: Array<() => void> = []
 
   public render() {
     const { isOnPaper, onPress, palette } = this.props
@@ -61,13 +61,13 @@ class RippleCreator extends React.PureComponent<Props, State> {
                 onHoverStart={() => {
                   this.setState({isHover: true})
                 }}
-                onPressIn={this.onPressIn.bind(this)}
-                onPressOut={this.onPressOut.bind(this)}
+                onPressIn={this.onPressIn}
+                onPressOut={this.onPressOut}
                 onHoverEnd={() => {
                   this.setState({isHover: false})
                   this.onPressOut()
                 }}
-                onContextMenu={this.onPressOut.bind(this)}
+                onContextMenu={this.onPressOut}
                 style={styleSheet.button}
               >
                 {this.state.ripplesProps.map(props => (
@@ -84,15 +84,15 @@ class RippleCreator extends React.PureComponent<Props, State> {
     )
   }
 
-  private onPressIn(e: Types.SyntheticEvent) {
+  private onPressIn = (e: Types.SyntheticEvent) => {
     this.addRipple(e.nativeEvent)
   }
 
-  private onPressOut() {
+  private onPressOut = () => {
     this.fadeNextRipple() 
   }
 
-  private async addRipple (event: Types.MouseEvent, cb = () => null) {
+  private async addRipple(event: Types.MouseEvent, cb: () => void = () => null) {
     this.processingOnPressInHandler = true
     const rect = await UserInterface.measureLayoutRelativeToWindow(this.containerRef)
 
@@ -132,8 +132,9 @@ class RippleCreator extends React.PureComponent<Props, State> {
       },
       cb
     )
-    // on slow mobile the onPressOut event comes befor the onPressIn because onPressIn is still busy with the layout measurement.
-    // so we buffer all the remove actions to execute until the end of the onPressIn handler execution.
+    // On slow mobile the onPressOut event comes befor the onPressIn
+    // because onPressIn is still busy with the layout measurement.
+    // So we buffer all the remove actions to execute until the end of the onPressIn handler execution.
     this.removeQueue.forEach(remove => remove())
     this.removeQueue = []
     this.processingOnPressInHandler = false
