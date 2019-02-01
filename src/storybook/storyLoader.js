@@ -10,6 +10,7 @@ function loadStories() {
   require('../components/ripple/story.native');
   require('../components/spiner/story.native');
   require('../components/tab/story.native');
+  require('../components/view/story.native');
   
 }
 
@@ -19,6 +20,7 @@ const stories = [
   '../components/ripple/story.native',
   '../components/spiner/story.native',
   '../components/tab/story.native',
+  '../components/view/story.native',
   
 ];
 

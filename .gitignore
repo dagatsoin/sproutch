@@ -1,9 +1,8 @@
 node_modules/**/*
 .expo/*
-build/
+lib/
 npm-debug.*
 *.jks
 *.p12
 *.key
 *.mobileprovision
-storybook-static

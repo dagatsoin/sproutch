@@ -1,6 +1,5 @@
-import { StyleObject, ViewStyle, Styles } from '../../styles/createStyleSheet'
-import { Theme, override } from '../../styles/theme'
-
+import { StyleObject, Styles, ViewStyle } from '../../styles/createStyleSheet'
+import { override, Theme } from '../../styles/theme'
 
 export type ProgressBarStyle = {
   root: StyleObject<ViewStyle>

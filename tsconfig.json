@@ -1,50 +1,40 @@
 {
   "compilerOptions": {
-      "allowJs": true,
-      "allowSyntheticDefaultImports": true,
-      "baseUrl": "./",
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "forceConsistentCasingInFileNames": true,
-      "jsx": "react",
-      "lib": ["es2017", "dom"],
-      "module":"es2015",
-      "moduleResolution": "node",
-      "noImplicitReturns": true,
-      "noImplicitThis": true,
-      "noUnusedLocals": false,
-      "noUnusedParameters": true,
-      "outDir": "build",
-      "preserveConstEnums": true,
-      "rootDir": "src",
-      "skipLibCheck": true,
-      "sourceMap": true,
-      "strictNullChecks": true,  
-      "suppressImplicitAnyIndexErrors": true,
-      "target": "es2015",
-      "paths": { 
-        "sproutch": ["./src/vendor/sproutch"]
-      },
-      "types": [
-        "node",
-        "react",
-        "react-dom",
-        "react-native"
-      ]
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react",
+    "lib": ["es2017", "dom"],
+    "module": "es2015",
+    "moduleResolution": "node",
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedParameters": true,
+    "outDir": "lib",
+    "preserveConstEnums": true,
+    "rootDir": "src",
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "target": "es2015",
+    "paths": {
+      "sproutch": ["./src/vendor/sproutch"]
+    },
+    "types": ["node", "react", "react-dom", "react-native"]
   },
-  "files": [
-    "src/index.tsx",
-  ],
-  "include": [
-    "src/types/*.d.ts"
-  ],
-  "exclude":[
-      "build", 
-      "node_modules",
-      "jest.config.js",
-      "App.js",
-      "babel.config.js",
-      "metro.config.js"
+  "files": ["src/index.tsx"],
+  "include": ["src/types/*.d.ts"],
+  "exclude": [
+    "build",
+    "node_modules",
+    "jest.config.js",
+    "App.js",
+    "babel.config.js",
+    "metro.config.js"
   ],
   "compileOnSave": false
 }

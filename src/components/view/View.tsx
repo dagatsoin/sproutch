@@ -4,9 +4,9 @@ import {
   Animated,
   Image,
   Platform,
+  Styles,
   Types,
   View as RNView,
-  Styles,
 } from 'reactxp'
 
 import { imageBackgroundStyle } from './style'

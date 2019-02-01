@@ -2,7 +2,7 @@ export function imageBackgroundStyle({
   capInsets,
   uri,
 }: any
-){
+) {
   return `
     position: absolute;
     z-index: -1;

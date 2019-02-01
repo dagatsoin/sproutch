@@ -34,11 +34,9 @@ type WithTheme = <T>() => <P extends ConsistentWith<P, InjectedTheme<T>>>(
   component: AnyComponent<P & InjectedTheme<T>>,
 ) => React.ComponentType<Overwrite<P, InjectedTheme<T>>>
 
-
 export interface InjectedTheme<T> {
-  theme?: T //todo make this injected props non optional
+  theme?: T // todo make this injected props non optional
 }
-
 
 export const withTheme: WithTheme = () => (Component: React.ComponentClass<any, any>) => (
   props: any

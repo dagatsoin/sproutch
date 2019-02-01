@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { Types } from 'reactxp'
-import { StyleRuleSet, StyleRuleSetRecursive, LayoutInfo } from 'reactxp/dist/common/Types'
+import { LayoutInfo, StyleRuleSet, StyleRuleSetRecursive } from 'reactxp/dist/common/Types'
 
-import  { tabStyle, TabStyle } from './styles'
 import { TextStyle } from '../../styles/createStyleSheet'
 import { ThemeContext } from '../../styles/theme'
+import { Ripple } from '../ripple'
 import { Text } from '../text'
 import { View } from '../view'
-import { Ripple } from '../ripple'
+import { tabStyle, TabStyle } from './styles'
 
 export type TabProps = {
   id: string
@@ -30,23 +30,23 @@ export type TabProps = {
 }
 
 class Tab extends React.Component<TabProps  & Types.ViewProps> {
-  private layout: LayoutInfo
+  private layout?: LayoutInfo
 
-  componentWillMount() {
+  public componentWillMount() {
     const { onWillMount = () => {} } = this.props
     onWillMount(this.props.id)
   }
 
-  componentDidMount() {
-    this.onLayout(this.layout)
+  public componentDidMount() {
+    this.layout && this.onLayout(this.layout)
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     const { onUnmount = () => {} } = this.props
     onUnmount(this.props.id)
   }
 
-  render() {
+  public render() {
     const {
       renderIcon,
       label,
@@ -79,7 +79,7 @@ class Tab extends React.Component<TabProps  & Types.ViewProps> {
 
           return (
             <View
-              onLayout={this.onLayout.bind(this)}
+              onLayout={this.onLayout}
               style={styles.root}
             >
               {renderIcon && renderIcon(styles.icon)}
@@ -96,7 +96,7 @@ class Tab extends React.Component<TabProps  & Types.ViewProps> {
     )
   }
 
-  private onLayout(layout: LayoutInfo) {
+  private onLayout = (layout: LayoutInfo) => {
     const { id, onTabLayout } = this.props
     if (
       this.layout !== undefined &&

@@ -1,6 +1,6 @@
-import { StyleObject, ViewStyle, Styles } from '../../styles/createStyleSheet'
-import { Theme, darkShadow, lightShadow } from '../../styles/theme'
-import { getLuminance } from '../../styles/colorManipulator';
+import { getLuminance } from '../../styles/colorManipulator'
+import { StyleObject, Styles, ViewStyle } from '../../styles/createStyleSheet'
+import { darkShadow, lightShadow, Theme } from '../../styles/theme'
 
 type RootStyle = {
   root: StyleObject<ViewStyle>

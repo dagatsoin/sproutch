@@ -1,7 +1,7 @@
-import { StyleObject, TextStyle, ViewStyle, Styles, ScrollViewStyle } from '../../styles/createStyleSheet'
-import { Theme, override } from '../../styles/theme'
+import { Platform } from 'reactxp'
 import { fade } from '../../styles/colorManipulator'
-import { Platform } from 'reactxp';
+import { ScrollViewStyle, StyleObject, Styles, TextStyle, ViewStyle } from '../../styles/createStyleSheet'
+import { override, Theme } from '../../styles/theme'
 
 export type TabStyle = {
   root: StyleObject<ViewStyle>

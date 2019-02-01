@@ -1,8 +1,9 @@
 import { storiesOf } from '@storybook/react-native'
-import { withKnobs } from '@storybook/addon-knobs'
+import {  withKnobs } from '@storybook/addon-knobs'
 
-import renderFunction from './story.common'
+import { backgroundImage, ninePatches } from './story.common'
 
 storiesOf('Sproutch', module)
   .addDecorator(withKnobs)
-  .add('Tabs', renderFunction as any)
+  .add('Background image', backgroundImage as any)
+  .add('Nine patches', ninePatches as any)
