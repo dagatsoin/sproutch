@@ -64,7 +64,7 @@ export const tabStyle = function({
   const tabColor =
     palette === undefined || palette === ''
       ? fade(theme.palette.primary.contrastText, 0.7)
-      : theme.palette[palette].main
+      : theme.palette.text.secondary
 
   const tabActiveColor =
     palette === undefined || palette === ''
