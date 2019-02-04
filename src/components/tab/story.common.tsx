@@ -87,27 +87,26 @@ const customCursorAnimation: CustomAnimation = (
   ]),
 })
 
-const renderBadge = () => {
-  return (
-    <View
-      style={Styles.createViewStyle({
-        backgroundColor: 'red',
-        borderRadius: 10,
-        width: 16,
-        height: 16,
-        position: 'absolute',
-        top: 0,
-        right: 0,
-      })}
+const notification = (
+  <View
+    style={Styles.createViewStyle({
+      backgroundColor: 'red',
+      borderRadius: 10,
+      width: 16,
+      height: 16,
+      position: 'absolute',
+      top: 0,
+      right: 0,
+    })}
+  >
+    <Text
+      style={Styles.createTextStyle({ color: 'black', textAlign: 'center' })}
     >
-      <Text
-        style={Styles.createTextStyle({ color: 'black', textAlign: 'center' })}
-      >
-        1
-      </Text>
-    </View>
-  )
-}
+      1
+    </Text>
+  </View>
+)
+
 export default function({
   firstTabLabel = 'LARGE ROCKET LABEL',
   otherTabsLabel = 'ROCKET',
@@ -170,7 +169,7 @@ export default function({
               id="0"
               label={text('First tab label', firstTabLabel)}
               isDisable={boolean('Disabled', isDisable)}
-              renderSlot={renderBadge}
+              slot={notification}
               renderIcon={iconStyle => (
                 <>
                   {boolean('With icon', hasIcon) && (

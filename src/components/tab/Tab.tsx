@@ -25,11 +25,11 @@ export type TabProps = {
   palette?: 'primary' | 'secondary'
   notification?: boolean
   style?: Partial<TabStyle>
+  slot?: JSX.Element
   onClick?: (index: string) => void
   onUnmount?: (id: string) => void
   onTabLayout?: (tab: { id: string; layout: LayoutInfo }) => void
   onWillMount?: (id: string) => void
-  renderSlot?: () => JSX.Element
 }
 
 class Tab extends React.Component<TabProps & Types.ViewProps> {
@@ -58,7 +58,7 @@ class Tab extends React.Component<TabProps & Types.ViewProps> {
       hasTwoLines = false,
       mustGrow = false,
       palette,
-      renderSlot,
+      slot,
       style,
     } = this.props
 
@@ -84,7 +84,7 @@ class Tab extends React.Component<TabProps & Types.ViewProps> {
             <View onLayout={this.onLayout} style={styles.root}>
               {renderIcon && renderIcon(styles.icon)}
               {label && <Text style={styles.label}>{label}</Text>}
-              {renderSlot && renderSlot()}
+              {slot}
               {
                 <Ripple
                   onPress={() => !!onClick && onClick(id)}
