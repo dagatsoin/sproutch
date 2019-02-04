@@ -2,6 +2,7 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "rootDir": "../src",
     "baseUrl": "../src",
   },

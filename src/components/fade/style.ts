@@ -1,4 +1,4 @@
-import { Styles } from '../../styles/createStyleSheet'
+import { Styles } from '../../styles/createStyle'
 
 export default Styles.createViewStyle({
   position: 'absolute',

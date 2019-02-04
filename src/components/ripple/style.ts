@@ -1,38 +1,39 @@
+import { Types } from 'reactxp'
+
 import { getLuminance } from '../../styles/colorManipulator'
-import { StyleObject, Styles, ViewStyle } from '../../styles/createStyleSheet'
+import { StyleObject, Styles } from '../../styles/createStyle'
 import { darkShadow, lightShadow, Theme } from '../../styles/theme'
 
 type RootStyle = {
-  root: StyleObject<ViewStyle>
-  overlay: StyleObject<ViewStyle>
-  button: StyleObject<ViewStyle>
+  root: StyleObject<Types.ViewStyle>
+  overlay: StyleObject<Types.ViewStyle>
+  button: StyleObject<Types.ViewStyle>
 }
 
 type RippleStyle = {
-  ripple: StyleObject<ViewStyle>
+  ripple: StyleObject<Types.ViewStyle>
 }
 
 export const containerStyle = function({
   isOnPaper,
   palette,
-  theme
+  theme,
 }: {
   isOnPaper?: boolean
-  palette?: 'primary' | 'secondary',
+  palette?: 'primary' | 'secondary'
   theme: Theme<any, any>
 }): RootStyle {
   const backgroundColor = palette
     ? theme.palette[palette].main
     : isOnPaper
-      ? theme.palette.type === 'light'
-        ? '#000'
-        : '#fff'
-      : getLuminance(theme.palette.primary.main) >= .5
-        ? '#000'
-        : '#fff'
-  const opacity = getLuminance(backgroundColor) >= .5
-  ? darkShadow.hover
-  : lightShadow.hover
+    ? theme.palette.type === 'light'
+      ? '#000'
+      : '#fff'
+    : getLuminance(theme.palette.primary.main) >= 0.5
+    ? '#000'
+    : '#fff'
+  const opacity =
+    getLuminance(backgroundColor) >= 0.5 ? darkShadow.hover : lightShadow.hover
 
   return {
     root: Styles.createViewStyle({
@@ -50,7 +51,7 @@ export const containerStyle = function({
     }),
     button: Styles.createViewStyle({
       flex: 1,
-    })
+    }),
   }
 }
 
@@ -60,7 +61,7 @@ export const rippleStyle = function({
   isOnPaper,
   radius,
   theme,
-  palette
+  palette,
 }: {
   x: number
   y: number
@@ -72,12 +73,12 @@ export const rippleStyle = function({
   const backgroundColor = palette
     ? theme.palette[palette].main
     : isOnPaper
-      ? theme.palette.type === 'light'
-        ? '#000'
-        : '#fff'
-      : getLuminance(theme.palette.primary.main) >= .5
-        ? '#000'
-        : '#fff'
+    ? theme.palette.type === 'light'
+      ? '#000'
+      : '#fff'
+    : getLuminance(theme.palette.primary.main) >= 0.5
+    ? '#000'
+    : '#fff'
   return {
     ripple: Styles.createViewStyle({
       position: 'absolute',
@@ -88,6 +89,6 @@ export const rippleStyle = function({
 
       backgroundColor,
       borderRadius: radius,
-    })
+    }),
   }
 }

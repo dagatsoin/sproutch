@@ -1,13 +1,14 @@
 import * as React from 'react'
 import { findDOMNode } from 'react-dom'
+import { Types } from 'reactxp'
 
-import { StyleObject, Styles, ViewStyle } from '../../styles/createStyleSheet'
+import { StyleObject, Styles } from '../../styles/createStyle'
 import { View } from '../view'
 import { shadows } from './style'
 
 type Props = {
   elevation?: number
-  style?: StyleObject<ViewStyle>
+  style?: StyleObject<Types.ViewStyle>
   square?: boolean
   children?: React.ReactNode
 }
@@ -23,21 +24,20 @@ export default class Paper extends React.Component<Props, {}> {
     const element = findDOMNode(this.containerRef) as HTMLElement
     element.style.boxShadow = this.shadow
   }
-  
-  public render() {
 
-    const {children, square } = this.props
+  public render() {
+    const { children, square } = this.props
 
     return (
       <View
-        ref={(comp: View) => this.containerRef = comp}
+        ref={(comp: View) => (this.containerRef = comp)}
         style={[
           this.props.style,
           square
             ? Styles.createViewStyle({
-              borderRadius: 0
-            })
-            : undefined
+                borderRadius: 0,
+              })
+            : undefined,
         ]}
       >
         {children}

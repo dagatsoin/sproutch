@@ -1,4 +1,4 @@
 export * from './theme'
 export * from './colors'
-export * from './createStyleSheet'
+export * from './createStyle'
 export * from './withTheme'

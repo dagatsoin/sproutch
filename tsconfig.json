@@ -8,7 +8,7 @@
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
     "lib": ["es2017", "dom"],
-    "module": "es2015",
+    "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitReturns": true,
     "noImplicitThis": true,
@@ -20,10 +20,7 @@
     "sourceMap": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
-    "target": "es2015",
-    "paths": {
-      "sproutch": ["./src/vendor/sproutch"]
-    },
+    "target": "es5",
     "types": ["node", "react", "react-dom", "react-native"]
   },
   "files": ["src/index.tsx"],

@@ -1,15 +1,15 @@
-import React from 'react'
-import { View } from 'reactxp'
+import * as React from 'react'
 import Svg, {
-  Rect,
   Defs,
   LinearGradient,
-  Stop,
+  Path,
   RadialGradient,
-  Path
+  Rect,
+  Stop,
 } from 'react-native-svg'
+import { Types, View } from 'reactxp'
 
-import { StyleObject, ViewStyle, Styles } from '../../styles'
+import { StyleObject, Styles } from '../../styles'
 
 type Props = {
   width?: number
@@ -20,7 +20,7 @@ type Props = {
   opacity?: number
   x?: number
   y?: number
-  style: StyleObject<ViewStyle>
+  style: StyleObject<Types.ViewStyle>
   children?: JSX.Element
 }
 
@@ -57,7 +57,7 @@ export default (props: Props) => {
     x = 0,
     y = 0,
     style = {},
-    children
+    children,
   } = props
 
   //define the lengths
@@ -83,7 +83,7 @@ export default (props: Props) => {
         stopColor={color}
         stopOpacity="0"
         key={key + 'Linear1'}
-      />
+      />,
     ]
   }
   const radial = (key: string) => {
@@ -105,7 +105,7 @@ export default (props: Props) => {
         stopColor={color}
         stopOpacity="0"
         key={key + 'Radial2'}
-      />
+      />,
     ]
   }
 
@@ -118,7 +118,7 @@ export default (props: Props) => {
         position: 'relative',
         width,
         height,
-        ...(style as object)
+        ...(style as object),
       })}
     >
       <Svg
@@ -127,7 +127,7 @@ export default (props: Props) => {
         style={{
           position: 'absolute',
           top: y - lineWidth,
-          left: x - lineWidth
+          left: x - lineWidth,
         }}
       >
         <Defs>

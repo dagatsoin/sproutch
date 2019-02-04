@@ -1,2 +1,7 @@
-export * from './styles'
-export * from './components'
+import * as Components from './components'
+import * as Styles from './styles'
+
+export = {
+  ...Components,
+  ...Styles,
+}

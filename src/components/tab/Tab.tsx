@@ -1,8 +1,11 @@
 import * as React from 'react'
 import { Types } from 'reactxp'
-import { LayoutInfo, StyleRuleSet, StyleRuleSetRecursive } from 'reactxp/dist/common/Types'
+import {
+  LayoutInfo,
+  StyleRuleSet,
+  StyleRuleSetRecursive,
+} from 'reactxp/dist/common/Types'
 
-import { TextStyle } from '../../styles/createStyleSheet'
 import { ThemeContext } from '../../styles/theme'
 import { Ripple } from '../ripple'
 import { Text } from '../text'
@@ -12,7 +15,7 @@ import { tabStyle, TabStyle } from './styles'
 export type TabProps = {
   id: string
   renderIcon?: (
-    style: StyleRuleSetRecursive<StyleRuleSet<TextStyle>>
+    style: StyleRuleSetRecursive<StyleRuleSet<Types.TextStyle>>
   ) => JSX.Element
   label?: string
   isActive?: boolean
@@ -24,12 +27,12 @@ export type TabProps = {
   style?: Partial<TabStyle>
   onClick?: (index: string) => void
   onUnmount?: (id: string) => void
-  onTabLayout?: (tab: { id: string, layout: LayoutInfo }) => void
+  onTabLayout?: (tab: { id: string; layout: LayoutInfo }) => void
   onWillMount?: (id: string) => void
   renderSlot?: () => JSX.Element
 }
 
-class Tab extends React.Component<TabProps  & Types.ViewProps> {
+class Tab extends React.Component<TabProps & Types.ViewProps> {
   private layout?: LayoutInfo
 
   public componentWillMount() {
@@ -73,22 +76,21 @@ class Tab extends React.Component<TabProps  & Types.ViewProps> {
               mustGrow,
               hasIcon: !!renderIcon,
               hasLabel: !!label,
-            }
+            },
           })
           const { id, onClick } = this.props
 
           return (
-            <View
-              onLayout={this.onLayout}
-              style={styles.root}
-            >
+            <View onLayout={this.onLayout} style={styles.root}>
               {renderIcon && renderIcon(styles.icon)}
               {label && <Text style={styles.label}>{label}</Text>}
               {renderSlot && renderSlot()}
-              {<Ripple
-                onPress={() => !!onClick && onClick(id)}
-                palette={palette}
-              />}
+              {
+                <Ripple
+                  onPress={() => !!onClick && onClick(id)}
+                  palette={palette}
+                />
+              }
             </View>
           )
         }}
@@ -104,12 +106,14 @@ class Tab extends React.Component<TabProps  & Types.ViewProps> {
       this.layout.width === layout.width &&
       this.layout.x === layout.x &&
       this.layout.y === layout.y
-    ) return
+    )
+      return
     this.layout = layout
-    onTabLayout && onTabLayout({
-      id,
-      layout
-    })
+    onTabLayout &&
+      onTabLayout({
+        id,
+        layout,
+      })
   }
 }
 export default Tab

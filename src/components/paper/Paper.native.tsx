@@ -1,14 +1,14 @@
 import * as React from 'react'
+import { Types } from 'reactxp'
 
+import { StyleObject } from '../../styles'
 import { BoxShadow } from '../shadow'
-import { shadows, styles } from './style'
-import { ViewStyle, StyleObject } from '../../styles/createStyleSheet'
 import { View } from '../view'
-import { ViewOnLayoutEvent } from 'reactxp/dist/common/Types'
+import { shadows, styles } from './style'
 
 type Props = {
   elevation?: number
-  style?: StyleObject<ViewStyle>
+  style?: StyleObject<Types.ViewStyle>
   square?: boolean
   children?: React.ReactNode
 }
@@ -19,18 +19,18 @@ type State = {
 }
 
 export default class Paper extends React.Component<Props, State> {
-  childRef: View
+  public childRef: View
 
-  state: State = {
+  public state: State = {
     width: 0,
     height: 0,
   }
 
-  onLayout({ width, height }: ViewOnLayoutEvent) {
+  public onLayout = ({ width, height }: Types.ViewOnLayoutEvent) => {
     if (!this.state.width) this.setState({ width, height })
   }
 
-  shouldComponentUpdate(nextProps: Props, nextState: State){
+  public shouldComponentUpdate(nextProps: Props, nextState: State) {
     return (
       nextProps.elevation !== this.props.elevation ||
       this.state.width !== nextState.width ||
@@ -38,43 +38,30 @@ export default class Paper extends React.Component<Props, State> {
     )
   }
 
-  render () {
+  public render() {
     const { elevation, children, square, style } = this.props
     const { width, height } = this.state
-    const nativeShadows = !!elevation && elevation > 0
-      ? shadows.native[elevation - 1](width, height)
-      : []
+    const nativeShadows =
+      !!elevation && elevation > 0
+        ? shadows.native[elevation - 1](width, height)
+        : []
 
     return (
-      <View
-        onLayout={this.onLayout.bind(this)}
-        style={[
-          style,
-          styles.root,
-        ]}
-      >
-        {
-          width !== 0 &&
+      <View onLayout={this.onLayout} style={[style, styles.root]}>
+        {width !== 0 &&
           height !== 0 &&
           nativeShadows.map((shadow, index) => (
             <BoxShadow
               key={index}
               style={{
-                ...styles.nativeShadowContainer as object,
-                ...!square && styles.roundBorder as object,
-                ...shadow.style as object
+                ...(styles.nativeShadowContainer as object),
+                ...(!square && (styles.roundBorder as object)),
+                ...(shadow.style as object),
               }}
               {...shadow.setting}
             />
-          ))
-        }
-        <View
-          style={[
-            styles.contentContainer,
-          ]}
-        >
-          {children}
-        </View>
+          ))}
+        <View style={[styles.contentContainer]}>{children}</View>
       </View>
     )
   }

@@ -1,10 +1,15 @@
-import React from 'react'
+import {
+  addDecorator,
+  configure,
+  getStorybookUI,
+  RenderFunction,
+} from '@storybook/react-native'
+import { Font } from 'expo'
+import * as React from 'react'
 import { ScrollView, StyleSheet as RNStyles } from 'react-native'
 import { Platform } from 'reactxp'
-import { Font } from 'expo'
-import { getStorybookUI, configure, addDecorator } from '@storybook/react-native'
 
-import { ThemeContext, getTheme } from '../'
+import { getTheme, ThemeContext } from '../styles'
 import './rn-addons'
 import { loadStories } from './storyLoader'
 
@@ -16,24 +21,22 @@ const styles = RNStyles.create({
     justifyContent: 'space-around',
     display: 'flex',
     flex: 1,
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  },
 })
 
 // Center the story in the screen
-const Center = (storyFn: Function) => (
-  <ScrollView
-    contentContainerStyle={styles.contentContainer}
-    >
+const Center = (storyFn: RenderFunction) => (
+  <ScrollView contentContainerStyle={styles.contentContainer}>
     {storyFn()}
   </ScrollView>
 )
 
 // Add the Theme provider
 
-const ThemeInjector = (storyFn: Function) => (
+const ThemeInjector = (storyFn: RenderFunction) => (
   <ThemeContext.Provider value={getTheme({})}>
-    { storyFn() }
+    {storyFn()}
   </ThemeContext.Provider>
 )
 
@@ -52,31 +55,35 @@ type State = {
 }
 
 export default class App extends React.Component<{}, {}> {
-  state: State = {
-    areAssetLoaded: false
+  public state: State = {
+    areAssetLoaded: false,
   }
-  
-  async componentDidMount() {
-    switch(Platform.getType()) {
+
+  public async componentDidMount() {
+    switch (Platform.getType()) {
       case 'ios':
         await Font.loadAsync({
-          'Roboto': require('../assets/fonts/roboto/Roboto-Regular.ttf'),
-          'FontAwesome': require('../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf'),
+          Roboto: require('../assets/fonts/roboto/Roboto-Regular.ttf'),
+          FontAwesome: require('../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf'),
         })
-        
+
         this.setState({
-          areAssetLoaded: true
+          areAssetLoaded: true,
         })
         break
-      
+
       case 'android':
-      await Font.loadAsync({
-        'FontAwesome': require('../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf'),
-      })
-      
+        await Font.loadAsync({
+          FontAwesome: require('../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf'),
+        })
+        this.setState({
+          areAssetLoaded: true,
+        })
+        break
+
       default:
         this.setState({
-          areAssetLoaded: true
+          areAssetLoaded: true,
         })
     }
   }
@@ -86,9 +93,7 @@ export default class App extends React.Component<{}, {}> {
     return areAssetLoaded
   }
 
-  render() {
-    return this.isReady
-      ? <GetStoryBookUIRoot/>
-      : <></>
+  public render() {
+    return this.isReady ? <GetStoryBookUIRoot /> : <></>
   }
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import { Animated, Platform, ScrollView, Styles, Types } from 'reactxp'
 import { LayoutInfo } from 'reactxp/dist/common/Types'
 import { TabProps } from './Tab'
@@ -741,7 +741,7 @@ function getLastTab(model: SAMModel): TabState | undefined {
 
 function getFirstTabId(model: SAMModel): string | undefined {
   const tab = model.tabsState[0]
-  return tab !== undefined ? tab.id : undefined
+  return tab ? tab.id : undefined
 }
 
 function getTabsWidth(model: SAMModel): number {
