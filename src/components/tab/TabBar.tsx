@@ -651,10 +651,8 @@ class Tabs extends React.PureComponent<Props, State> {
     // Offset the tab if it overflows
     if (activeTabId !== this.state.activeTabId) {
       this.scrollToTab(activeTabId)
-      this.setState(
-        { activeTabId },
-        () => this.props.onChange && this.props.onChange(activeTabId)
-      )
+      this.props.onChange && this.props.onChange(activeTabId)
+      this.setState({ activeTabId })
     }
   }
 
