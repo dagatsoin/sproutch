@@ -24,6 +24,7 @@ type Props = {
   ) => JSX.Element | JSX.Element[]
   renderLeftIndicator?: () => JSX.Element | JSX.Element[]
   renderRightIndicator?: () => JSX.Element | JSX.Element[]
+  onChange?: (tabId: string) => void
 } & InjectedTheme<Theme<any, any>>
 
 export type CustomAnimation = (
@@ -270,7 +271,7 @@ class Tabs extends React.PureComponent<Props, State> {
     const tabs = (
       <View style={styles.wrapper}>
         {this.renderCursor(styles)}
-        {this.props.children(this.bindTab.bind(this))}
+        {this.props.children(this.bindTab)}
       </View>
     )
 
@@ -303,15 +304,15 @@ class Tabs extends React.PureComponent<Props, State> {
   /**
    * This function inject some additional props into the child.
    */
-  private bindTab(id: string): Partial<TabProps> {
+  private bindTab = (id: string): Partial<TabProps> => {
     const { hasTwoLines, palette } = this.props
     const { activeTabId, isScrollEnabled } = this.state
 
     return {
-      onWillMount: this.registerTab.bind(this),
-      onTabLayout: this.setTabLayout.bind(this),
-      onUnmount: this.removeTab.bind(this),
-      onClick: this.onClickTab.bind(this),
+      onWillMount: this.registerTab,
+      onTabLayout: this.setTabLayout,
+      onUnmount: this.removeTab,
+      onClick: this.onClickTab,
       isActive: id === activeTabId,
       mustGrow: isScrollEnabled,
       hasTwoLines,
@@ -479,7 +480,7 @@ class Tabs extends React.PureComponent<Props, State> {
   /**
    * Register a tab
    */
-  private registerTab(id: string) {
+  private registerTab = (id: string) => {
     this.present({
       mutation: 'registerTab',
       payload: { id },
@@ -489,7 +490,7 @@ class Tabs extends React.PureComponent<Props, State> {
   /**
    * Remove a tab
    */
-  private removeTab(id: string) {
+  private removeTab = (id: string) => {
     this.present({
       mutation: 'removeTab',
       payload: { id },
@@ -499,7 +500,7 @@ class Tabs extends React.PureComponent<Props, State> {
   /*
    * A tab wants to update its layout
    */
-  private setTabLayout(payload: { id: string; layout: LayoutInfo }) {
+  private setTabLayout = (payload: { id: string; layout: LayoutInfo }) => {
     this.present({
       mutation: 'setLayout',
       payload,
@@ -646,10 +647,15 @@ class Tabs extends React.PureComponent<Props, State> {
     return Math.min(this.layout.maxScroll, Math.max(0, value))
   }
 
-  private onClickTab(activeTabId: string) {
+  private onClickTab = (activeTabId: string) => {
     // Offset the tab if it overflows
-    this.scrollToTab(activeTabId)
-    this.setState({ activeTabId })
+    if (activeTabId !== this.state.activeTabId) {
+      this.scrollToTab(activeTabId)
+      this.setState(
+        { activeTabId },
+        () => this.props.onChange && this.props.onChange(activeTabId)
+      )
+    }
   }
 
   private getAnimation({
