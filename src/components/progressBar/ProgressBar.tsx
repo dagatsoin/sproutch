@@ -5,38 +5,40 @@ import { ThemeContext } from '../../styles/theme'
 import { View } from '../view'
 import styles, { ProgressBarStyle } from './style'
 
-type Props = {
-  className?: string
+export type ProgressBarProps = {
   animationDuration?: number
   progress: number
   palette?: 'primary' | 'secondary'
   style?: Partial<ProgressBarStyle>
 }
 
-class ProgressBar extends React.PureComponent<Props> {
+class ProgressBar extends React.PureComponent<ProgressBarProps> {
   private animatedPercent = Animated.createValue(0.0)
   private animatedStyle: Types.AnimatedViewStyleRuleSet
   private animation: Types.Animated.CompositeAnimation
 
-  constructor(props: Props) {
+  constructor(props: ProgressBarProps) {
     super(props)
 
     const value = this.limit(props.progress)
     this.animatedPercent = Animated.createValue(value)
     this.animatedStyle = Styles.createAnimatedViewStyle({
-        transform: [{ scaleX: this.animatedPercent }]
+      transform: [{ scaleX: this.animatedPercent }],
     })
-    this.animation = this.getAnimation(value, props.animationDuration || 0)
+    this.animation = this.getAnimation(value, props.animationDuration || 0)
   }
 
   public componentDidMount() {
     this.animation.start()
   }
 
-  public componentWillReceiveProps(newProps: Props) {
+  public componentWillReceiveProps(newProps: ProgressBarProps) {
     this.animation.stop()
     const value = this.limit(newProps.progress)
-    this.animation = this.getAnimation(value, newProps.animationDuration || this.props.animationDuration || 0)
+    this.animation = this.getAnimation(
+      value,
+      newProps.animationDuration || this.props.animationDuration || 0
+    )
     this.animation.start()
   }
 
@@ -46,38 +48,30 @@ class ProgressBar extends React.PureComponent<Props> {
     return (
       <ThemeContext.Consumer>
         {theme => {
-          const stylesSheet = styles({theme, palette, style})
+          const stylesSheet = styles({ theme, palette, style })
           return (
             <View style={stylesSheet.root}>
-              <View style={stylesSheet.background}/>
+              <View style={stylesSheet.background} />
               <View style={stylesSheet.top}>
-                <View 
-                  style={stylesSheet.fill}
-                  animated={this.animatedStyle}
-                />
+                <View style={stylesSheet.fill} animated={this.animatedStyle} />
               </View>
             </View>
           )
-        }
-        }
+        }}
       </ThemeContext.Consumer>
     )
   }
 
   private limit(value: number = 0) {
-    return Math.min(1, Math.max(0, (value  / 100)))
+    return Math.min(1, Math.max(0, value / 100))
   }
 
   private getAnimation(toValue: number, duration: number) {
-    return Animated
-      .timing(
-        this.animatedPercent,
-        {
-          toValue,
-          duration,
-          easing: Animated.Easing.InOut()
-        }
-      )
+    return Animated.timing(this.animatedPercent, {
+      toValue,
+      duration,
+      easing: Animated.Easing.InOut(),
+    })
   }
 }
 

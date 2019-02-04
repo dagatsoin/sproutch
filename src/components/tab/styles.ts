@@ -11,25 +11,30 @@ export type TabStyle = {
 }
 
 export type TabsBarStyle = {
-  cursor: StyleObject<Types.ViewStyle>
   root: StyleObject<Types.ViewStyle>
   wrapper: StyleObject<Types.ViewStyle>
   leftIndicator: StyleObject<Types.ViewStyle>
-  scrollView: StyleObject<Types.ScrollViewStyle>
   rightIndicator: StyleObject<Types.ViewStyle>
+  cursor: StyleObject<Types.ViewStyle>
+  scrollView: StyleObject<Types.ScrollViewStyle>
   paddingHorizontal: number
 }
 
 export type TabStyleOverride = TabStyle & {
   root: StyleObject<Types.ViewStyle>
-  hasIcon: StyleObject<Types.TextStyle>
-  hasLabel: StyleObject<Types.TextStyle>
+  icon: StyleObject<Types.TextStyle>
+  label: StyleObject<Types.TextStyle>
+  hasIcon: StyleObject<Types.ViewStyle>
+  hasLabel: StyleObject<Types.ViewStyle>
 }
 
 export type TabBarStyleOverride = TabStyle & {
   root: StyleObject<Types.ViewStyle>
-  hasIcon: StyleObject<Types.TextStyle>
-  hasLabel: StyleObject<Types.TextStyle>
+  wrapper: StyleObject<Types.ViewStyle>
+  leftIndicator: StyleObject<Types.ViewStyle>
+  rightIndicator: StyleObject<Types.ViewStyle>
+  cursor: StyleObject<Types.ViewStyle>
+  scrollView: StyleObject<Types.ScrollViewStyle>
 }
 
 export const tabStyle = function({
@@ -98,6 +103,8 @@ export const tabStyle = function({
 
       cursor: 'pointer',
 
+      ...(style.root as object),
+
       ...override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'root'),
 
       ...(!!options && options.hasIcon
@@ -107,8 +114,6 @@ export const tabStyle = function({
       ...(!!options && options.hasLabel
         ? override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'hasLabel')
         : (style.hasLabel as object)),
-
-      ...(style.root as object),
     }),
     icon: Styles.createTextStyle({
       justifyContent: 'center',
@@ -131,6 +136,10 @@ export const tabStyle = function({
         options.isDisable && {
           color: tabDisabledColor,
         }),
+
+      ...(style.icon as object),
+
+      ...override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'icon'),
     }),
     label: Styles.createTextStyle({
       margin: 0,
@@ -153,6 +162,10 @@ export const tabStyle = function({
         options.isDisable && {
           color: tabDisabledColor,
         }),
+
+      ...(style.icon as object),
+
+      ...override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'label'),
     }),
   }
 }
@@ -165,7 +178,7 @@ export const tabsBarStyle = function({
 }: {
   theme: Theme<any, any>
   palette?: 'primary' | 'secondary' | ''
-  style?: Partial<TabStyleOverride>
+  style?: Partial<TabBarStyleOverride>
   options?: {
     hasTwoLines?: boolean
     isScrollEnabled?: boolean
@@ -191,12 +204,19 @@ export const tabsBarStyle = function({
       flex: 1,
       backgroundColor: tabBackgroundColor,
       paddingHorizontal,
-      ...override<'tabs', TabBarStyleOverride>(theme.overrides, 'tabs', 'root'),
       ...(style.root as object),
+      ...override<'tabs', TabBarStyleOverride>(theme.overrides, 'tabs', 'root'),
     }),
     wrapper: Styles.createViewStyle({
       flexDirection: 'row',
       overflow: 'visible',
+
+      ...(style.wrapper as object),
+      ...override<'tabs', TabBarStyleOverride>(
+        theme.overrides,
+        'tabs',
+        'wrapper'
+      ),
     }),
     leftIndicator: Styles.createViewStyle({
       position: 'absolute',
@@ -206,6 +226,13 @@ export const tabsBarStyle = function({
       width: paddingHorizontal,
 
       cursor: 'pointer',
+
+      ...(style.leftIndicator as object),
+      ...override<'tabs', TabBarStyleOverride>(
+        theme.overrides,
+        'tabs',
+        'leftIndicator'
+      ),
     }),
     rightIndicator: Styles.createViewStyle({
       position: 'absolute',
@@ -215,6 +242,13 @@ export const tabsBarStyle = function({
       width: paddingHorizontal,
 
       cursor: 'pointer',
+
+      ...(style.rightIndicator as object),
+      ...override<'tabs', TabBarStyleOverride>(
+        theme.overrides,
+        'tabs',
+        'rightIndicator'
+      ),
     }),
     cursor: Styles.createViewStyle({
       position: 'absolute',
@@ -225,10 +259,24 @@ export const tabsBarStyle = function({
       height: 2,
 
       backgroundColor: cursorColor,
+
+      ...(style.cursor as object),
+      ...override<'tabs', TabBarStyleOverride>(
+        theme.overrides,
+        'tabs',
+        'cursor'
+      ),
     }),
     scrollView: Styles.createScrollViewStyle({
       marginBottom: -20,
       ...(Platform.getType() === 'web' && { display: 'inline-flex' }), // To get the tab width fit their content
+
+      ...(style.scrollView as object),
+      ...override<'tabs', TabBarStyleOverride>(
+        theme.overrides,
+        'tabs',
+        'scrollView'
+      ),
     }),
     // Custom values
     paddingHorizontal,
