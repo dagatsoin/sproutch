@@ -1,2 +1,3 @@
-export { default as Tab } from './Tab'
-export { default as TabBar } from './TabBar'
+export { default as Tab, TabProps } from './Tab'
+export { default as TabBar, TabBarProps } from './TabBar'
+export * from './styles'

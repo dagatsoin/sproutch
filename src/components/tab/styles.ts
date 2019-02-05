@@ -21,21 +21,11 @@ export type TabsBarStyle = {
 }
 
 export type TabStyleOverride = TabStyle & {
-  root: StyleObject<Types.ViewStyle>
-  icon: StyleObject<Types.TextStyle>
-  label: StyleObject<Types.TextStyle>
   hasIcon: StyleObject<Types.ViewStyle>
   hasLabel: StyleObject<Types.ViewStyle>
 }
 
-export type TabBarStyleOverride = TabStyle & {
-  root: StyleObject<Types.ViewStyle>
-  wrapper: StyleObject<Types.ViewStyle>
-  leftIndicator: StyleObject<Types.ViewStyle>
-  rightIndicator: StyleObject<Types.ViewStyle>
-  cursor: StyleObject<Types.ViewStyle>
-  scrollView: StyleObject<Types.ScrollViewStyle>
-}
+export type TabBarStyleOverride = Exclude<TabsBarStyle, 'paddingHorizontal'>
 
 export const tabStyle = function({
   theme,

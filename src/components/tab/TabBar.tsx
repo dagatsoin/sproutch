@@ -1,20 +1,19 @@
 import * as React from 'react'
 import { Animated, Platform, ScrollView, Styles, Types } from 'reactxp'
 import { LayoutInfo } from 'reactxp/dist/common/Types'
-import { TabProps } from './Tab'
-
 import { debounce } from '../../helpers'
 import { Theme } from '../../styles/theme'
 import { InjectedTheme, withTheme } from '../../styles/withTheme'
 import { Ripple } from '../ripple'
 import { View } from '../view'
-import { tabsBarStyle, TabsBarStyle } from './styles'
+import { TabBarStyleOverride, tabsBarStyle, TabsBarStyle } from './styles'
+import { TabProps } from './Tab'
 
-type Props = {
+export type TabBarProps = {
   activeTabId?: string
   hasTwoLines?: boolean
   palette?: 'primary' | 'secondary'
-  style?: Partial<TabsBarStyle>
+  style?: Partial<TabBarStyleOverride>
   children: (setProps: (id: string) => Partial<TabProps>) => JSX.Element
   customCursorAnimation?: CustomAnimation
   renderCustomCursor?: (
@@ -102,7 +101,7 @@ type TabsLayout = {
   tabsState: TabLayout[]
 }
 
-class Tabs extends React.PureComponent<Props, State> {
+class Tabs extends React.PureComponent<TabBarProps, State> {
   get activeTab(): TabState | undefined {
     return this.SAMmodel.tabsState.find(s => s.id === this.state.activeTabId)
   }
@@ -215,7 +214,7 @@ class Tabs extends React.PureComponent<Props, State> {
     true
   )
 
-  public static getDerivedStateFromProps(nextProps: Props, state: State) {
+  public static getDerivedStateFromProps(nextProps: TabBarProps, state: State) {
     const hasActiveTabFromPropsChanged =
       nextProps.activeTabId !== state.activeIdFromProps
     return {
@@ -290,7 +289,7 @@ class Tabs extends React.PureComponent<Props, State> {
     )
   }
 
-  public componentDidUpdate(_prevProps: Props, prevState: State) {
+  public componentDidUpdate(_prevProps: TabBarProps, prevState: State) {
     // Prevent cursor animation when scrolling with with arrows
     if (
       this.state.activeTabId !== prevState.activeTabId &&
