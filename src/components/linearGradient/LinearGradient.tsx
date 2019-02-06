@@ -1,16 +1,16 @@
 import * as React from 'react'
 import { findDOMNode } from 'react-dom'
-import { Platform, Types, UserInterface } from 'reactxp'
+import { Types, UserInterface } from 'reactxp'
 
-import { StyleObject } from '../../styles/createStyle'
+import { StyleProp } from '../../styles/createStyle'
 import { View } from '../view'
 
 type Props = {
   colors: string[]
-  start?: { x: number; y: number }
-  end?: { x: number; y: number }
+  start?: [number, number]
+  end?: [number, number]
   locations?: number[]
-  style?: StyleObject<Types.ViewStyle>
+  style?: StyleProp<Types.ViewStyle>
   children?: React.ReactNode
 }
 
@@ -26,8 +26,7 @@ class LinearGradient extends React.PureComponent<Props, {}> {
     return (
       <View
         style={style}
-        // tslint:disable-next-line: jsx-no-bind
-        onLayout={this.measure.bind(this)}
+        onLayout={this.measure}
         ref={(comp: View) => (this.rootRef = comp)}
       >
         <View ref={(comp: View) => (this.backgroundImageRef = comp)} />
@@ -49,15 +48,13 @@ class LinearGradient extends React.PureComponent<Props, {}> {
   }
 
   private updateLayout(dimensions: { width: number; height: number }) {
-    if (Platform.getType() === 'web') {
-      ;[findDOMNode(this.backgroundImageRef) as HTMLDivElement].map(e => {
-        const style = this.getStyle(dimensions)
-        e.setAttribute('style', style)
-      })
-    }
+    ;[findDOMNode(this.backgroundImageRef) as HTMLDivElement].map(e => {
+      const style = this.getStyle(dimensions)
+      e.setAttribute('style', style)
+    })
   }
 
-  private measure(e: Types.ViewOnLayoutEvent) {
+  private measure = (e: Types.ViewOnLayoutEvent) => {
     if (e.width !== this.oldWidth && e.height !== this.oldHeight) {
       this.oldWidth = e.width
       this.oldHeight = e.height
@@ -71,11 +68,11 @@ class LinearGradient extends React.PureComponent<Props, {}> {
 
   private getAngle({ width, height }: { width: number; height: number }) {
     // Math.atan2 handles Infinity
-    const { start = { x: 0, y: 0 }, end = { x: 1, y: 0 } } = this.props
+    const { start = [0, 0], end = [0, 1] } = this.props
     const angle =
       Math.atan2(
-        width * (end.y * 100 - start.y * 100),
-        height * (end.x * 100 - start.x * 100)
+        width * (end[1] * 100 - start[1] * 100),
+        height * (end[0] * 100 - start[0] * 100)
       ) +
       Math.PI / 2
     return angle + 'rad'

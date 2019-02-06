@@ -63,9 +63,9 @@ export default class Fade extends React.Component<Props, State> {
     const { isVisible } = this.state
     const { children, style } = this.props
     return (
-      <View style={[fadeStyle, style]} animated={this.animatedStyle}>
+      <Animated.View style={[fadeStyle, style, this.animatedStyle]}>
         {isVisible && children}
-      </View>
+      </Animated.View>
     )
   }
 

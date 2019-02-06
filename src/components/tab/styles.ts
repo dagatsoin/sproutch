@@ -1,28 +1,28 @@
 import { Platform, Types } from 'reactxp'
 
-import { fade } from '../../styles/colorManipulator'
-import { StyleObject, Styles } from '../../styles/createStyle'
+import { colorManipulator } from '../../styles/colorManipulator'
+import { StyleProp, Styles } from '../../styles/createStyle'
 import { override, Theme } from '../../styles/theme'
 
 export type TabStyle = {
-  root: StyleObject<Types.ViewStyle>
-  icon: StyleObject<Types.TextStyle>
-  label: StyleObject<Types.TextStyle>
+  root: StyleProp<Types.ViewStyle>
+  icon: StyleProp<Types.TextStyle>
+  label: StyleProp<Types.TextStyle>
 }
 
 export type TabsBarStyle = {
-  root: StyleObject<Types.ViewStyle>
-  wrapper: StyleObject<Types.ViewStyle>
-  leftIndicator: StyleObject<Types.ViewStyle>
-  rightIndicator: StyleObject<Types.ViewStyle>
-  cursor: StyleObject<Types.ViewStyle>
-  scrollView: StyleObject<Types.ScrollViewStyle>
+  root: StyleProp<Types.ViewStyle>
+  wrapper: StyleProp<Types.ViewStyle>
+  leftIndicator: StyleProp<Types.ViewStyle>
+  rightIndicator: StyleProp<Types.ViewStyle>
+  cursor: StyleProp<Types.ViewStyle>
+  scrollView: StyleProp<Types.ScrollViewStyle>
   paddingHorizontal: number
 }
 
 export type TabStyleOverride = TabStyle & {
-  hasIcon: StyleObject<Types.ViewStyle>
-  hasLabel: StyleObject<Types.ViewStyle>
+  hasIcon: StyleProp<Types.ViewStyle>
+  hasLabel: StyleProp<Types.ViewStyle>
 }
 
 export type TabBarStyleOverride = Exclude<TabsBarStyle, 'paddingHorizontal'>
@@ -53,7 +53,7 @@ export const tabStyle = function({
 
   const tabColor =
     palette === undefined || palette === ''
-      ? fade(theme.palette.primary.contrastText, 0.7)
+      ? colorManipulator.fade(theme.palette.primary.contrastText, 0.7)
       : theme.palette.text.secondary
 
   const tabActiveColor =
@@ -63,7 +63,7 @@ export const tabStyle = function({
 
   const tabDisabledColor =
     palette === undefined || palette === ''
-      ? fade(theme.palette.primary.contrastText, 0.5)
+      ? colorManipulator.fade(theme.palette.primary.contrastText, 0.5)
       : theme.palette.text.disabled
 
   const twoLinesPadding = theme.spacing * 1.5

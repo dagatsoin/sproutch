@@ -1,4 +1,4 @@
-import * as deepmerge from 'deepmerge'
+import * as deepmerge from 'lodash.merge'
 import * as React from 'react'
 import { ViewStyle } from 'react-native'
 import { Color, colors } from './colors'

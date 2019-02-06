@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { findDOMNode } from 'react-dom'
-import { Platform, Types } from 'reactxp'
+import { Types } from 'reactxp'
 
-import { StyleObject } from '../../styles'
+import { StyleProp } from '../../styles'
 import { View } from '../view'
 
 type Props = {
@@ -11,11 +11,11 @@ type Props = {
   center: [number, number]
   radius: number
   isPercent?: boolean
-  style: StyleObject<Types.ViewStyle>
+  style: StyleProp<Types.ViewStyle>
   children?: React.ReactNode
 }
 
-class LinearGradient extends React.PureComponent<Props, {}> {
+class RadialGradient extends React.PureComponent<Props, {}> {
   public backgroundImageRef: View
 
   public render() {
@@ -37,11 +37,9 @@ class LinearGradient extends React.PureComponent<Props, {}> {
   }
 
   private updateLayout() {
-    if (Platform.getType() === 'web') {
-      ;[findDOMNode(this.backgroundImageRef) as HTMLElement].map(e =>
-        e.setAttribute('style', this.style)
-      )
-    }
+    ;[findDOMNode(this.backgroundImageRef) as HTMLElement].map(e =>
+      e.setAttribute('style', this.style)
+    )
   }
 
   private get style() {
@@ -66,4 +64,4 @@ class LinearGradient extends React.PureComponent<Props, {}> {
   }
 }
 
-export default LinearGradient
+export default RadialGradient

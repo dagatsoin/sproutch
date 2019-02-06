@@ -19,7 +19,7 @@ function clamp(value: any, min: number = 0, max: number = 1) {
  * Converts a color from CSS hex format to CSS rgb format.
  *
  */
-export function convertHexToRGB(color: any) {
+function convertHexToRGB(color: any) {
   color = color.substr(1)
 
   const re = new RegExp(`.{1,${color.length / 3}}`, 'g')
@@ -29,13 +29,15 @@ export function convertHexToRGB(color: any) {
     colors = colors.map((n: any) => n + n)
   }
 
-  return colors ? `rgb(${colors.map((n: any) => parseInt(n, 16)).join(', ')})` : ''
+  return colors
+    ? `rgb(${colors.map((n: any) => parseInt(n, 16)).join(', ')})`
+    : ''
 }
 
 /**
  * Converts a color from CSS rgb format to CSS hex format.
  */
-export function rgbToHex(color: string) {
+function rgbToHex(color: string) {
   // Pass hex straight through
   if (color.indexOf('#') === 0) {
     return color
@@ -52,19 +54,23 @@ export function rgbToHex(color: string) {
 }
 
 /**
- * Returns an object with the type and values of a color.
+ * Returns an object with:
+ * - the type of the color format ('rgb', 'rgba', 'hsl', 'hsla')
+ * - the R, G, B values as an array
  *
  * Note: Does not support rgb % values.
  */
-export function decomposeColor(color: any): any {
+function decomposeColor(color: string): { type: string; values: number[] } {
   if (color.charAt(0) === '#') {
     return decomposeColor(convertHexToRGB(color))
   }
 
   const marker = color.indexOf('(')
   const type = color.substring(0, marker)
-  let values = color.substring(marker + 1, color.length - 1).split(',')
-  values = values.map((value: any) => parseFloat(value))
+  const values = color
+    .substring(marker + 1, color.length - 1)
+    .split(',')
+    .map(value => parseFloat(value))
 
   if (process.env.NODE_ENV !== 'production') {
     if (['rgb', 'rgba', 'hsl', 'hsla'].indexOf(type) === -1) {
@@ -72,7 +78,7 @@ export function decomposeColor(color: any): any {
         [
           `Sproutch: unsupported \`${color}\` color.`,
           'We support the following formats: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla().',
-        ].join('\n'),
+        ].join('\n')
       )
     }
   }
@@ -83,7 +89,7 @@ export function decomposeColor(color: any): any {
 /**
  * Converts a color object with type and values to a string.
  */
-export function recomposeColor(color: any) {
+function recomposeColor(color: any) {
   const { type } = color
   let { values } = color
 
@@ -105,7 +111,7 @@ export function recomposeColor(color: any) {
  *
  * Formula: https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
  */
-export function getContrastRatio(foreground: any, background: any) {
+function getContrastRatio(foreground: any, background: any) {
   const lumA = getLuminance(foreground)
   const lumB = getLuminance(background)
   return (Math.max(lumA, lumB) + 0.05) / (Math.min(lumA, lumB) + 0.05)
@@ -117,7 +123,7 @@ export function getContrastRatio(foreground: any, background: any) {
  *
  * Formula: https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
  */
-export function getLuminance(color: any) {
+function getLuminance(color: any) {
   const decomposedColor = decomposeColor(color)
 
   if (decomposedColor.type.indexOf('rgb') !== -1) {
@@ -126,7 +132,9 @@ export function getLuminance(color: any) {
       return val <= 0.03928 ? val / 12.92 : ((val + 0.055) / 1.055) ** 2.4
     })
     // Truncate at 3 digits
-    return Number((0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]).toFixed(3))
+    return Number(
+      (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]).toFixed(3)
+    )
   }
 
   // else if (decomposedColor.type.indexOf('hsl') !== -1)
@@ -137,15 +145,17 @@ export function getLuminance(color: any) {
  * Darken or lighten a colour, depending on its luminance.
  * Light colors are darkened, dark colors are lightened.
  */
-export function emphasize(color: any, coefficient: number = 0.15) {
-  return getLuminance(color) > 0.5 ? darken(color, coefficient) : lighten(color, coefficient)
+function emphasize(color: any, coefficient: number = 0.15) {
+  return getLuminance(color) > 0.5
+    ? darken(color, coefficient)
+    : lighten(color, coefficient)
 }
 
 /**
  * Set the absolute transparency of a color.
  * Any existing alpha values are overwritten.
  */
-export function fade(color: any, value: number) {
+function fade(color: any, value: number) {
   if (!color) return color
 
   color = decomposeColor(color)
@@ -162,7 +172,7 @@ export function fade(color: any, value: number) {
 /**
  * Darkens a color.
  */
-export function darken(color: any, coefficient: number) {
+function darken(color: any, coefficient: number) {
   if (!color) return color
 
   color = decomposeColor(color)
@@ -181,7 +191,7 @@ export function darken(color: any, coefficient: number) {
 /**
  * Lightens a color.
  */
-export function lighten(color: any, coefficient: number) {
+function lighten(color: any, coefficient: number) {
   if (!color) return color
 
   color = decomposeColor(color)
@@ -196,4 +206,17 @@ export function lighten(color: any, coefficient: number) {
   }
 
   return recomposeColor(color)
+}
+
+export const colorManipulator = {
+  convertHexToRGB,
+  rgbToHex,
+  decomposeColor,
+  recomposeColor,
+  getContrastRatio,
+  getLuminance,
+  emphasize,
+  fade,
+  darken,
+  lighten,
 }

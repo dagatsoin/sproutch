@@ -347,7 +347,7 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
       this.props.renderCustomCursor ? (
         this.renderCustomCursor(style)
       ) : (
-        <View style={[style.cursor]} animated={this.animatedStyle} />
+        <Animated.View style={[style.cursor, this.animatedStyle]} />
       )
     ) : (
       <></>
