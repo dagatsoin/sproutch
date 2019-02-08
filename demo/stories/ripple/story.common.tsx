@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { Paper, Ripple, Styles, Text, View } from '@sproutch/sproutch'
+import { Paper, Ripple, Styles, Text, View } from '@sproutch/ui'
 
 type State = {
   isClicked: boolean

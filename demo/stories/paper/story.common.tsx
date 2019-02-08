@@ -1,4 +1,4 @@
-import { Paper, Styles, View } from '@sproutch/sproutch'
+import { Paper, Styles, View } from '@sproutch/ui'
 import * as React from 'react'
 import { Text } from 'reactxp'
 

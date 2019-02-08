@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { configure, addDecorator } from '@storybook/react'
 
-import { ThemeContext } from '@sproutch/sproutch'
+import { ThemeContext } from '@sproutch/ui'
 import fontAwesome from 'react-native-vector-icons/Fonts/FontAwesome.ttf'
 
-import { defaultTheme as theme } from '@sproutch/sproutch'
+import { defaultTheme as theme } from '@sproutch/ui'
 
 const fontAwesomeStyle = `@font-face {
   src: url(${fontAwesome});

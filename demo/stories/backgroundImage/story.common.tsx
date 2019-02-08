@@ -1,5 +1,5 @@
 // https://ibb.co/VT4tcMF
-import { BackgroundImage, View } from '@sproutch/sproutch'
+import { BackgroundImage, View } from '@sproutch/ui'
 import * as React from 'react'
 import { Styles } from 'reactxp'
 

@@ -1,4 +1,4 @@
-import { BorderImage, Styles, View } from '@sproutch/sproutch'
+import { BorderImage, Styles, View } from '@sproutch/ui'
 import * as React from 'react'
 
 export const borderImage = function() {   
