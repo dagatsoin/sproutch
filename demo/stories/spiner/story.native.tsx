@@ -1,4 +1,4 @@
-import { Spiner } from '@sproutch/sproutch'
+import { Spiner } from '@sproutch/ui'
 import { storiesOf } from '@storybook/react-native'
 import * as React from 'react'
 

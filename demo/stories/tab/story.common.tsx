@@ -1,4 +1,4 @@
-import { colorManipulator, CustomAnimation, DefaultTheme, Tab, TabBar, Text, View } from '@sproutch/sproutch'
+import { colorManipulator, CustomAnimation, DefaultTheme, Tab, TabBar, Text, View } from '@sproutch/ui'
 import { boolean, number, select, text } from '@storybook/addon-knobs'
 import * as React from 'react'
 import { Animated, Styles } from 'reactxp'

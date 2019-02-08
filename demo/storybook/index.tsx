@@ -1,4 +1,4 @@
-import { getTheme, ThemeContext } from '@sproutch/sproutch'
+import { getTheme, ThemeContext } from '@sproutch/ui'
 import {
   addDecorator,
   configure,

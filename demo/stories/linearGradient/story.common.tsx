@@ -1,4 +1,4 @@
-import { LinearGradient } from '@sproutch/sproutch'
+import { LinearGradient } from '@sproutch/ui'
 import { number } from '@storybook/addon-knobs'
 import * as React from 'react'
 

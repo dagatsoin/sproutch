@@ -8,7 +8,7 @@ storiesOf('Sproutch', module)
   .addDecorator(withKnobs)
   .add('Ripple', () => <Story/>)
   
-// import { Paper, Ripple, Text, View } from '@sproutch/sproutch'
+// import { Paper, Ripple, Text, View } from '@sproutch/ui'
 // import { withKnobs } from '@storybook/addon-knobs'
 // import { storiesOf } from '@storybook/react-native'
 // import * as React from 'react'

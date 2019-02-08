@@ -1,7 +1,7 @@
 import { boolean, number } from '@storybook/addon-knobs'
 import * as React from 'react'
 
-import { RadialGradient } from '@sproutch/sproutch'
+import { RadialGradient } from '@sproutch/ui'
 
 export default function({
   height = 200,
