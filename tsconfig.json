@@ -23,8 +23,9 @@
     "target": "es5",
     "types": ["node", "react", "react-dom", "react-native"]
   },
-  "files": ["src/index.tsx"],
-  "include": ["src/types/*.d.ts"],
+  "include": [
+    "src/**/*"
+  ],
   "exclude": [
     "build",
     "node_modules",

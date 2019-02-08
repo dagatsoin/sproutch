@@ -2,13 +2,13 @@ import * as React from 'react'
 import { findDOMNode } from 'react-dom'
 import { Types } from 'reactxp'
 
-import { StyleObject, Styles } from '../../styles/createStyle'
+import { StyleProp, Styles } from '../../styles/createStyle'
 import { View } from '../view'
 import { shadows } from './style'
 
 type Props = {
   elevation?: number
-  style?: StyleObject<Types.ViewStyle>
+  style?: StyleProp<Types.ViewStyle>
   square?: boolean
   children?: React.ReactNode
 }

@@ -1,14 +1,14 @@
 import * as React from 'react'
 import { Types } from 'reactxp'
 
-import { StyleObject } from '../../styles'
-import { BoxShadow } from '../shadow'
+import { StyleProp } from '../../styles'
+import { Elevation } from '../elevation/index.native'
 import { View } from '../view'
 import { shadows, styles } from './style'
 
 type Props = {
   elevation?: number
-  style?: StyleObject<Types.ViewStyle>
+  style?: StyleProp<Types.ViewStyle>
   square?: boolean
   children?: React.ReactNode
 }
@@ -51,7 +51,7 @@ export default class Paper extends React.Component<Props, State> {
         {width !== 0 &&
           height !== 0 &&
           nativeShadows.map((shadow, index) => (
-            <BoxShadow
+            <Elevation
               key={index}
               style={{
                 ...(styles.nativeShadowContainer as object),

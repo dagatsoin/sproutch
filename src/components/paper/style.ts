@@ -1,14 +1,14 @@
 import { Types } from 'reactxp'
 
-import { StyleObject, Styles } from '../../styles/createStyle'
+import { StyleProp, Styles } from '../../styles/createStyle'
 
 // TODO: the keylight should be fixed at top
 export type PaperStyle = {
-  shadowWeb: StyleObject<Types.ViewStyle>
-  shadowMobile: StyleObject<Types.ViewStyle>
-  shadow0: StyleObject<Types.ViewStyle>
-  shadow1: StyleObject<Types.ViewStyle>
-  shadow2: StyleObject<Types.ViewStyle>
+  shadowWeb: StyleProp<Types.ViewStyle>
+  shadowMobile: StyleProp<Types.ViewStyle>
+  shadow0: StyleProp<Types.ViewStyle>
+  shadow1: StyleProp<Types.ViewStyle>
+  shadow2: StyleProp<Types.ViewStyle>
 }
 
 export const styles = {
@@ -38,9 +38,9 @@ export const styles = {
 // credit to Material UI
 // https://github.com/mui-org/material-ui/blob/master/packages/material-ui/src/styles/shadows.js
 
-const shadowKeyUmbraOpacity = 0.2
-const shadowKeyPenumbraOpacity = 0.14
-const shadowAmbientShadowOpacity = 0.12
+const shadowKeyUmbraOpacity = '0.2'
+const shadowKeyPenumbraOpacity = '0.14'
+const shadowAmbientShadowOpacity = '0.12'
 
 function createWebShadow(...px: number[]) {
   return [

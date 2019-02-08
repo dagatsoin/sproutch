@@ -12,34 +12,34 @@ export type ProgressBarProps = {
   style?: Partial<ProgressBarStyle>
 }
 
-class ProgressBar extends React.PureComponent<ProgressBarProps> {
+type State = {
+  /**
+   * RN does not implement transformOrigin.
+   * As the animation is based on scale from the center of the progress bar,
+   * we need to manually offset the progress bar from its container.
+   */
+  containerWidth: number
+}
+
+class ProgressBar extends React.PureComponent<ProgressBarProps, State> {
+  public state: State = {
+    containerWidth: 0,
+  }
   private animatedPercent = Animated.createValue(0.0)
+  private animatedOffset = Animated.createValue(0.0)
   private animatedStyle: Types.AnimatedViewStyleRuleSet
-  private animation: Types.Animated.CompositeAnimation
-
-  constructor(props: ProgressBarProps) {
-    super(props)
-
-    const value = this.limit(props.progress)
-    this.animatedPercent = Animated.createValue(value)
-    this.animatedStyle = Styles.createAnimatedViewStyle({
-      transform: [{ scaleX: this.animatedPercent }],
-    })
-    this.animation = this.getAnimation(value, props.animationDuration || 0)
+  private animation: {
+    translate: Types.Animated.CompositeAnimation
+    scale: Types.Animated.CompositeAnimation
   }
 
   public componentDidMount() {
-    this.animation.start()
-  }
-
-  public componentWillReceiveProps(newProps: ProgressBarProps) {
-    this.animation.stop()
-    const value = this.limit(newProps.progress)
-    this.animation = this.getAnimation(
-      value,
-      newProps.animationDuration || this.props.animationDuration || 0
-    )
-    this.animation.start()
+    this.animatedStyle = Styles.createAnimatedViewStyle({
+      transform: [
+        { translateX: this.animatedOffset },
+        { scaleX: this.animatedPercent },
+      ],
+    })
   }
 
   public render() {
@@ -52,8 +52,8 @@ class ProgressBar extends React.PureComponent<ProgressBarProps> {
           return (
             <View style={stylesSheet.root}>
               <View style={stylesSheet.background} />
-              <View style={stylesSheet.top}>
-                <View style={stylesSheet.fill} animated={this.animatedStyle} />
+              <View style={stylesSheet.top} onLayout={this.onLayout}>
+                <Animated.View style={[stylesSheet.fill, this.animatedStyle]} />
               </View>
             </View>
           )
@@ -62,16 +62,58 @@ class ProgressBar extends React.PureComponent<ProgressBarProps> {
     )
   }
 
-  private limit(value: number = 0) {
-    return Math.min(1, Math.max(0, value / 100))
+  public componentDidUpdate(prevProps: ProgressBarProps, prevState: State) {
+    if (
+      (this.state.containerWidth > 0 && prevState.containerWidth === 0) || // We received the initial layout, let begin the animation
+      this.state.containerWidth !== prevState.containerWidth || // Layout has change, we need to refresh the offset value
+      this.props.progress !== prevProps.progress // Component has received a new progress value, we need to refresh the animation values
+    ) {
+      const init = prevState.containerWidth === 0
+      // Stop current animation if any
+      if (this.animation) {
+        this.animation.translate.stop()
+        this.animation.scale.stop()
+      }
+      const scale = Math.min(1, Math.max(0, this.props.progress / 100))
+      const offset =
+        this.state.containerWidth / -2 + (this.state.containerWidth * scale) / 2
+      this.animation = this.getAnimation(
+        { scale, offset },
+        init // When initialising the layout, minimize the progress bar on the left
+          ? 0
+          : this.props.animationDuration || 0
+      )
+      this.animation.translate.start()
+      this.animation.scale.start()
+    }
   }
 
-  private getAnimation(toValue: number, duration: number) {
-    return Animated.timing(this.animatedPercent, {
-      toValue,
-      duration,
-      easing: Animated.Easing.InOut(),
-    })
+  private onLayout = (layout: Types.LayoutInfo) => {
+    this.setState({ containerWidth: layout.width })
+  }
+
+  private getAnimation(
+    {
+      offset,
+      scale,
+    }: {
+      offset: number
+      scale: number
+    },
+    duration: number
+  ) {
+    return {
+      translate: Animated.timing(this.animatedOffset, {
+        toValue: offset,
+        duration,
+        easing: Animated.Easing.InOut(),
+      }),
+      scale: Animated.timing(this.animatedPercent, {
+        toValue: scale,
+        duration,
+        easing: Animated.Easing.InOut(),
+      }),
+    }
   }
 }
 

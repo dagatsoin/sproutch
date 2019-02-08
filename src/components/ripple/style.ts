@@ -1,17 +1,17 @@
 import { Types } from 'reactxp'
 
-import { getLuminance } from '../../styles/colorManipulator'
-import { StyleObject, Styles } from '../../styles/createStyle'
+import { colorManipulator } from '../../styles/colorManipulator'
+import { StyleProp, Styles } from '../../styles/createStyle'
 import { darkShadow, lightShadow, Theme } from '../../styles/theme'
 
 type RootStyle = {
-  root: StyleObject<Types.ViewStyle>
-  overlay: StyleObject<Types.ViewStyle>
-  button: StyleObject<Types.ViewStyle>
+  root: StyleProp<Types.ViewStyle>
+  overlay: StyleProp<Types.ViewStyle>
+  button: StyleProp<Types.ViewStyle>
 }
 
 type RippleStyle = {
-  ripple: StyleObject<Types.ViewStyle>
+  ripple: StyleProp<Types.ViewStyle>
 }
 
 export const containerStyle = function({
@@ -29,11 +29,13 @@ export const containerStyle = function({
     ? theme.palette.type === 'light'
       ? '#000'
       : '#fff'
-    : getLuminance(theme.palette.primary.main) >= 0.5
+    : colorManipulator.getLuminance(theme.palette.primary.main) >= 0.5
     ? '#000'
     : '#fff'
   const opacity =
-    getLuminance(backgroundColor) >= 0.5 ? darkShadow.hover : lightShadow.hover
+    colorManipulator.getLuminance(backgroundColor) >= 0.5
+      ? darkShadow.hover
+      : lightShadow.hover
 
   return {
     root: Styles.createViewStyle({
@@ -76,7 +78,7 @@ export const rippleStyle = function({
     ? theme.palette.type === 'light'
       ? '#000'
       : '#fff'
-    : getLuminance(theme.palette.primary.main) >= 0.5
+    : colorManipulator.getLuminance(theme.palette.primary.main) >= 0.5
     ? '#000'
     : '#fff'
   return {

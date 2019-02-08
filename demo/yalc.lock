@@ -1,0 +1,10 @@
+{
+  "version": "v1",
+  "packages": {
+    "@sproutch/sproutch": {
+      "signature": "95810c697a08c2990f0c5ded9f4ee796",
+      "file": true,
+      "replaced": "^0.0.1"
+    }
+  }
+}

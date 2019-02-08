@@ -9,9 +9,10 @@
     "url": "https://github.com/dagatsoin/sproutch/issues"
   },
   "files": [
+    "index.js",
+    "index.native.js",
     "lib",
-    "LICENSE",
-    "src"
+    "LICENSE"
   ],
   "license": "MIT",
   "keywords": [
@@ -21,88 +22,57 @@
     "material-ui",
     "material-design"
   ],
-  "main": "lib/index.js",
+  "watch": {
+    "publish-local": {
+      "patterns": [
+        "src"
+      ],
+      "extensions": "js,jsx,ts,tsx,json,md,css",
+      "ignore": "src/node_modules",
+      "legacyWatch": true,
+      "delay": 2500,
+      "runOnChangeOnly": false
+    }
+  },
   "scripts": {
-    "android": "rnstl && expo start --android",
-    "build-storybook": "build-storybook",
-    "build": "rnstl && npm run clean && npm run tslint-check && npm run lint && npm run tsc",
-    "buildAndStart": "npm run build && npm run watchAndStart ",
-    "buildRunAndroid": "npm run build && npm run watchAndRunAndroid ",
-    "buildRunIOS": "npm run build && npm run watchAndRunIOS ",
-    "clean": "rimraf build",
-    "deploy-storybook": "storybook-to-ghpages",
-    "eject": "expo eject",
-    "ios": "rnstl && expo start --ios",
+    "build": "npm run clean && npm run tslint-check && npm run lint && npm run tsc",
+    "publish-local": "yalc publish && cd demo && yalc update",
+    "clean": "rimraf lib",
     "lint": "tslint --config tslint.prod.json --project .",
-    "postinstall": "rndebugger-open --expo",
     "prepare": "npm run build",
     "pretty-quick": "pretty-quick --staged --pattern \"src/**/*.*(js|jsx|ts|tsx|json|md|css)\"",
-    "start": "rnstl && expo start",
-    "storybook": "start-storybook -p 6006 -c .storybook",
     "tsc": "tsc",
     "tslint-check": "tslint-config-prettier-check ./tslint.prod.json",
-    "watch": "rnstl && npm run build -- -w",
-    "watchAndRunAndroid": "concurrently \"npm run watch\" \"npm run android\"",
-    "watchAndRunIOS": "concurrently \"npm run watch\" \"npm run ios\"",
-    "watchAndStart": "concurrently \"npm run watch\" \"npm run start\""
+    "watch": "npm-watch"
   },
   "husky": {
     "hooks": {
       "pre-commit": "npm run pretty-quick"
     }
   },
-  "config": {
-    "react-native-storybook-loader": {
-      "searchDir": [
-        "./src"
-      ],
-      "pattern": "**/story.native.tsx",
-      "outputFile": "./src/storybook/storyLoader.js"
-    }
-  },
   "dependencies": {
-    "deepmerge": "^3.0.0",
-    "expo": "^32.0.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz"
+    "lodash.merge": "^4.6.1"
   },
   "peerDependencies": {
-    "react": "16.7.0",
+    "expo": "^32.0.0",
     "reactxp": "^1.5.0"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^4.1.6",
-    "@storybook/addon-knobs": "^4.1.6",
-    "@storybook/addon-links": "^4.1.6",
-    "@storybook/addon-ondevice-knobs": "^4.1.4",
-    "@storybook/addon-ondevice-notes": "^4.1.4",
-    "@storybook/addons": "^4.1.6",
-    "@storybook/react": "^4.1.6",
-    "@storybook/react-native": "^4.1.4",
-    "@storybook/storybook-deployer": "^2.8.1",
-    "@types/jest": "^23.3.10",
+    "@types/expo": "^32.0.0",
     "@types/react": "^16.7.18",
     "@types/react-dom": "^16.0.11",
     "@types/react-native": "^0.57.23",
-    "@types/react-test-renderer": "^16.0.3",
-    "@types/storybook__addon-knobs": "^4.0.0",
-    "@types/storybook__react-native": "^3.0.3",
     "awesome-typescript-loader": "^5.2.1",
     "babel-preset-expo": "^5.0.0",
-    "concurrently": "^4.1.0",
-    "core-js": "^2.6.3",
+    "expo": "^32.0.0",
     "husky": "^1.3.1",
+    "npm-watch": "^0.6.0",
     "prettier": "^1.16.3",
     "pretty-quick": "^1.10.0",
     "react": "16.5.1",
     "react-art": "^16.7.0",
-    "react-native-debugger-open": "^0.3.17",
-    "react-native-linear-gradient": "^2.5.3",
-    "react-native-storybook-loader": "^1.8.0",
-    "react-native-vector-icons": "^6.1.0",
-    "react-native-web": "^0.10.0-alpha.1",
     "reactxp": "^1.5.0",
     "rimraf": "^2.6.2",
-    "ts-jest": "^23.10.5",
     "tslint": "^5.12.0",
     "tslint-config-prettier": "^1.17.0",
     "tslint-react": "^3.6.0",
