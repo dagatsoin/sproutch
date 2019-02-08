@@ -11,7 +11,6 @@ type Props = {
   end?: [number, number]
   locations?: number[]
   style?: StyleProp<Types.ViewStyle>
-  children?: React.ReactNode
 }
 
 class LinearGradient extends React.PureComponent<Props, {}> {
@@ -21,7 +20,7 @@ class LinearGradient extends React.PureComponent<Props, {}> {
   private oldHeight: number
 
   public render() {
-    const { style, children } = this.props
+    const { style } = this.props
 
     return (
       <View
@@ -30,7 +29,6 @@ class LinearGradient extends React.PureComponent<Props, {}> {
         ref={(comp: View) => (this.rootRef = comp)}
       >
         <View ref={(comp: View) => (this.backgroundImageRef = comp)} />
-        {children}
       </View>
     )
   }

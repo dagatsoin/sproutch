@@ -8,11 +8,10 @@ import { View } from '../view'
 type Props = {
   colors: string[]
   stops: number[]
-  center: [number, number]
+  center?: [number, number]
   radius: number
   isPercent?: boolean
   style: StyleProp<Types.ViewStyle>
-  children?: React.ReactNode
 }
 
 type State = {
@@ -31,7 +30,7 @@ class RadialGradientComponent extends React.PureComponent<Props, State> {
   }
 
   public render() {
-    const { style, children, stops, colors } = this.props
+    const { style, stops, colors } = this.props
     const { Defs, RadialGradient, Stop, Ellipse } = Svg
 
     return (
@@ -69,7 +68,6 @@ class RadialGradientComponent extends React.PureComponent<Props, State> {
             fill="url(#grad)"
           />
         </Svg>
-        {children}
       </View>
     )
   }

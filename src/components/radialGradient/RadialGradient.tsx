@@ -12,7 +12,6 @@ type Props = {
   radius: number
   isPercent?: boolean
   style: StyleProp<Types.ViewStyle>
-  children?: React.ReactNode
 }
 
 class RadialGradient extends React.PureComponent<Props, {}> {
@@ -24,7 +23,6 @@ class RadialGradient extends React.PureComponent<Props, {}> {
     return (
       <View style={style}>
         <View ref={(comp: View) => (this.backgroundImageRef = comp)} />
-        {children}
       </View>
     )
   }
