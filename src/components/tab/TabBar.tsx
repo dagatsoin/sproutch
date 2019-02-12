@@ -7,22 +7,22 @@ import { InjectedTheme, withTheme } from '../../styles/withTheme'
 import { Ripple } from '../ripple'
 import { View } from '../view'
 import { TabBarStyleOverride, tabsBarStyle, TabsBarStyle } from './styles'
-import { TabProps } from './Tab'
+import Tab, { TabProps } from './Tab'
 
 export type TabBarProps = {
   activeTabId?: string
-  hasTwoLines?: boolean
+  hasIconOnTop?: boolean
   palette?: 'primary' | 'secondary'
   style?: Partial<TabBarStyleOverride>
-  children: (setProps: (id: string) => Partial<TabProps>) => JSX.Element
+  children: TabProps[]
   customCursorAnimation?: CustomAnimation
   renderCustomCursor?: (
     tabLayout: LayoutInfo,
     barLayout: LayoutInfo,
     theme: Theme<any, any>
   ) => JSX.Element | JSX.Element[]
-  renderLeftIndicator?: () => JSX.Element | JSX.Element[]
-  renderRightIndicator?: () => JSX.Element | JSX.Element[]
+  leftScrollButton?: JSX.Element | JSX.Element[]
+  rightScrollButton?: JSX.Element | JSX.Element[]
   onChange?: (tabId: string) => void
 } & InjectedTheme<Theme<any, any>>
 
@@ -270,7 +270,7 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
     const tabs = (
       <View style={styles.wrapper}>
         {this.renderCursor(styles)}
-        {this.props.children(this.bindTab)}
+        {this.children}
       </View>
     )
 
@@ -303,8 +303,8 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
   /**
    * This function inject some additional props into the child.
    */
-  private bindTab = (id: string): Partial<TabProps> => {
-    const { hasTwoLines, palette } = this.props
+  private bindTab = (id: string) => {
+    const { hasIconOnTop, palette } = this.props
     const { activeTabId, isScrollEnabled } = this.state
 
     return {
@@ -314,9 +314,15 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
       onClick: this.onClickTab,
       isActive: id === activeTabId,
       mustGrow: isScrollEnabled,
-      hasTwoLines,
+      hasIconOnTop,
       palette,
     }
+  }
+
+  get children() {
+    return this.props.children.map(props => (
+      <Tab {...props} {...this.bindTab(props.id)} />
+    ))
   }
 
   private updateCursorPosition() {
@@ -396,14 +402,14 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
   }
 
   private getStyles(isScrollEnabled: boolean) {
-    const { hasTwoLines, palette, theme, style } = this.props
+    const { hasIconOnTop, palette, theme, style } = this.props
 
     return tabsBarStyle({
       theme: theme!,
       palette,
       style,
       options: {
-        hasTwoLines,
+        hasIconOnTop,
         isScrollEnabled,
       },
     })
@@ -613,11 +619,11 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
 
   private renderLeftIndicator(styles: TabsBarStyle) {
     const { isScrollEnabled } = this.state
-    const { palette, renderLeftIndicator } = this.props
+    const { palette, leftScrollButton } = this.props
 
-    return isScrollEnabled && renderLeftIndicator ? (
+    return isScrollEnabled && leftScrollButton ? (
       <View style={styles.leftIndicator} onStartShouldSetResponder={() => true}>
-        {renderLeftIndicator()}
+        {leftScrollButton}
         {<Ripple onPress={() => this.rollLeft()} palette={palette} />}
       </View>
     ) : (
@@ -627,14 +633,14 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
 
   private renderRightIndicator(styles: TabsBarStyle) {
     const { isScrollEnabled } = this.state
-    const { palette, renderRightIndicator } = this.props
+    const { palette, rightScrollButton } = this.props
 
-    return isScrollEnabled && renderRightIndicator ? (
+    return isScrollEnabled && rightScrollButton ? (
       <View
         style={styles.rightIndicator}
         onStartShouldSetResponder={() => true}
       >
-        {renderRightIndicator()}
+        {rightScrollButton}
         {<Ripple onPress={() => this.rollRight()} palette={palette} />}
       </View>
     ) : (

@@ -108,7 +108,7 @@ export default function({
   otherTabBarLabel = 'ROCKET',
   hasIcon = false,
   isDisable = false,
-  hasTwoLines = false,
+  hasIconOnTop = false,
   palette,
   activeTabId = '0',
   tabNumber = 5,
@@ -122,7 +122,7 @@ export default function({
   return (
     <>
       <TabBar
-        hasTwoLines={boolean('Has two lines', hasTwoLines)}
+        hasIconOnTop={boolean('Has two lines', hasIconOnTop)}
         palette={paletteKnob || undefined}
         activeTabId={select('Tab', ['0', '1', '2', '3', '4', '5'], activeTabId)}
         customCursorAnimation={
@@ -135,7 +135,7 @@ export default function({
             ? renderCustomCursor
             : undefined
         }
-        renderLeftIndicator={() => (
+        leftScrollButton={(
           <View
             style={{
               flex: 1,
@@ -146,7 +146,7 @@ export default function({
             <FontAwesome.default name="chevron-left" size={16} color="#ddd" />
           </View>
         )}
-        renderRightIndicator={() => (
+        rightScrollButton={(
           <View
             style={{
               flex: 1,
@@ -158,50 +158,45 @@ export default function({
           </View>
         )}
       >
-        {setProps => (
-          <>
-            <Tab
-              key={0}
-              id="0"
-              label={text('First tab label', firstTabLabel)}
-              isDisable={boolean('Disabled', isDisable)}
-              slot={notification}
-              renderIcon={iconStyle => (
-                <>
-                  {boolean('With icon', hasIcon) && (
-                    <FontAwesome.default
-                      style={iconStyle}
-                      name="rocket"
-                      size={30}
-                      color="#900"
-                    />
-                  )}
-                </>
-              )}
-              {...setProps('0')}
-            />
-            {Array.from(Array(number('Tab number', tabNumber))).map((_, i) => (
-              <Tab
-                key={i + 1}
-                id={i + 1 + ''}
-                label={`${otherTabBarLabel} ${i + 1}`}
-                renderIcon={iconStyle => (
+        {
+          [
+            {
+              id: "0",
+              label: text('First tab label', firstTabLabel),
+              isDisable: boolean('Disabled', isDisable),
+              slot: notification,
+              renderIcon: iconStyle => (
                   <>
                     {boolean('With icon', hasIcon) && (
                       <FontAwesome.default
                         style={iconStyle}
-                        name="check"
+                        name="rocket"
                         size={30}
                         color="#900"
                       />
                     )}
                   </>
-                )}
-                {...setProps(i + 1 + '')}
-              />
-            ))}
-          </>
-        )}
+                )
+            },
+            ...Array.from(Array(number('Tab number', tabNumber)))
+                .map((_, i) => ({
+                  id: i + 1 + '',
+                  label: `${otherTabBarLabel} ${i + 1}`,
+                  renderIcon: iconStyle => (
+                    <>
+                      {boolean('With icon', hasIcon) && (
+                        <FontAwesome.default
+                          style={iconStyle}
+                          name="check"
+                          size={30}
+                          color="#900"
+                        />
+                      )}
+                    </>
+                  )
+                }))
+            ]
+          }
       </TabBar>
     </>
   )

@@ -18,21 +18,23 @@ export type TabProps = {
     style: StyleRuleSetRecursive<StyleRuleSet<Types.TextStyle>>
   ) => JSX.Element
   label?: string
-  isActive?: boolean
-  hasTwoLines?: boolean
   isDisable?: boolean
-  mustGrow?: boolean
-  palette?: 'primary' | 'secondary'
-  notification?: boolean
   style?: Partial<TabStyle>
   slot?: JSX.Element
-  onClick?: (index: string) => void
-  onUnmount?: (id: string) => void
-  onTabLayout?: (tab: { id: string; layout: LayoutInfo }) => void
-  onWillMount?: (id: string) => void
 }
 
-class Tab extends React.Component<TabProps & Types.ViewProps> {
+type CompleteProps = {
+  mustGrow?: boolean
+  palette?: 'primary' | 'secondary'
+  hasIconOnTop?: boolean
+  isActive: boolean
+  onClick: (index: string) => void
+  onUnmount: (id: string) => void
+  onTabLayout: (tab: { id: string; layout: LayoutInfo }) => void
+  onWillMount: (id: string) => void
+} & TabProps
+
+class Tab extends React.Component<CompleteProps & Types.ViewProps> {
   private layout?: LayoutInfo
 
   public componentWillMount() {
@@ -55,7 +57,7 @@ class Tab extends React.Component<TabProps & Types.ViewProps> {
       label,
       isActive = false,
       isDisable = false,
-      hasTwoLines = false,
+      hasIconOnTop = false,
       mustGrow = false,
       palette,
       slot,
@@ -70,7 +72,7 @@ class Tab extends React.Component<TabProps & Types.ViewProps> {
             palette,
             style,
             options: {
-              hasTwoLines,
+              hasIconOnTop,
               isDisable,
               isActive,
               mustGrow,

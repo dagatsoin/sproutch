@@ -24,8 +24,7 @@ export default class extends React.Component<{}, State> {
           style={Styles.createViewStyle({
             flex: 1,
           })}
-          onStartShouldSetResponder={() => true}
-          onPress={() => this.setState({ isClicked: true })}
+          
         >
           <View
             style={Styles.createViewStyle({
@@ -42,7 +41,7 @@ export default class extends React.Component<{}, State> {
               {this.state.isClicked ? "Clicked" : "Click! Click!"}
             </Text>
           </View>
-          <Ripple isOnPaper />
+          <Ripple isOnPaper onPress={() => this.setState({ isClicked: true })}/>
         </View>
       </Paper>
     )

@@ -38,14 +38,14 @@ export const tabStyle = function({
   style?: Partial<TabStyleOverride>
   options?: {
     mustGrow: boolean
-    hasTwoLines: boolean
+    hasIconOnTop: boolean
     hasIcon: boolean
     hasLabel: boolean
     isActive: boolean
     isDisable: boolean
   }
 }): TabStyle {
-  const tabHeight = options && options.hasTwoLines ? 72 : 48
+  const tabHeight = options && options.hasIconOnTop ? 72 : 48
   const tabMinWidth = 90
   const tabMaxWidth = 360
 
@@ -83,13 +83,13 @@ export const tabStyle = function({
 
       paddingHorizontal: 16,
       paddingVertical:
-        !!options && options.hasTwoLines ? twoLinesPadding : undefined,
+        !!options && options.hasIconOnTop ? twoLinesPadding : undefined,
 
       justifyContent:
-        !!options && options.hasTwoLines ? 'space-between' : 'center',
+        !!options && options.hasIconOnTop ? 'space-between' : 'center',
 
       alignItems: 'center',
-      flexDirection: !!options && options.hasTwoLines ? 'column' : 'row',
+      flexDirection: !!options && options.hasIconOnTop ? 'column' : 'row',
 
       cursor: 'pointer',
 
@@ -134,7 +134,7 @@ export const tabStyle = function({
     label: Styles.createTextStyle({
       margin: 0,
       paddingLeft:
-        !!options && !options.hasTwoLines && options.hasIcon
+        !!options && !options.hasIconOnTop && options.hasIcon
           ? theme.spacing
           : 0,
 
@@ -170,11 +170,11 @@ export const tabsBarStyle = function({
   palette?: 'primary' | 'secondary' | ''
   style?: Partial<TabBarStyleOverride>
   options?: {
-    hasTwoLines?: boolean
+    hasIconOnTop?: boolean
     isScrollEnabled?: boolean
   }
 }): TabsBarStyle {
-  const tabHeight = options && options.hasTwoLines ? 72 : 48
+  const tabHeight = options && options.hasIconOnTop ? 72 : 48
 
   const tabBackgroundColor =
     palette === undefined || palette === ''
