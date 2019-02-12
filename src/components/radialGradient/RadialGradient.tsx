@@ -1,24 +1,14 @@
 import * as React from 'react'
 import { findDOMNode } from 'react-dom'
-import { Types } from 'reactxp'
 
-import { StyleProp } from '../../styles'
 import { View } from '../view'
+import { RadialGradientProps } from './RadialGradientProps'
 
-type Props = {
-  colors: string[]
-  stops: number[]
-  center: [number, number]
-  radius: number
-  isPercent?: boolean
-  style: StyleProp<Types.ViewStyle>
-}
-
-class RadialGradient extends React.PureComponent<Props, {}> {
+class RadialGradient extends React.Component<RadialGradientProps, {}> {
   public backgroundImageRef: View
 
   public render() {
-    const { style, children } = this.props
+    const { style } = this.props
 
     return (
       <View style={style}>
@@ -26,15 +16,16 @@ class RadialGradient extends React.PureComponent<Props, {}> {
       </View>
     )
   }
+
   public componentDidMount() {
-    this.updateLayout()
+    this.updateGradientStyle()
   }
 
   public componentDidUpdate() {
-    this.updateLayout()
+    this.updateGradientStyle()
   }
 
-  private updateLayout() {
+  private updateGradientStyle() {
     ;[findDOMNode(this.backgroundImageRef) as HTMLElement].map(e =>
       e.setAttribute('style', this.style)
     )
@@ -42,12 +33,30 @@ class RadialGradient extends React.PureComponent<Props, {}> {
 
   private get style() {
     // Retrieve the new center coordinates value in pixel
-    const { center, colors, isPercent } = this.props
+    const {
+      center,
+      colors,
+      isEllipse,
+      radius = 'farthest-corner',
+      stops,
+    } = this.props
 
-    const realLocations = colors.map((_, i) => (1 / (colors.length - 1)) * i)
     const colorStrings = colors
-      .map((color, i) => `${color} ${Math.round(realLocations[i] * 100)}%`)
+      .map((color, i) => `${color} ${stops[i] * 100}%`)
       .join(', ')
+
+    const isCenterInPercent = !center || typeof center[0] === 'string'
+    const posX = center ? `${center[0]}${isCenterInPercent ? '' : 'px'}` : '50%'
+
+    const posY = center ? `${center[1]}${isCenterInPercent ? '' : 'px'}` : '50%'
+
+    const shape = isEllipse ? 'ellipse' : 'circle'
+
+    const _radius = isEllipse
+      ? Array.isArray(radius)
+        ? radius.map(r => r + '%').join(' ')
+        : radius
+      : radius
 
     return `
       position: absolute;
@@ -55,9 +64,7 @@ class RadialGradient extends React.PureComponent<Props, {}> {
       right: 0;
       bottom: 0;
       left: 0;
-      background-image: radial-gradient(circle at ${center[0]}${
-      isPercent ? '%' : 'px'
-    } ${center[1]}${isPercent ? '%' : 'px'}, ${colorStrings})
+      background-image: radial-gradient(${shape} ${_radius} at ${posX} ${posY}, ${colorStrings})
     `
   }
 }
