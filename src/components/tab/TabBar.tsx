@@ -321,7 +321,7 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
 
   get children() {
     return this.props.children.map(props => (
-      <Tab {...props} {...this.bindTab(props.id)} />
+      <Tab key={props.id} {...props} {...this.bindTab(props.id)} />
     ))
   }
 
