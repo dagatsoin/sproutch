@@ -15,6 +15,7 @@ export type TabsBarStyle = {
   wrapper: StyleProp<Types.ViewStyle>
   leftIndicator: StyleProp<Types.ViewStyle>
   rightIndicator: StyleProp<Types.ViewStyle>
+  cursorAnimatedContainer: StyleProp<Types.ViewStyle>
   cursor: StyleProp<Types.ViewStyle>
   scrollView: StyleProp<Types.ScrollViewStyle>
   paddingHorizontal: number
@@ -240,13 +241,15 @@ export const tabsBarStyle = function({
         'rightIndicator'
       ),
     }),
-    cursor: Styles.createViewStyle({
+    cursorAnimatedContainer: Styles.createViewStyle({
       position: 'absolute',
       width: 1,
-      top: tabHeight - 2,
-      right: 0,
-      left: 0,
-      height: 2,
+      top: 0,
+      bottom: 0,
+    }),
+    cursor: Styles.createViewStyle({
+      height: 4,
+      top: tabHeight - 4,
 
       backgroundColor: cursorColor,
 

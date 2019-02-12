@@ -1,7 +1,7 @@
-import { colorManipulator, CustomAnimation, DefaultTheme, Tab, TabBar, Text, View } from '@sproutch/ui'
+import { Animated, colorManipulator, CustomAnimation, DefaultTheme, TabBar, Text, View } from '@sproutch/ui'
 import { boolean, number, select, text } from '@storybook/addon-knobs'
 import * as React from 'react'
-import { Animated, Styles } from 'reactxp'
+import { Styles } from 'reactxp'
 
 import { LayoutInfo } from 'reactxp/dist/common/Types'
 
@@ -16,13 +16,14 @@ function renderCustomCursor(
   return (
     <View
       style={Styles.createViewStyle({
-        borderRadius: 1,
+        position: 'absolute',
+        width: 1,
         height: 4,
+        top: 44,
         backgroundColor: colorManipulator.fade(
           theme.business.warning.main,
           Math.max(x / barWidth, 0.1)
-        ),
-        transform: [{ scaleY: 4 }],
+        )
       })}
     />
   )
@@ -40,19 +41,19 @@ const customCursorAnimation: CustomAnimation = (
       easing: Animated.Easing.Out(),
     }),
     Animated.timing(scaleX, {
-      toValue: width - theme.spacing * 2,
+      toValue: width - theme.spacing * 4,
       duration: 200,
       easing: Animated.Easing.In(),
     }),
   ]),
   scaleY: Animated.sequence([
     Animated.timing(scaleY, {
-      toValue: 30,
+      toValue: 1,
       duration: 100,
       easing: Animated.Easing.Out(),
     }),
     Animated.timing(scaleY, {
-      toValue: 4,
+      toValue: 1,
       duration: 200,
       easing: Animated.Easing.In(),
     }),
@@ -165,35 +166,27 @@ export default function({
               label: text('First tab label', firstTabLabel),
               isDisable: boolean('Disabled', isDisable),
               slot: notification,
-              renderIcon: iconStyle => (
-                  <>
-                    {boolean('With icon', hasIcon) && (
-                      <FontAwesome.default
-                        style={iconStyle}
-                        name="rocket"
-                        size={30}
-                        color="#900"
-                      />
-                    )}
-                  </>
-                )
+              renderIcon: boolean('With icon', hasIcon) && (iconStyle => (
+                <FontAwesome.default
+                  style={iconStyle}
+                  name="rocket"
+                  size={30}
+                  color="#900"
+                />
+              ))
             },
             ...Array.from(Array(number('Tab number', tabNumber)))
                 .map((_, i) => ({
                   id: i + 1 + '',
                   label: `${otherTabBarLabel} ${i + 1}`,
-                  renderIcon: iconStyle => (
-                    <>
-                      {boolean('With icon', hasIcon) && (
-                        <FontAwesome.default
-                          style={iconStyle}
-                          name="check"
-                          size={30}
-                          color="#900"
-                        />
-                      )}
-                    </>
-                  )
+                  renderIcon: boolean('With icon', hasIcon) && (iconStyle => (
+                    <FontAwesome.default
+                      style={iconStyle}
+                      name="check"
+                      size={30}
+                      color="#900"
+                    />
+                  ))
                 }))
             ]
           }

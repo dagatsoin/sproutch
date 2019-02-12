@@ -1,4 +1,9 @@
 {
   "version": "v1",
-  "packages": {}
+  "packages": {
+    "@sproutch/ui": {
+      "signature": "fffe8f9aa61d06b1885d3f7e3e88afe4",
+      "file": true
+    }
+  }
 }

@@ -20,7 +20,7 @@ export type TabBarProps = {
     tabLayout: LayoutInfo,
     barLayout: LayoutInfo,
     theme: Theme<any, any>
-  ) => JSX.Element | JSX.Element[]
+  ) => React.ReactNode
   leftScrollButton?: JSX.Element | JSX.Element[]
   rightScrollButton?: JSX.Element | JSX.Element[]
   onChange?: (tabId: string) => void
@@ -341,7 +341,7 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
       rotateY: 0,
       rotateZ: 0,
       scaleX: this.activeTab!.layout!.width,
-      scaleY: 2,
+      scaleY: 1,
     })
     Object.keys(this.cursorAnimation).forEach(key =>
       this.cursorAnimation[key].start()
@@ -349,29 +349,23 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
   }
 
   private renderCursor(style: TabsBarStyle) {
-    return this.controlState === 'isLayoutReady' ? (
-      this.props.renderCustomCursor ? (
-        this.renderCustomCursor(style)
-      ) : (
-        <Animated.View style={[style.cursor, this.animatedStyle]} />
+    return (
+      this.controlState === 'isLayoutReady' && (
+        <Animated.View
+          style={[style.cursorAnimatedContainer, this.animatedStyle]}
+        >
+          {this.props.renderCustomCursor ? (
+            this.props.renderCustomCursor(
+              this.activeTab!.layout!,
+              this.layout.barLayout!,
+              this.props.theme!
+            )
+          ) : (
+            <View style={style.cursor} />
+          )}
+        </Animated.View>
       )
-    ) : (
-      <></>
     )
-  }
-
-  private renderCustomCursor(style: TabsBarStyle) {
-    if (!this.props.renderCustomCursor) return <></>
-    const customCursor = this.props.renderCustomCursor(
-      this.activeTab!.layout!,
-      this.layout.barLayout!,
-      this.props.theme!
-    ) as React.ReactElement<View>
-    return React.cloneElement(customCursor, {
-      ...customCursor.props,
-      style: [style.cursor, (customCursor.props as any).style],
-      animated: this.animatedStyle,
-    } as any)
   }
 
   private renderInScrollView(
