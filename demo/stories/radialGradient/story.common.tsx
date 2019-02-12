@@ -1,38 +1,55 @@
-import { boolean, number } from '@storybook/addon-knobs'
+import { boolean, number, select, array } from '@storybook/addon-knobs'
 import * as React from 'react'
 
-import { RadialGradient } from '@sproutch/ui'
+import { RadialGradient, RadialGradientProps } from '@sproutch/ui'
 
 export default function({
+  isEllipse = true,
   height = 200,
   width = 200,
-  isPercent = true,
+  radius,
+  percentRadius = [50, 50],
+  center = [50, 50]
 }: {
+  isEllipse: boolean
   height: number
   width: number
-  isPercent: boolean
+  radius?: string
+  percentRadius?: [number, number]
+  center: [number, number]
 }) {
+  const predefinedRadiusKnob = select(
+    'Radius type',
+    [undefined as RadialGradientProps['radius'], 'closest-side', 'closest-corner', 'farthest-side', 'farthest-corner'],
+    radius
+  )
+
+  const percentRadiusKnob = array('Radius in percent (to enable, select NULL in Radius Type)', percentRadius, ', ')
+
   return (
     <RadialGradient
-      isPercent={boolean('Center in percentage', isPercent)}
       style={{
-        width: number('Width', width, {
+        borderStyle: 'solid',
+        borderWidth: 1,
+        borderColor: 'red',
+        width: number('Container width', width, {
           range: true,
           min: 0,
           max: 500,
           step: 20,
         }),
-        height: number('Height', height, {
+        height: number('Container height', height, {
           range: true,
           min: 0,
           max: 500,
           step: 20,
         }),
       }}
-      colors={['#edd33e', '#B4985F', '#0000ff']}
-      stops={[0.1, 0.5, 0.6]}
-      center={[50, 100]}
-      radius={100}
+      radius={predefinedRadiusKnob || percentRadiusKnob}
+      isEllipse={boolean('Ellipse shape', isEllipse)}
+      colors={['#edd33e', '#B4985F', '#00f', '#000']}
+      stops={[0.1, 0.5, 0.99, 1]}
+      center={array('Gradient origin position (in percent)', [center[0] + '%', center[1] + '%'], ', ')}
     />
   )
 }
