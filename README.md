@@ -1,16 +1,29 @@
-# Sproutch
+# Sproutch :poop:
 
-A cross platefrom UI library for React and React Native Android/iOS.
+React and React Native iOS/Android library to make lovely (or not) UI.
 
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![npm version](https://badge.fury.io/js/%40sproutch%2Fui.svg)](https://badge.fury.io/js/%40sproutch%2Fui)
 [![Gitter chat](https://badges.gitter.im/sproutch/community.png)](https://gitter.im/sproutch/community?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
 
-## Installation
+:construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction:
+
+`Actually in aplha 0.0.2 but already usable. Expect breaking changes in the futur.`
+
+:construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction:
+
+## Prerequisites
+
+### Dependencies
 
 Sproutch depends on two peer dependencies:
 - ReactXP: the cross plateform base elements library which sproutch is built upon
 - ExpoKit: bringing some basic components such `Svg` and `LinearGradient`
+
+**Important note**
+Actually developped with RN **0.57**. No guarantee that newer versions will work.
+
+### Installation
 
 To install Sproutch and its dependencies:
 - If you target a web project or an expo/crna project:
@@ -20,6 +33,128 @@ To install Sproutch and its dependencies:
 - If you target raw (without expo) React Native **(I did not test yet, please, fill an issue if it crashes)**
 
   `$ npm i @sproutch/ui reactxp expo`
+
+### Usage
+
+```tsx
+import { defaultTheme, ThemeContext } from '@sproutch/ui'
+
+render(
+  <ThemeContext.Provider value={defaultTheme}>
+    <App />
+  </ThemeContext.Provider>,
+  document.getElementById("react-content")
+)
+```
+
+## Theming
+
+Sproutch implements Material Design specs by default. But *some*, (bcz still WIP) components are already **deeply** customizable if you want to bring your own design system.
+
+Sproutch is themable etheir by overriding existing style or by providing a theme.
+
+1. Overriding component style.
+
+Each component has a `style` property which accepts all stylesheets keys used by the component.
+
+ex: the ProgressBar component can accept an object with those keys:
+
+```tsx
+{
+  root: ViewStyle
+  top: ViewStyle
+  background: ViewStyle
+  fill: ViewStyle
+}
+```
+
+2. Providing a theme
+
+ThemeProvider accept a theme object which explained below. The theme shape is heavily inspired by Material UI Theme and stick to the material design specification.
+
+ex: `<ThemeProvider theme={myTheme]>`
+
+```tsx
+type Theme<B, O> = {
+  shape: {
+    borderRadius: number
+  }
+  palette: {
+    type: 'light' | 'dark'
+    common: {
+      // the value of the deepest and clearest point
+      black: string
+      white: string
+    }
+    primary: {
+      // the variants of your primary color
+      light: string
+      main: string
+      dark: string
+      contrastText: string
+    }
+    secondary:  {
+      // the variants of your secondary color
+      light: string
+      main: string
+      dark: string
+      contrastText: string
+    }
+    text: {
+      // The colors of the different text style
+      primary: string
+      secondary: string
+      disabled: string
+      hint: string
+    }
+    divider: string // color of the separation line
+    background: {
+      // The different background color
+      statusBar: string
+      appBar: string
+      default: string
+      paper: string
+    }
+  }
+  // The 'rythme' of your design system
+  spacing: number
+  business: {
+    // A customizable slot where you can put
+    // any value regarding your graphic chart
+    // eg. third colors, info color scheme...
+    // The default theme provide already provides
+    // some colors helpers that you can override:
+    /*
+    error: {
+      light: colors.red['300'], // #e57373,
+      main: colors.red['500'], // #f44336,
+      dark: colors.red['700'], // #d32f2f,
+      contrastText: colors.white, // #fff
+    },
+    valid: {
+      light: colors.green['300'], // #81c784  ,
+      main: colors.green['500'], // #4caf50,
+      dark: colors.green['700'], // #388e3c,
+      contrastText: colors.white, // #fff
+    },
+    warning: {
+      light: colors.orange['300'], // #ffb74d
+      main: colors.orange['500'], // #ff9800
+      dark: colors.orange['700'], // #f57c00
+      contrastText: colors.white, // #fff
+    },
+  */
+  }
+  typography: {
+    // The base font
+    fontFamily: string
+    fontSize: number
+    fontWeightLight: string
+    fontWeightRegular: string
+    fontWeightMedium: string
+  }
+}
+```
 
 ## Live demo and components doc
 
