@@ -1,3 +1,6 @@
-import { Types } from 'reactxp'
 export { ActivityIndicator as Spinner } from 'reactxp'
-export type SpinnerProps = Types.ActivityIndicatorProps
+export type SpinnerProps = {
+  color: string
+  size?: 'large' | 'medium' | 'small' | 'tiny'
+  deferTime?: number
+}

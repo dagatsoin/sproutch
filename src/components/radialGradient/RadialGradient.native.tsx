@@ -1,13 +1,12 @@
 import { Svg } from 'expo'
 import * as React from 'react'
-import { Types } from 'reactxp'
 
 import { colorManipulator, Styles } from '../../styles'
-import { View } from '../view'
+import { LayoutInfo, View } from '../view'
 import { RadialGradientProps } from './RadialGradientProps'
 
 type State = {
-  layout: Types.LayoutInfo
+  layout: LayoutInfo
 }
 
 class RadialGradientComponent extends React.Component<
@@ -235,7 +234,7 @@ class RadialGradientComponent extends React.Component<
     }
   }
 
-  private onLayout = (layout: Types.LayoutInfo) => {
+  private onLayout = (layout: LayoutInfo) => {
     this.setState({ layout })
   }
 }

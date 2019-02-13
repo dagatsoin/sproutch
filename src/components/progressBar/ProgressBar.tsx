@@ -1,8 +1,12 @@
 import * as React from 'react'
-import { Animated, Styles, Types } from 'reactxp'
+import { Animated, Styles } from 'reactxp'
 
 import { ThemeContext } from '../../styles/theme'
-import { View } from '../view'
+import {
+  AnimatedCompositeAnimation,
+  AnimatedViewStyleRuleSet,
+} from '../animated'
+import { LayoutInfo, View } from '../view'
 import styles, { ProgressBarStyle } from './style'
 
 export type ProgressBarProps = {
@@ -27,10 +31,10 @@ class ProgressBar extends React.PureComponent<ProgressBarProps, State> {
   }
   private animatedPercent = Animated.createValue(0.0)
   private animatedOffset = Animated.createValue(0.0)
-  private animatedStyle: Types.AnimatedViewStyleRuleSet
+  private animatedStyle: AnimatedViewStyleRuleSet
   private animation: {
-    translate: Types.Animated.CompositeAnimation
-    scale: Types.Animated.CompositeAnimation
+    translate: AnimatedCompositeAnimation
+    scale: AnimatedCompositeAnimation
   }
 
   public componentDidMount() {
@@ -88,7 +92,7 @@ class ProgressBar extends React.PureComponent<ProgressBarProps, State> {
     }
   }
 
-  private onLayout = (layout: Types.LayoutInfo) => {
+  private onLayout = (layout: LayoutInfo) => {
     this.setState({ containerWidth: layout.width })
   }
 
