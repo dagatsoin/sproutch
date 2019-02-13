@@ -2,15 +2,13 @@ import * as React from 'react'
 import { Animated, Styles, Types } from 'reactxp'
 
 import { darkShadow, ThemeContext } from '../../styles/theme'
-import { View } from '../view'
 import { rippleStyle } from './style'
 
-// const fadeInDuration = 75
 const fadeOutDuration = 150
 const scaleDuration = 225
 const easing = Animated.Easing.CubicBezier(0.4, 0, 0.2, 1)
 
-export type RippleProps = {
+export type ParticleProps = {
   id: number
   isFading: boolean
   x: number
@@ -19,10 +17,10 @@ export type RippleProps = {
   radiusFrom: number
   isOnPaper?: boolean
   palette?: 'primary' | 'secondary'
-  onRippleEnd: () => void
+  onLifeEnd: () => void
 }
 
-class Ripple extends React.PureComponent<RippleProps, {}> {
+class Particle extends React.PureComponent<ParticleProps, {}> {
   private animatedScale = Animated.createValue(1)
   private animatedOpacity = Animated.createValue(darkShadow.press)
   private animatedStyle: Types.AnimatedViewStyleRuleSet
@@ -45,7 +43,7 @@ class Ripple extends React.PureComponent<RippleProps, {}> {
     }).start(this.onAnimateRadiusEnd.bind(this))
   }
 
-  public componentWillReceiveProps(newProps: RippleProps) {
+  public componentWillReceiveProps(newProps: ParticleProps) {
     const { isFading: fading } = this.props
     if (newProps.isFading !== fading && !this.runningAnimation) {
       this.fadeOut()
@@ -100,8 +98,8 @@ class Ripple extends React.PureComponent<RippleProps, {}> {
       toValue: 0,
       duration: fadeOutDuration,
       easing: Animated.Easing.Linear(),
-    }).start(this.props.onRippleEnd)
+    }).start(this.props.onLifeEnd)
   }
 }
 
-export default Ripple
+export default Particle

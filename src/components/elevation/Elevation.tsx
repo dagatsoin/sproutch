@@ -4,7 +4,7 @@ import { Types, View } from 'reactxp'
 
 import { StyleProp, Styles } from '../../styles'
 
-type Props = {
+export type ElevationProps = {
   width?: number
   height?: number
   color?: string
@@ -41,7 +41,7 @@ function colorRgb(color: string) {
   }
 }
 
-export default (props: Props) => {
+export default (props: ElevationProps) => {
   // get the shadow settings and give them default values
   const {
     width = 0,

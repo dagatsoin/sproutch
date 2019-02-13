@@ -3,9 +3,9 @@ import { Text, Types } from 'reactxp'
 
 import { Theme, ThemeContext } from '../../styles/theme'
 
-type Props = Types.TextProps
+export type TextProps = Types.TextProps
 
-export const TextComp = ({ children, style, ...props }: Props) => (
+export const TextComp = ({ children, style, ...props }: TextProps) => (
   <ThemeContext.Consumer>
     {(theme: Theme<any, any>) => (
       <Text

@@ -5,7 +5,7 @@ import { Types, UserInterface } from 'reactxp'
 import { StyleProp } from '../../styles/createStyle'
 import { View } from '../view'
 
-type Props = {
+export type LinearGradientProps = {
   colors: string[]
   start?: [number, number]
   end?: [number, number]
@@ -13,7 +13,7 @@ type Props = {
   style?: StyleProp<Types.ViewStyle>
 }
 
-class LinearGradient extends React.PureComponent<Props, {}> {
+class LinearGradient extends React.PureComponent<LinearGradientProps, {}> {
   public backgroundImageRef: View
   public rootRef: View
   private oldWidth: number
