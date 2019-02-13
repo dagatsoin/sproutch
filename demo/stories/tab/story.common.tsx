@@ -22,7 +22,7 @@ function renderCustomCursor(
         top: 44,
         backgroundColor: colorManipulator.fade(
           theme.business.warning.main,
-          Math.max(x / barWidth, 0.1)
+          Math.max(x / Math.max(barWidth, 1), 0.1)
         )
       })}
     />
@@ -111,9 +111,9 @@ export default function({
   isDisable = false,
   hasIconOnTop = false,
   palette,
-  activeTabId = '1',
-  tabNumber = 1,
-  customCursor = true,
+  activeTabId = '5',
+  tabNumber = 5,
+  customCursor = false,
 }: any) {
   const paletteKnob = select(
     'Palette',

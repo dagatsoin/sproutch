@@ -12,7 +12,7 @@ function loadStories() {
   require('../stories/progressBar/story.native');
   require('../stories/radialGradient/story.native');
   require('../stories/ripple/story.native');
-  require('../stories/spiner/story.native');
+  require('../stories/spinner/story.native');
   require('../stories/tab/story.native');
   
 }
@@ -25,7 +25,7 @@ const stories = [
   '../stories/progressBar/story.native',
   '../stories/radialGradient/story.native',
   '../stories/ripple/story.native',
-  '../stories/spiner/story.native',
+  '../stories/spinner/story.native',
   '../stories/tab/story.native',
   
 ];

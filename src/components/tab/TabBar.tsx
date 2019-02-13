@@ -264,6 +264,7 @@ class Tabs extends React.Component<TabBarProps, State> {
   }
 
   public render() {
+    console.log('render')
     const {
       hasLeftScrollIndicator,
       hasRightScrollIndicator,
@@ -578,12 +579,14 @@ class Tabs extends React.Component<TabBarProps, State> {
         this.layout.barLayout!.width +
         this.getStyles(isScrollEnabled).paddingHorizontal * 2
       : 0
-    this.setState({ isScrollEnabled, hasRightScrollIndicator })
+    this.setState({ isScrollEnabled, hasRightScrollIndicator }, () => {
+      this.scrollToTab(this.state.activeTabId, false)
+    })
   }
 
-  private scrollToTab(id: string) {
+  private scrollToTab(id: string, animated?: boolean) {
     const offset = this.getTabOffset(id)
-    this.scrollTo(this.layout.currentScroll + offset)
+    this.scrollTo(this.layout.currentScroll + offset, animated)
   }
 
   /**
@@ -617,11 +620,17 @@ class Tabs extends React.Component<TabBarProps, State> {
 
   private onScroll = (_newScrollTop: number, newScrollLeft: number) => {
     this.layout.currentScroll = Math.round(newScrollLeft)
-    this.setState({
-      hasLeftScrollIndicator: this.layout.currentScroll > 0,
-      hasRightScrollIndicator:
-        this.layout.currentScroll < this.layout.maxScroll,
-    })
+    if (
+      this.layout.currentScroll > 0 !== this.state.hasLeftScrollIndicator ||
+      this.layout.currentScroll < this.layout.maxScroll !==
+        this.state.hasRightScrollIndicator
+    ) {
+      this.setState({
+        hasLeftScrollIndicator: this.layout.currentScroll > 0,
+        hasRightScrollIndicator:
+          this.layout.currentScroll < this.layout.maxScroll,
+      })
+    }
   }
 
   private renderLeftIndicator(styles: TabsBarStyle) {
