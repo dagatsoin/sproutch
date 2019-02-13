@@ -3,6 +3,7 @@ import { Platform, Types } from 'reactxp'
 import { colorManipulator } from '../../styles/colorManipulator'
 import { StyleProp, Styles } from '../../styles/createStyle'
 import { override, Theme } from '../../styles/theme'
+import { TextStyle } from '../text'
 import { ViewStyle } from '../view'
 
 export type TabStyle = {
@@ -22,10 +23,13 @@ export type TabsBarStyle = {
   paddingHorizontal: number
 }
 
-export type TabStyleOverride = TabStyle & {
-  hasIcon: StyleProp<ViewStyle>
-  hasLabel: StyleProp<ViewStyle>
-}
+export type TabStyleOverride = Partial<
+  TabStyle & {
+    hasIcon: StyleProp<ViewStyle>
+    hasLabel: StyleProp<ViewStyle>
+    isActiveLabel: StyleProp<TextStyle>
+  }
+>
 
 export type TabBarStyleOverride = Exclude<TabsBarStyle, 'paddingHorizontal'>
 
@@ -148,6 +152,7 @@ export const tabStyle = function({
       ...(!!options &&
         options.isActive && {
           color: tabActiveColor,
+          ...(style.isActiveLabel as object),
         }),
 
       ...(!!options &&

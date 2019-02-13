@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { Types } from 'reactxp'
 import {
   LayoutInfo,
   StyleRuleSet,
@@ -8,18 +7,18 @@ import {
 
 import { ThemeContext } from '../../styles/theme'
 import { Ripple } from '../ripple'
-import { Text } from '../text'
-import { View } from '../view'
-import { tabStyle, TabStyle } from './styles'
+import { Text, TextStyle } from '../text'
+import { View, ViewProps } from '../view'
+import { tabStyle, TabStyleOverride } from './styles'
 
 export type TabProps = {
   id: string
   renderIcon?: (
-    style: StyleRuleSetRecursive<StyleRuleSet<Types.TextStyle>>
+    style: StyleRuleSetRecursive<StyleRuleSet<TextStyle>>
   ) => JSX.Element
   label?: string
   isDisable?: boolean
-  style?: Partial<TabStyle>
+  style?: TabStyleOverride
   slot?: JSX.Element
 }
 
@@ -34,7 +33,7 @@ type CompleteProps = {
   onWillMount: (id: string) => void
 } & TabProps
 
-class Tab extends React.Component<CompleteProps & Types.ViewProps> {
+class Tab extends React.Component<CompleteProps & ViewProps> {
   private layout?: LayoutInfo
 
   public componentWillMount() {
