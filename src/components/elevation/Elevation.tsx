@@ -1,8 +1,9 @@
 import { Svg } from 'expo'
 import * as React from 'react'
-import { Types, View } from 'reactxp'
+import { View } from 'reactxp'
 
 import { StyleProp, Styles } from '../../styles'
+import { ViewStyle } from '../view'
 
 export type ElevationProps = {
   width?: number
@@ -13,7 +14,7 @@ export type ElevationProps = {
   opacity?: string
   x?: number
   y?: number
-  style: StyleProp<Types.ViewStyle>
+  style: StyleProp<ViewStyle>
   children?: JSX.Element
 }
 

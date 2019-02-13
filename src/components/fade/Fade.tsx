@@ -1,6 +1,11 @@
 import * as React from 'react'
+import { Animated, Styles } from 'reactxp'
 
-import { Animated, Styles, Types } from 'reactxp'
+import {
+  AnimatedCompositeAnimation,
+  AnimatedViewStyleRuleSet,
+} from '../animated'
+import { ViewStyle } from '../view'
 import fadeStyle from './style'
 
 export type FadeProps = {
@@ -8,7 +13,7 @@ export type FadeProps = {
   isAnimatedOnMount?: boolean
   duration?: number
   palette?: 'primary' | 'secondary'
-  style?: Types.ViewStyle
+  style?: ViewStyle
   onAnimationEnd?: () => void
   children: React.ReactNode
 }
@@ -20,8 +25,8 @@ type State = {
 export default class Fade extends React.Component<FadeProps, State> {
   public state: State = { isVisible: false }
   private animatedOpacity = Animated.createValue(0)
-  private animatedStyle: Types.AnimatedViewStyleRuleSet
-  private animation: Types.Animated.CompositeAnimation
+  private animatedStyle: AnimatedViewStyleRuleSet
+  private animation: AnimatedCompositeAnimation
   private duration: number
 
   constructor(props: FadeProps) {

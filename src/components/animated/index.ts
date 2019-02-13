@@ -1,5 +1,7 @@
 import { Types } from 'reactxp'
 export { Animated } from 'reactxp'
+
+export type AnimatedCompositeAnimation = Types.Animated.CompositeAnimation
 export type AnimatedProps = Types.AnimatedFlexboxStyle
 export type AnimatedFlexboxStyle = Types.AnimatedFlexboxStyle
 export type AnimatedTransformStyle = Types.AnimatedTransformStyle
@@ -12,3 +14,5 @@ export type AnimatedImageProps = Types.AnimatedImageProps
 export type AnimatedTextProps = Types.AnimatedTextProps
 export type AnimatedViewProps = Types.AnimatedViewProps
 export type AnimatedTextInputProps = Types.AnimatedTextInputProps
+
+export type AnimatedViewStyleRuleSet = Types.AnimatedViewStyleRuleSet

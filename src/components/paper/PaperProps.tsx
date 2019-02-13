@@ -1,8 +1,8 @@
-import { Types } from 'reactxp'
 import { StyleProp } from '../../styles/createStyle'
+import { ViewStyle } from '../view'
 export type PaperProps = {
   elevation?: number
-  style?: StyleProp<Types.ViewStyle>
+  style?: StyleProp<ViewStyle>
   square?: boolean
   children?: React.ReactNode
 }

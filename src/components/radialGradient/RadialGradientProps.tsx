@@ -1,6 +1,6 @@
-import { Types } from 'reactxp'
-
 import { StyleProp } from '../../styles'
+import { ViewStyle } from '../view'
+
 export type RadialGradientProps = {
   isEllipse?: boolean
   colors: string[]
@@ -12,5 +12,5 @@ export type RadialGradientProps = {
     | 'farthest-side'
     | 'farthest-corner'
   center?: [number, number] | [string, string]
-  style: StyleProp<Types.ViewStyle>
+  style: StyleProp<ViewStyle>
 }

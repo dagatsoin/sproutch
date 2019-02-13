@@ -3,27 +3,28 @@ import { Platform, Types } from 'reactxp'
 import { colorManipulator } from '../../styles/colorManipulator'
 import { StyleProp, Styles } from '../../styles/createStyle'
 import { override, Theme } from '../../styles/theme'
+import { ViewStyle } from '../view'
 
 export type TabStyle = {
-  root: StyleProp<Types.ViewStyle>
+  root: StyleProp<ViewStyle>
   icon: StyleProp<Types.TextStyle>
   label: StyleProp<Types.TextStyle>
 }
 
 export type TabsBarStyle = {
-  root: StyleProp<Types.ViewStyle>
-  wrapper: StyleProp<Types.ViewStyle>
-  leftIndicator: StyleProp<Types.ViewStyle>
-  rightIndicator: StyleProp<Types.ViewStyle>
-  cursorAnimatedContainer: StyleProp<Types.ViewStyle>
-  cursor: StyleProp<Types.ViewStyle>
+  root: StyleProp<ViewStyle>
+  wrapper: StyleProp<ViewStyle>
+  leftIndicator: StyleProp<ViewStyle>
+  rightIndicator: StyleProp<ViewStyle>
+  cursorAnimatedContainer: StyleProp<ViewStyle>
+  cursor: StyleProp<ViewStyle>
   scrollView: StyleProp<Types.ScrollViewStyle>
   paddingHorizontal: number
 }
 
 export type TabStyleOverride = TabStyle & {
-  hasIcon: StyleProp<Types.ViewStyle>
-  hasLabel: StyleProp<Types.ViewStyle>
+  hasIcon: StyleProp<ViewStyle>
+  hasLabel: StyleProp<ViewStyle>
 }
 
 export type TabBarStyleOverride = Exclude<TabsBarStyle, 'paddingHorizontal'>

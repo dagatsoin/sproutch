@@ -1,17 +1,16 @@
-import { Types } from 'reactxp'
-
 import { colorManipulator } from '../../styles/colorManipulator'
 import { StyleProp, Styles } from '../../styles/createStyle'
 import { darkShadow, lightShadow, Theme } from '../../styles/theme'
+import { ViewStyle } from '../view'
 
 type RootStyle = {
-  root: StyleProp<Types.ViewStyle>
-  overlay: StyleProp<Types.ViewStyle>
-  button: StyleProp<Types.ViewStyle>
+  root: StyleProp<ViewStyle>
+  overlay: StyleProp<ViewStyle>
+  button: StyleProp<ViewStyle>
 }
 
 type RippleStyle = {
-  ripple: StyleProp<Types.ViewStyle>
+  ripple: StyleProp<ViewStyle>
 }
 
 export const containerStyle = function({
