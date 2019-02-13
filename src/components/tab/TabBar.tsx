@@ -1,11 +1,16 @@
 import * as React from 'react'
-import { Animated, Platform, ScrollView, Styles, Types } from 'reactxp'
-import { LayoutInfo } from 'reactxp/dist/common/Types'
+import { Animated, Platform, ScrollView } from 'reactxp'
+
 import { debounce } from '../../helpers'
+import { Styles } from '../../styles'
 import { Theme } from '../../styles/theme'
 import { InjectedTheme, withTheme } from '../../styles/withTheme'
+import {
+  AnimatedCompositeAnimation,
+  AnimatedViewStyleRuleSet,
+} from '../animated'
 import { Ripple } from '../ripple'
-import { View } from '../view'
+import { LayoutInfo, View } from '../view'
 import { TabBarStyleOverride, tabsBarStyle, TabsBarStyle } from './styles'
 import Tab, { TabProps } from './Tab'
 
@@ -14,8 +19,8 @@ export type TabBarProps = {
   hasIconOnTop?: boolean
   palette?: 'primary' | 'secondary'
   style?: Partial<TabBarStyleOverride>
-  children: TabProps[]
-  customCursorAnimation?: CustomAnimation
+  tabs: TabProps[]
+  customCursorAnimation?: CustomTabBarCursorAnimation
   renderCustomCursor?: (
     tabLayout: LayoutInfo,
     barLayout: LayoutInfo,
@@ -26,19 +31,19 @@ export type TabBarProps = {
   onChange?: (tabId: string) => void
 } & InjectedTheme<Theme<any, any>>
 
-export type CustomAnimation = (
+export type CustomTabBarCursorAnimation = (
   cursorValues: AnimatedValues,
   targetLayout: LayoutInfo,
   theme: Theme<any, any>
 ) => {
-  opacity?: Types.Animated.CompositeAnimation
-  translateX?: Types.Animated.CompositeAnimation
-  translateY?: Types.Animated.CompositeAnimation
-  rotateX?: Types.Animated.CompositeAnimation
-  rotateY?: Types.Animated.CompositeAnimation
-  rotateZ?: Types.Animated.CompositeAnimation
-  scaleX?: Types.Animated.CompositeAnimation
-  scaleY?: Types.Animated.CompositeAnimation
+  opacity?: AnimatedCompositeAnimation
+  translateX?: AnimatedCompositeAnimation
+  translateY?: AnimatedCompositeAnimation
+  rotateX?: AnimatedCompositeAnimation
+  rotateY?: AnimatedCompositeAnimation
+  rotateZ?: AnimatedCompositeAnimation
+  scaleX?: AnimatedCompositeAnimation
+  scaleY?: AnimatedCompositeAnimation
 }
 
 type AnimatableKey =
@@ -147,9 +152,9 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
     scaleX: Animated.createValue(0),
     scaleY: Animated.createValue(0),
   }
-  private animatedStyle: Types.AnimatedViewStyleRuleSet
+  private animatedStyle: AnimatedViewStyleRuleSet
   private cursorAnimation: {
-    [key in AnimatableKey]: Types.Animated.CompositeAnimation
+    [key in AnimatableKey]: AnimatedCompositeAnimation
   }
   private controlState: ControlState = 'stale'
 
@@ -270,7 +275,7 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
     const tabs = (
       <View style={styles.wrapper}>
         {this.renderCursor(styles)}
-        {this.children}
+        {this.tabs}
       </View>
     )
 
@@ -319,8 +324,8 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
     }
   }
 
-  get children() {
-    return this.props.children.map(props => (
+  get tabs() {
+    return this.props.tabs.map(props => (
       <Tab key={props.id} {...props} {...this.bindTab(props.id)} />
     ))
   }

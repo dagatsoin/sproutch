@@ -1,4 +1,4 @@
-import { Animated, colorManipulator, CustomAnimation, DefaultTheme, TabBar, Text, View } from '@sproutch/ui'
+import { Animated, colorManipulator, CustomTabBarCursorAnimation, DefaultTheme, TabBar, Text, View } from '@sproutch/ui'
 import { boolean, number, select, text } from '@storybook/addon-knobs'
 import * as React from 'react'
 import { Styles } from 'reactxp'
@@ -29,7 +29,7 @@ function renderCustomCursor(
   )
 }
 
-const customCursorAnimation: CustomAnimation = (
+const customCursorAnimation: CustomTabBarCursorAnimation = (
   { scaleX, scaleY, translateY, rotateZ },
   { width },
   theme
@@ -158,8 +158,7 @@ export default function({
             <FontAwesome.default name="chevron-right" size={16} color="#ddd" />
           </View>
         )}
-      >
-        {
+        tabs={
           [
             {
               id: "0",
@@ -190,7 +189,7 @@ export default function({
                 }))
             ]
           }
-      </TabBar>
+      />
     </>
   )
 }

@@ -7,30 +7,31 @@ This components needs \`TabBar\` and \Tab
 ### Usage
 This component implements the Tab system of Material Design.
 \`\`\`
-<TabBar>
-  {setProps => (
-    <>
-      <Tab
-        key={0}
-        id="0"
-        label="First tab label"
-        {...setProps('0')}
-      />
-      <Tab
-        key={1}
-        id="1"
-        label="Second tab label"
-        {...setProps('1')}
-      />
-      <Tab
-        key={2}
-        id="2"
-        label="Third tab label"
-        {...setProps('2')}
-      />
-    </>
-  )}
-</TabBar>
+<TabBar children = {
+    setProps => (
+      <>
+        <Tab
+          key={0}
+          id="0"
+          label="First tab label"
+          {...setProps('0')}
+        />
+        <Tab
+          key={1}
+          id="1"
+          label="Second tab label"
+          {...setProps('1')}
+        />
+        <Tab
+          key={2}
+          id="2"
+          label="Third tab label"
+          {...setProps('2')}
+        />
+      </>
+    )
+  }
+/>
 \`\`\`
 ### Properties
 
@@ -65,7 +66,7 @@ Accept a style object to override the default style of the TabBar
 }
 \`\`\`
 
-#### children
+#### tabs
 \`type: TabProps[]\`
 
 This is here where you will generate the tabs. They can change dynamically. 
@@ -93,7 +94,7 @@ The style props accepts this object type.
 }
 \`\`\`
 
-The complete children property used in this story:
+The complete tabs property used in this story:
 
 \`\`\`
 [
