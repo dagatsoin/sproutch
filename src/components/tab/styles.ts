@@ -155,7 +155,7 @@ export const tabStyle = function({
           color: tabDisabledColor,
         }),
 
-      ...(style.icon as object),
+      ...(style.label as object),
 
       ...override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'label'),
     }),

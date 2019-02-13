@@ -5,9 +5,42 @@ import { Color, colors } from './colors'
 export type Typography = {
   fontFamily: string
   fontSize: number
-  fontWeightLight: string
-  fontWeightRegular: string
-  fontWeightMedium: string
+  fontWeightLight:
+    | 'normal'
+    | 'bold'
+    | '100'
+    | '200'
+    | '300'
+    | '400'
+    | '500'
+    | '600'
+    | '700'
+    | '800'
+    | '900'
+  fontWeightRegular:
+    | 'normal'
+    | 'bold'
+    | '100'
+    | '200'
+    | '300'
+    | '400'
+    | '500'
+    | '600'
+    | '700'
+    | '800'
+    | '900'
+  fontWeightMedium:
+    | 'normal'
+    | 'bold'
+    | '100'
+    | '200'
+    | '300'
+    | '400'
+    | '500'
+    | '600'
+    | '700'
+    | '800'
+    | '900'
 }
 
 export type ThemeConfig<B, O> = Partial<{

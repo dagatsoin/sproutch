@@ -264,7 +264,6 @@ class Tabs extends React.Component<TabBarProps, State> {
   }
 
   public render() {
-    console.log('render')
     const {
       hasLeftScrollIndicator,
       hasRightScrollIndicator,
