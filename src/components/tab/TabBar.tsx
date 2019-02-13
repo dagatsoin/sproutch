@@ -355,21 +355,22 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
 
   private renderCursor(style: TabsBarStyle) {
     return (
-      this.controlState === 'isLayoutReady' && (
-        <Animated.View
-          style={[style.cursorAnimatedContainer, this.animatedStyle]}
-        >
-          {this.props.renderCustomCursor ? (
-            this.props.renderCustomCursor(
-              this.activeTab!.layout!,
-              this.layout.barLayout!,
-              this.props.theme!
-            )
-          ) : (
-            <View style={style.cursor} />
-          )}
-        </Animated.View>
-      )
+      <Animated.View
+        style={[style.cursorAnimatedContainer, this.animatedStyle]}
+      >
+        {this.props.renderCustomCursor &&
+        this.activeTab &&
+        this.activeTab.layout &&
+        this.layout.barLayout ? (
+          this.props.renderCustomCursor(
+            this.activeTab.layout,
+            this.layout.barLayout,
+            this.props.theme!
+          )
+        ) : (
+          <View style={style.cursor} />
+        )}
+      </Animated.View>
     )
   }
 
