@@ -106,7 +106,7 @@ type TabsLayout = {
   tabsState: TabLayout[]
 }
 
-class Tabs extends React.PureComponent<TabBarProps, State> {
+class Tabs extends React.Component<TabBarProps, State> {
   get activeTab(): TabState | undefined {
     return this.SAMmodel.tabsState.find(s => s.id === this.state.activeTabId)
   }
@@ -295,7 +295,7 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
   }
 
   public componentDidUpdate(_prevProps: TabBarProps, prevState: State) {
-    // Prevent cursor animation when scrolling with with arrows
+    // Prevent cursor animation when scrolling with arrows
     if (
       this.state.activeTabId !== prevState.activeTabId &&
       this.controlState === 'isLayoutReady'
@@ -354,17 +354,24 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
   }
 
   private renderCursor(style: TabsBarStyle) {
+    const activeTabLayout =
+      this.activeTab && this.activeTab.layout
+        ? this.activeTab.layout
+        : { x: 0, y: 0, width: 0, height: 0 }
+
+    const barLayout =
+      this.layout && this.layout.barLayout
+        ? this.layout.barLayout
+        : { x: 0, y: 0, width: 0, height: 0 }
+
     return (
       <Animated.View
         style={[style.cursorAnimatedContainer, this.animatedStyle]}
       >
-        {this.props.renderCustomCursor &&
-        this.activeTab &&
-        this.activeTab.layout &&
-        this.layout.barLayout ? (
+        {this.props.renderCustomCursor ? (
           this.props.renderCustomCursor(
-            this.activeTab.layout,
-            this.layout.barLayout,
+            activeTabLayout,
+            barLayout,
             this.props.theme!
           )
         ) : (

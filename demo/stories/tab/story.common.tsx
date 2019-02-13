@@ -111,9 +111,9 @@ export default function({
   isDisable = false,
   hasIconOnTop = false,
   palette,
-  activeTabId = '0',
-  tabNumber = 5,
-  customCursor = false,
+  activeTabId = '1',
+  tabNumber = 1,
+  customCursor = true,
 }: any) {
   const paletteKnob = select(
     'Palette',
