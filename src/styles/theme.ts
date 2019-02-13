@@ -1,6 +1,5 @@
 import * as deepmerge from 'lodash.merge'
 import * as React from 'react'
-import { ViewStyle } from 'react-native'
 import { Color, colors } from './colors'
 
 export type Typography = {
@@ -30,7 +29,7 @@ export type Theme<B, O> = {
 }
 
 export type Shape = {
-  borderRadius: ViewStyle['borderRadius']
+  borderRadius: number
 }
 
 export type PaletteIntention = Partial<PaletteColor>
