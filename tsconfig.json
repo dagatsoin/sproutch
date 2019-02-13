@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./",
     "emitDecoratorMetadata": true,
@@ -9,6 +8,7 @@
     "jsx": "react",
     "lib": ["es2017", "dom"],
     "module": "commonjs",
+    "declaration": true,
     "moduleResolution": "node",
     "noImplicitReturns": true,
     "noImplicitThis": true,

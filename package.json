@@ -10,7 +10,9 @@
   },
   "files": [
     "index.js",
+    "index.d.ts",
     "index.native.js",
+    "index.native.d.ts",
     "lib",
     "LICENSE"
   ],
