@@ -5,12 +5,14 @@ React and React Native iOS/Android library to make lovely (or not) UI.
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![npm version](https://badge.fury.io/js/%40sproutch%2Fui.svg)](https://badge.fury.io/js/%40sproutch%2Fui)
 [![Gitter chat](https://badges.gitter.im/sproutch/community.png)](https://gitter.im/sproutch/community?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
+[![TypeScript](https://badges.frapsoft.com/typescript/love/typescript.png?v=101)](https://github.com/ellerbrock/typescript-badges/)
 
-:construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction:
+
+:construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction:
 
 `Actually in aplha 0.0.2 but already usable. Expect breaking changes in the futur.`
 
-:construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction:
+:construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction:
 
 ## Prerequisites
 
@@ -21,7 +23,7 @@ Sproutch depends on two peer dependencies:
 - ExpoKit: bringing some basic components such `Svg` and `LinearGradient`
 
 **Important note**
-Actually developped with RN **0.57**. No guarantee that newer versions will work.
+- Actually developped with RN **0.57**. No guarantee that newer versions will work. But it may...
 
 ### Installation
 
@@ -47,28 +49,11 @@ render(
 )
 ```
 
-## Theming
+## Global theming
 
 Sproutch implements Material Design specs by default. But *some*, (bcz still WIP) components are already **deeply** customizable if you want to bring your own design system.
 
-Sproutch is themable etheir by overriding existing style or by providing a theme.
-
-1. Overriding component style.
-
-Each component has a `style` property which accepts all stylesheets keys used by the component.
-
-ex: the ProgressBar component can accept an object with those keys:
-
-```tsx
-{
-  root: ViewStyle
-  top: ViewStyle
-  background: ViewStyle
-  fill: ViewStyle
-}
-```
-
-2. Providing a theme
+Sproutch is themable by providing a theme.
 
 ThemeProvider accept a theme object which explained below. The theme shape is heavily inspired by Material UI Theme and stick to the material design specification.
 
@@ -156,6 +141,21 @@ type Theme<B, O> = {
 }
 ```
 
+## Customize component style
+
+Some components (in the futur, all will have) has a `style` property which accepts all stylesheets keys used by the component.
+
+ex: the ProgressBar component can accept an object with those keys:
+
+```tsx
+{
+  root: ViewStyle
+  top: ViewStyle
+  background: ViewStyle
+  fill: ViewStyle
+}
+```
+
 ## Live demo and components doc
 
 We use Storybook both for Web and Native.
@@ -166,7 +166,6 @@ You will find the doc for each component in the Note tab of its story:
 
 ## Contribution
 
-PRs are close for now. I prefer to reach a stable version and write a clear contribution guidance first.
+PRs won't be treated until reaching a stable version and write a clear contribution guidance first.
 
-If you find a bug, please fill an issue. I am also on Gitter to chat.
-
+If you find a bug, please fill an issue. I am also on [Gitter to chat](https://gitter.im/sproutch/community).
