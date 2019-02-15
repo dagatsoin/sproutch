@@ -161,7 +161,7 @@ ex: the ProgressBar component can accept an object with those keys:
 We use Storybook both for Web and Native.
 As a cross plateform UI, the API is the same for both Native and Web version. 
 You will find the doc for each component in the Note tab of its story:
-- For Native: https://expo.io/@dagatsoin/sproutch
+- For Native: https://expo.io/@dagatsoin/sproutch (only for Android, because Apple does not allow to load external Expo project)
 - For Web: https://dagatsoin.github.io/sproutch
 
 ## Contribution
