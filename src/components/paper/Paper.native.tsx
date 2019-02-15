@@ -1,24 +1,17 @@
 import * as React from 'react'
 import { Types } from 'reactxp'
 
-import { StyleProp } from '../../styles'
 import { Elevation } from '../elevation/index.native'
 import { View } from '../view'
+import { PaperProps } from './PaperProps'
 import { shadows, styles } from './style'
-
-type Props = {
-  elevation?: number
-  style?: StyleProp<Types.ViewStyle>
-  square?: boolean
-  children?: React.ReactNode
-}
 
 type State = {
   width: number
   height: number
 }
 
-export default class Paper extends React.Component<Props, State> {
+export default class Paper extends React.Component<PaperProps, State> {
   public childRef: View
 
   public state: State = {
@@ -30,7 +23,7 @@ export default class Paper extends React.Component<Props, State> {
     if (!this.state.width) this.setState({ width, height })
   }
 
-  public shouldComponentUpdate(nextProps: Props, nextState: State) {
+  public shouldComponentUpdate(nextProps: PaperProps, nextState: State) {
     return (
       nextProps.elevation !== this.props.elevation ||
       this.state.width !== nextState.width ||

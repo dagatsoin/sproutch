@@ -4,10 +4,10 @@ import { Button, Platform, Types, UserInterface } from 'reactxp'
 import { ThemeContext } from '../../styles/theme'
 import { Fade } from '../fade'
 import { View } from '../view'
-import Ripple, { RippleProps } from './Ripple'
+import Particle, { ParticleProps } from './Particle'
 import { containerStyle } from './style'
 
-type Props = {
+export type RippleProperties = {
   isOnPaper?: boolean
   palette?: 'primary' | 'secondary'
   onPress?: (e: Types.SyntheticEvent) => void
@@ -20,9 +20,9 @@ type State = {
   cb?: () => void
 }
 
-type RippleInfo = RippleProps & { id: number }
+type RippleInfo = ParticleProps & { id: number }
 
-class RippleCreator extends React.PureComponent<Props, State> {
+class RippleGenerator extends React.PureComponent<RippleProperties, State> {
   private static isWeb = Platform.getType() === 'web'
   public state: State = {
     nextKey: 0,
@@ -69,7 +69,7 @@ class RippleCreator extends React.PureComponent<Props, State> {
                 style={styleSheet.button}
               >
                 {this.state.ripplesProps.map(props => (
-                  <Ripple key={props.id} {...props} />
+                  <Particle key={props.id} {...props} />
                 ))}
               </Button>
             </View>
@@ -97,10 +97,10 @@ class RippleCreator extends React.PureComponent<Props, State> {
     )
 
     // Get the ripple layout
-    const cursorX = RippleCreator.isWeb
+    const cursorX = RippleGenerator.isWeb
       ? Math.round(event.clientX - rect.x)
       : Math.round(event.pageX! - rect.x)
-    const cursorY = RippleCreator.isWeb
+    const cursorY = RippleGenerator.isWeb
       ? Math.round(event.clientY - rect.y)
       : Math.round(event.pageY! - rect.y)
 
@@ -123,7 +123,7 @@ class RippleCreator extends React.PureComponent<Props, State> {
             isFading: false,
             isOnPaper,
             palette,
-            onRippleEnd: this.onRippleEnd.bind(this),
+            onLifeEnd: this.onRippleEnd.bind(this),
           },
           ...state.ripplesProps,
         ],
@@ -172,4 +172,4 @@ class RippleCreator extends React.PureComponent<Props, State> {
   }
 }
 
-export default RippleCreator
+export default RippleGenerator

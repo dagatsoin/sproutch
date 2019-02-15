@@ -1,20 +1,22 @@
 import * as React from 'react'
 import { Text, Types } from 'reactxp'
 
-import { Theme, ThemeContext } from '../../styles/theme'
+import { Styles, Theme, ThemeContext } from '../../styles'
 
-type Props = Types.TextProps
+export type TextProps = Types.TextProps
 
-export const TextComp = ({ children, style, ...props }: Props) => (
+export const TextComp = ({ children, style, ...props }: TextProps) => (
   <ThemeContext.Consumer>
     {(theme: Theme<any, any>) => (
       <Text
-        style={{
-          fontFamily: theme.typography.fontFamily,
-          fontSize: theme.typography.fontSize,
-          fontWeight: theme.typography.fontWeightLight,
-          ...(style as object),
-        }}
+        style={[
+          Styles.createTextStyle({
+            fontFamily: theme.typography.fontFamily,
+            fontSize: theme.typography.fontSize,
+            fontWeight: theme.typography.fontWeightLight,
+          }),
+          style,
+        ]}
         {...props as any}
       >
         {children}

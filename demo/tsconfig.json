@@ -2,6 +2,7 @@
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
+    "baseUrl": "../",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
@@ -14,13 +15,16 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "outDir": "lib",
+    "paths": {
+      "@sproutch/ui": ["../src"]
+    },
     "preserveConstEnums": true,
     "skipLibCheck": true,
     "sourceMap": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
     "target": "es5",
-    "types": ["node", "react", "react-dom", "react-native"],
+    "types": ["node", "react", "react-dom", "react-native"]
   },
   "include": [
     "./stories/**/*",

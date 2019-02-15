@@ -1,10 +1,9 @@
 import * as React from 'react'
 import { configure, addDecorator } from '@storybook/react'
+import { withNotes } from '@storybook/addon-notes'
 
-import { ThemeContext } from '@sproutch/sproutch'
+import { defaultTheme, ThemeContext } from '@sproutch/ui'
 import fontAwesome from 'react-native-vector-icons/Fonts/FontAwesome.ttf'
-
-import { defaultTheme as theme } from '@sproutch/sproutch'
 
 const fontAwesomeStyle = `@font-face {
   src: url(${fontAwesome});
@@ -44,11 +43,12 @@ const Center = (storyFn) => (
 // Add the Theme provider
 
 const ThemeInjector = (storyFn) => (
-  <ThemeContext.Provider value={theme}>
+  <ThemeContext.Provider value={defaultTheme}>
     { storyFn() }
   </ThemeContext.Provider>
 )
 
+addDecorator(withNotes)
 addDecorator(Center)
 addDecorator(ThemeInjector)
 

@@ -1,13 +1,12 @@
-import { Types } from 'reactxp'
-
 import { StyleProp, Styles } from '../../styles/createStyle'
 import { override, Theme } from '../../styles/theme'
+import { ViewStyle } from '../view'
 
 export type ProgressBarStyle = {
-  root: StyleProp<Types.ViewStyle>
-  top: StyleProp<Types.ViewStyle>
-  background: StyleProp<Types.ViewStyle>
-  fill: StyleProp<Types.ViewStyle>
+  root: StyleProp<ViewStyle>
+  top: StyleProp<ViewStyle>
+  background: StyleProp<ViewStyle>
+  fill: StyleProp<ViewStyle>
 }
 
 export type ProgressBarOverride = Partial<ProgressBarStyle>

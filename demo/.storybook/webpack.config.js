@@ -39,8 +39,10 @@ module.exports = (_baseConfig, _env, config) => {
 
   config.resolve.extensions.push('.ts', '.tsx')
   config.resolve.alias = {
-   'react-native': 'react-native-web'
+   'react-native': 'react-native-web',
+   '@sproutch/ui': root('../src')
   }
+  config.resolve.modules = [root('node_modules')]
   config.devtool = 'inline-source-map'
   return config
 }

@@ -1,14 +1,13 @@
-import { Types } from 'reactxp'
-
 import { StyleProp, Styles } from '../../styles/createStyle'
+import { ViewStyle } from '../view'
 
 // TODO: the keylight should be fixed at top
 export type PaperStyle = {
-  shadowWeb: StyleProp<Types.ViewStyle>
-  shadowMobile: StyleProp<Types.ViewStyle>
-  shadow0: StyleProp<Types.ViewStyle>
-  shadow1: StyleProp<Types.ViewStyle>
-  shadow2: StyleProp<Types.ViewStyle>
+  shadowWeb: StyleProp<ViewStyle>
+  shadowMobile: StyleProp<ViewStyle>
+  shadow0: StyleProp<ViewStyle>
+  shadow1: StyleProp<ViewStyle>
+  shadow2: StyleProp<ViewStyle>
 }
 
 export const styles = {

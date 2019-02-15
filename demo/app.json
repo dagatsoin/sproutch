@@ -24,6 +24,7 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": "A cross platefrom UI library for React and React Native Android/iOS."
   }
 }

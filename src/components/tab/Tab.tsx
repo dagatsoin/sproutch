@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { Types } from 'reactxp'
 import {
   LayoutInfo,
   StyleRuleSet,
@@ -8,31 +7,33 @@ import {
 
 import { ThemeContext } from '../../styles/theme'
 import { Ripple } from '../ripple'
-import { Text } from '../text'
-import { View } from '../view'
-import { tabStyle, TabStyle } from './styles'
+import { Text, TextStyle } from '../text'
+import { View, ViewProps } from '../view'
+import { tabStyle, TabStyleOverride } from './styles'
 
 export type TabProps = {
   id: string
   renderIcon?: (
-    style: StyleRuleSetRecursive<StyleRuleSet<Types.TextStyle>>
+    style: StyleRuleSetRecursive<StyleRuleSet<TextStyle>>
   ) => JSX.Element
   label?: string
-  isActive?: boolean
-  hasTwoLines?: boolean
   isDisable?: boolean
-  mustGrow?: boolean
-  palette?: 'primary' | 'secondary'
-  notification?: boolean
-  style?: Partial<TabStyle>
+  style?: TabStyleOverride
   slot?: JSX.Element
-  onClick?: (index: string) => void
-  onUnmount?: (id: string) => void
-  onTabLayout?: (tab: { id: string; layout: LayoutInfo }) => void
-  onWillMount?: (id: string) => void
 }
 
-class Tab extends React.Component<TabProps & Types.ViewProps> {
+type CompleteProps = {
+  mustGrow?: boolean
+  palette?: 'primary' | 'secondary'
+  hasIconOnTop?: boolean
+  isActive: boolean
+  onClick: (index: string) => void
+  onUnmount: (id: string) => void
+  onTabLayout: (tab: { id: string; layout: LayoutInfo }) => void
+  onWillMount: (id: string) => void
+} & TabProps
+
+class Tab extends React.Component<CompleteProps & ViewProps> {
   private layout?: LayoutInfo
 
   public componentWillMount() {
@@ -55,7 +56,7 @@ class Tab extends React.Component<TabProps & Types.ViewProps> {
       label,
       isActive = false,
       isDisable = false,
-      hasTwoLines = false,
+      hasIconOnTop = false,
       mustGrow = false,
       palette,
       slot,
@@ -70,7 +71,7 @@ class Tab extends React.Component<TabProps & Types.ViewProps> {
             palette,
             style,
             options: {
-              hasTwoLines,
+              hasIconOnTop,
               isDisable,
               isActive,
               mustGrow,

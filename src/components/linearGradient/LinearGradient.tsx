@@ -1,27 +1,26 @@
 import * as React from 'react'
 import { findDOMNode } from 'react-dom'
-import { Types, UserInterface } from 'reactxp'
+import { UserInterface } from 'reactxp'
 
 import { StyleProp } from '../../styles/createStyle'
-import { View } from '../view'
+import { View, ViewOnLayoutEvent, ViewStyle } from '../view'
 
-type Props = {
+export type LinearGradientProps = {
   colors: string[]
   start?: [number, number]
   end?: [number, number]
   locations?: number[]
-  style?: StyleProp<Types.ViewStyle>
-  children?: React.ReactNode
+  style?: StyleProp<ViewStyle>
 }
 
-class LinearGradient extends React.PureComponent<Props, {}> {
+class LinearGradient extends React.PureComponent<LinearGradientProps, {}> {
   public backgroundImageRef: View
   public rootRef: View
   private oldWidth: number
   private oldHeight: number
 
   public render() {
-    const { style, children } = this.props
+    const { style } = this.props
 
     return (
       <View
@@ -30,7 +29,6 @@ class LinearGradient extends React.PureComponent<Props, {}> {
         ref={(comp: View) => (this.rootRef = comp)}
       >
         <View ref={(comp: View) => (this.backgroundImageRef = comp)} />
-        {children}
       </View>
     )
   }
@@ -54,7 +52,7 @@ class LinearGradient extends React.PureComponent<Props, {}> {
     })
   }
 
-  private measure = (e: Types.ViewOnLayoutEvent) => {
+  private measure = (e: ViewOnLayoutEvent) => {
     if (e.width !== this.oldWidth && e.height !== this.oldHeight) {
       this.oldWidth = e.width
       this.oldHeight = e.height

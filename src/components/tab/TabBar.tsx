@@ -1,44 +1,49 @@
 import * as React from 'react'
-import { Animated, Platform, ScrollView, Styles, Types } from 'reactxp'
-import { LayoutInfo } from 'reactxp/dist/common/Types'
+import { Animated, Platform, ScrollView } from 'reactxp'
+
 import { debounce } from '../../helpers'
+import { Styles } from '../../styles'
 import { Theme } from '../../styles/theme'
 import { InjectedTheme, withTheme } from '../../styles/withTheme'
+import {
+  AnimatedCompositeAnimation,
+  AnimatedViewStyleRuleSet,
+} from '../animated'
 import { Ripple } from '../ripple'
-import { View } from '../view'
+import { LayoutInfo, View } from '../view'
 import { TabBarStyleOverride, tabsBarStyle, TabsBarStyle } from './styles'
-import { TabProps } from './Tab'
+import Tab, { TabProps } from './Tab'
 
 export type TabBarProps = {
   activeTabId?: string
-  hasTwoLines?: boolean
+  hasIconOnTop?: boolean
   palette?: 'primary' | 'secondary'
   style?: Partial<TabBarStyleOverride>
-  children: (setProps: (id: string) => Partial<TabProps>) => JSX.Element
-  customCursorAnimation?: CustomAnimation
+  tabs: TabProps[]
+  customCursorAnimation?: CustomTabBarCursorAnimation
   renderCustomCursor?: (
     tabLayout: LayoutInfo,
     barLayout: LayoutInfo,
     theme: Theme<any, any>
-  ) => JSX.Element | JSX.Element[]
-  renderLeftIndicator?: () => JSX.Element | JSX.Element[]
-  renderRightIndicator?: () => JSX.Element | JSX.Element[]
+  ) => React.ReactNode
+  leftScrollButton?: JSX.Element | JSX.Element[]
+  rightScrollButton?: JSX.Element | JSX.Element[]
   onChange?: (tabId: string) => void
 } & InjectedTheme<Theme<any, any>>
 
-export type CustomAnimation = (
+export type CustomTabBarCursorAnimation = (
   cursorValues: AnimatedValues,
   targetLayout: LayoutInfo,
   theme: Theme<any, any>
 ) => {
-  opacity?: Types.Animated.CompositeAnimation
-  translateX?: Types.Animated.CompositeAnimation
-  translateY?: Types.Animated.CompositeAnimation
-  rotateX?: Types.Animated.CompositeAnimation
-  rotateY?: Types.Animated.CompositeAnimation
-  rotateZ?: Types.Animated.CompositeAnimation
-  scaleX?: Types.Animated.CompositeAnimation
-  scaleY?: Types.Animated.CompositeAnimation
+  opacity?: AnimatedCompositeAnimation
+  translateX?: AnimatedCompositeAnimation
+  translateY?: AnimatedCompositeAnimation
+  rotateX?: AnimatedCompositeAnimation
+  rotateY?: AnimatedCompositeAnimation
+  rotateZ?: AnimatedCompositeAnimation
+  scaleX?: AnimatedCompositeAnimation
+  scaleY?: AnimatedCompositeAnimation
 }
 
 type AnimatableKey =
@@ -101,7 +106,7 @@ type TabsLayout = {
   tabsState: TabLayout[]
 }
 
-class Tabs extends React.PureComponent<TabBarProps, State> {
+class Tabs extends React.Component<TabBarProps, State> {
   get activeTab(): TabState | undefined {
     return this.SAMmodel.tabsState.find(s => s.id === this.state.activeTabId)
   }
@@ -147,9 +152,9 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
     scaleX: Animated.createValue(0),
     scaleY: Animated.createValue(0),
   }
-  private animatedStyle: Types.AnimatedViewStyleRuleSet
+  private animatedStyle: AnimatedViewStyleRuleSet
   private cursorAnimation: {
-    [key in AnimatableKey]: Types.Animated.CompositeAnimation
+    [key in AnimatableKey]: AnimatedCompositeAnimation
   }
   private controlState: ControlState = 'stale'
 
@@ -270,7 +275,7 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
     const tabs = (
       <View style={styles.wrapper}>
         {this.renderCursor(styles)}
-        {this.props.children(this.bindTab)}
+        {this.tabs}
       </View>
     )
 
@@ -290,7 +295,7 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
   }
 
   public componentDidUpdate(_prevProps: TabBarProps, prevState: State) {
-    // Prevent cursor animation when scrolling with with arrows
+    // Prevent cursor animation when scrolling with arrows
     if (
       this.state.activeTabId !== prevState.activeTabId &&
       this.controlState === 'isLayoutReady'
@@ -303,8 +308,8 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
   /**
    * This function inject some additional props into the child.
    */
-  private bindTab = (id: string): Partial<TabProps> => {
-    const { hasTwoLines, palette } = this.props
+  private bindTab = (id: string) => {
+    const { hasIconOnTop, palette } = this.props
     const { activeTabId, isScrollEnabled } = this.state
 
     return {
@@ -314,9 +319,15 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
       onClick: this.onClickTab,
       isActive: id === activeTabId,
       mustGrow: isScrollEnabled,
-      hasTwoLines,
+      hasIconOnTop,
       palette,
     }
+  }
+
+  get tabs() {
+    return this.props.tabs.map(props => (
+      <Tab key={props.id} {...props} {...this.bindTab(props.id)} />
+    ))
   }
 
   private updateCursorPosition() {
@@ -335,7 +346,7 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
       rotateY: 0,
       rotateZ: 0,
       scaleX: this.activeTab!.layout!.width,
-      scaleY: 2,
+      scaleY: 1,
     })
     Object.keys(this.cursorAnimation).forEach(key =>
       this.cursorAnimation[key].start()
@@ -343,29 +354,31 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
   }
 
   private renderCursor(style: TabsBarStyle) {
-    return this.controlState === 'isLayoutReady' ? (
-      this.props.renderCustomCursor ? (
-        this.renderCustomCursor(style)
-      ) : (
-        <Animated.View style={[style.cursor, this.animatedStyle]} />
-      )
-    ) : (
-      <></>
-    )
-  }
+    const activeTabLayout =
+      this.activeTab && this.activeTab.layout
+        ? this.activeTab.layout
+        : { x: 0, y: 0, width: 0, height: 0 }
 
-  private renderCustomCursor(style: TabsBarStyle) {
-    if (!this.props.renderCustomCursor) return <></>
-    const customCursor = this.props.renderCustomCursor(
-      this.activeTab!.layout!,
-      this.layout.barLayout!,
-      this.props.theme!
-    ) as React.ReactElement<View>
-    return React.cloneElement(customCursor, {
-      ...customCursor.props,
-      style: [style.cursor, (customCursor.props as any).style],
-      animated: this.animatedStyle,
-    } as any)
+    const barLayout =
+      this.layout && this.layout.barLayout
+        ? this.layout.barLayout
+        : { x: 0, y: 0, width: 0, height: 0 }
+
+    return (
+      <Animated.View
+        style={[style.cursorAnimatedContainer, this.animatedStyle]}
+      >
+        {this.props.renderCustomCursor ? (
+          this.props.renderCustomCursor(
+            activeTabLayout,
+            barLayout,
+            this.props.theme!
+          )
+        ) : (
+          <View style={style.cursor} />
+        )}
+      </Animated.View>
+    )
   }
 
   private renderInScrollView(
@@ -396,14 +409,14 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
   }
 
   private getStyles(isScrollEnabled: boolean) {
-    const { hasTwoLines, palette, theme, style } = this.props
+    const { hasIconOnTop, palette, theme, style } = this.props
 
     return tabsBarStyle({
       theme: theme!,
       palette,
       style,
       options: {
-        hasTwoLines,
+        hasIconOnTop,
         isScrollEnabled,
       },
     })
@@ -565,12 +578,14 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
         this.layout.barLayout!.width +
         this.getStyles(isScrollEnabled).paddingHorizontal * 2
       : 0
-    this.setState({ isScrollEnabled, hasRightScrollIndicator })
+    this.setState({ isScrollEnabled, hasRightScrollIndicator }, () => {
+      this.scrollToTab(this.state.activeTabId, false)
+    })
   }
 
-  private scrollToTab(id: string) {
+  private scrollToTab(id: string, animated?: boolean) {
     const offset = this.getTabOffset(id)
-    this.scrollTo(this.layout.currentScroll + offset)
+    this.scrollTo(this.layout.currentScroll + offset, animated)
   }
 
   /**
@@ -604,20 +619,26 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
 
   private onScroll = (_newScrollTop: number, newScrollLeft: number) => {
     this.layout.currentScroll = Math.round(newScrollLeft)
-    this.setState({
-      hasLeftScrollIndicator: this.layout.currentScroll > 0,
-      hasRightScrollIndicator:
-        this.layout.currentScroll < this.layout.maxScroll,
-    })
+    if (
+      this.layout.currentScroll > 0 !== this.state.hasLeftScrollIndicator ||
+      this.layout.currentScroll < this.layout.maxScroll !==
+        this.state.hasRightScrollIndicator
+    ) {
+      this.setState({
+        hasLeftScrollIndicator: this.layout.currentScroll > 0,
+        hasRightScrollIndicator:
+          this.layout.currentScroll < this.layout.maxScroll,
+      })
+    }
   }
 
   private renderLeftIndicator(styles: TabsBarStyle) {
     const { isScrollEnabled } = this.state
-    const { palette, renderLeftIndicator } = this.props
+    const { palette, leftScrollButton } = this.props
 
-    return isScrollEnabled && renderLeftIndicator ? (
+    return isScrollEnabled && leftScrollButton ? (
       <View style={styles.leftIndicator} onStartShouldSetResponder={() => true}>
-        {renderLeftIndicator()}
+        {leftScrollButton}
         {<Ripple onPress={() => this.rollLeft()} palette={palette} />}
       </View>
     ) : (
@@ -627,14 +648,14 @@ class Tabs extends React.PureComponent<TabBarProps, State> {
 
   private renderRightIndicator(styles: TabsBarStyle) {
     const { isScrollEnabled } = this.state
-    const { palette, renderRightIndicator } = this.props
+    const { palette, rightScrollButton } = this.props
 
-    return isScrollEnabled && renderRightIndicator ? (
+    return isScrollEnabled && rightScrollButton ? (
       <View
         style={styles.rightIndicator}
         onStartShouldSetResponder={() => true}
       >
-        {renderRightIndicator()}
+        {rightScrollButton}
         {<Ripple onPress={() => this.rollRight()} palette={palette} />}
       </View>
     ) : (

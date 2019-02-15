@@ -1,1 +1,4 @@
-export { default as LinearGradient } from './LinearGradient'
+export {
+  default as LinearGradient,
+  LinearGradientProps,
+} from './LinearGradient'

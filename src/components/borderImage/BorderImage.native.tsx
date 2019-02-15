@@ -1,9 +1,11 @@
 import * as React from 'react'
 import { Image, Styles, Types, View } from 'reactxp'
+
+import { LayoutInfo } from '../view'
 import { BorderImageProps } from './BorderImageProps'
 
 type State = {
-  layout?: Types.LayoutInfo
+  layout?: LayoutInfo
 }
 
 export default class BorderImage extends React.Component<
@@ -23,7 +25,7 @@ export default class BorderImage extends React.Component<
     )
   }
 
-  private onLayout = (layout: Types.LayoutInfo) => {
+  private onLayout = (layout: LayoutInfo) => {
     this.setState({ layout })
   }
 }

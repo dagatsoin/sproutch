@@ -3,27 +3,33 @@ import { Platform, Types } from 'reactxp'
 import { colorManipulator } from '../../styles/colorManipulator'
 import { StyleProp, Styles } from '../../styles/createStyle'
 import { override, Theme } from '../../styles/theme'
+import { TextStyle } from '../text'
+import { ViewStyle } from '../view'
 
 export type TabStyle = {
-  root: StyleProp<Types.ViewStyle>
+  root: StyleProp<ViewStyle>
   icon: StyleProp<Types.TextStyle>
   label: StyleProp<Types.TextStyle>
 }
 
 export type TabsBarStyle = {
-  root: StyleProp<Types.ViewStyle>
-  wrapper: StyleProp<Types.ViewStyle>
-  leftIndicator: StyleProp<Types.ViewStyle>
-  rightIndicator: StyleProp<Types.ViewStyle>
-  cursor: StyleProp<Types.ViewStyle>
+  root: StyleProp<ViewStyle>
+  wrapper: StyleProp<ViewStyle>
+  leftIndicator: StyleProp<ViewStyle>
+  rightIndicator: StyleProp<ViewStyle>
+  cursorAnimatedContainer: StyleProp<ViewStyle>
+  cursor: StyleProp<ViewStyle>
   scrollView: StyleProp<Types.ScrollViewStyle>
   paddingHorizontal: number
 }
 
-export type TabStyleOverride = TabStyle & {
-  hasIcon: StyleProp<Types.ViewStyle>
-  hasLabel: StyleProp<Types.ViewStyle>
-}
+export type TabStyleOverride = Partial<
+  TabStyle & {
+    hasIcon: StyleProp<ViewStyle>
+    hasLabel: StyleProp<ViewStyle>
+    isActiveLabel: StyleProp<TextStyle>
+  }
+>
 
 export type TabBarStyleOverride = Exclude<TabsBarStyle, 'paddingHorizontal'>
 
@@ -38,14 +44,14 @@ export const tabStyle = function({
   style?: Partial<TabStyleOverride>
   options?: {
     mustGrow: boolean
-    hasTwoLines: boolean
+    hasIconOnTop: boolean
     hasIcon: boolean
     hasLabel: boolean
     isActive: boolean
     isDisable: boolean
   }
 }): TabStyle {
-  const tabHeight = options && options.hasTwoLines ? 72 : 48
+  const tabHeight = options && options.hasIconOnTop ? 72 : 48
   const tabMinWidth = 90
   const tabMaxWidth = 360
 
@@ -83,13 +89,13 @@ export const tabStyle = function({
 
       paddingHorizontal: 16,
       paddingVertical:
-        !!options && options.hasTwoLines ? twoLinesPadding : undefined,
+        !!options && options.hasIconOnTop ? twoLinesPadding : undefined,
 
       justifyContent:
-        !!options && options.hasTwoLines ? 'space-between' : 'center',
+        !!options && options.hasIconOnTop ? 'space-between' : 'center',
 
       alignItems: 'center',
-      flexDirection: !!options && options.hasTwoLines ? 'column' : 'row',
+      flexDirection: !!options && options.hasIconOnTop ? 'column' : 'row',
 
       cursor: 'pointer',
 
@@ -134,7 +140,7 @@ export const tabStyle = function({
     label: Styles.createTextStyle({
       margin: 0,
       paddingLeft:
-        !!options && !options.hasTwoLines && options.hasIcon
+        !!options && !options.hasIconOnTop && options.hasIcon
           ? theme.spacing
           : 0,
 
@@ -146,6 +152,7 @@ export const tabStyle = function({
       ...(!!options &&
         options.isActive && {
           color: tabActiveColor,
+          ...(style.isActiveLabel as object),
         }),
 
       ...(!!options &&
@@ -153,7 +160,7 @@ export const tabStyle = function({
           color: tabDisabledColor,
         }),
 
-      ...(style.icon as object),
+      ...(style.label as object),
 
       ...override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'label'),
     }),
@@ -170,11 +177,11 @@ export const tabsBarStyle = function({
   palette?: 'primary' | 'secondary' | ''
   style?: Partial<TabBarStyleOverride>
   options?: {
-    hasTwoLines?: boolean
+    hasIconOnTop?: boolean
     isScrollEnabled?: boolean
   }
 }): TabsBarStyle {
-  const tabHeight = options && options.hasTwoLines ? 72 : 48
+  const tabHeight = options && options.hasIconOnTop ? 72 : 48
 
   const tabBackgroundColor =
     palette === undefined || palette === ''
@@ -240,13 +247,15 @@ export const tabsBarStyle = function({
         'rightIndicator'
       ),
     }),
-    cursor: Styles.createViewStyle({
+    cursorAnimatedContainer: Styles.createViewStyle({
       position: 'absolute',
       width: 1,
-      top: tabHeight - 2,
-      right: 0,
-      left: 0,
-      height: 2,
+      top: 0,
+      bottom: 0,
+    }),
+    cursor: Styles.createViewStyle({
+      height: 4,
+      top: tabHeight - 4,
 
       backgroundColor: cursorColor,
 

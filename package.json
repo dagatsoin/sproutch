@@ -1,6 +1,6 @@
 {
-  "name": "@sproutch/sproutch",
-  "version": "0.0.1",
+  "name": "@sproutch/ui",
+  "version": "0.0.2",
   "description": "A cross platform UI kit for web and react native Android/iOS.",
   "author": "Daniel Neveux",
   "homepage": "https://dagatsoin.github.io/sproutch/",
@@ -10,7 +10,9 @@
   },
   "files": [
     "index.js",
+    "index.d.ts",
     "index.native.js",
+    "index.native.d.ts",
     "lib",
     "LICENSE"
   ],

@@ -1,7 +1,7 @@
-import { colorManipulator, CustomAnimation, DefaultTheme, Tab, TabBar, Text, View } from '@sproutch/sproutch'
+import { Animated, colorManipulator, CustomTabBarCursorAnimation, DefaultTheme, TabBar, Text, View } from '@sproutch/ui'
 import { boolean, number, select, text } from '@storybook/addon-knobs'
 import * as React from 'react'
-import { Animated, Styles } from 'reactxp'
+import { Styles } from 'reactxp'
 
 import { LayoutInfo } from 'reactxp/dist/common/Types'
 
@@ -16,19 +16,20 @@ function renderCustomCursor(
   return (
     <View
       style={Styles.createViewStyle({
-        borderRadius: 1,
+        position: 'absolute',
+        width: 1,
         height: 4,
+        top: 44,
         backgroundColor: colorManipulator.fade(
           theme.business.warning.main,
-          Math.max(x / barWidth, 0.1)
-        ),
-        transform: [{ scaleY: 4 }],
+          Math.max(x / Math.max(barWidth, 1), 0.1)
+        )
       })}
     />
   )
 }
 
-const customCursorAnimation: CustomAnimation = (
+const customCursorAnimation: CustomTabBarCursorAnimation = (
   { scaleX, scaleY, translateY, rotateZ },
   { width },
   theme
@@ -40,19 +41,19 @@ const customCursorAnimation: CustomAnimation = (
       easing: Animated.Easing.Out(),
     }),
     Animated.timing(scaleX, {
-      toValue: width - theme.spacing * 2,
+      toValue: width - theme.spacing * 4,
       duration: 200,
       easing: Animated.Easing.In(),
     }),
   ]),
   scaleY: Animated.sequence([
     Animated.timing(scaleY, {
-      toValue: 30,
+      toValue: 1,
       duration: 100,
       easing: Animated.Easing.Out(),
     }),
     Animated.timing(scaleY, {
-      toValue: 4,
+      toValue: 1,
       duration: 200,
       easing: Animated.Easing.In(),
     }),
@@ -108,9 +109,9 @@ export default function({
   otherTabBarLabel = 'ROCKET',
   hasIcon = false,
   isDisable = false,
-  hasTwoLines = false,
+  hasIconOnTop = false,
   palette,
-  activeTabId = '0',
+  activeTabId = '5',
   tabNumber = 5,
   customCursor = false,
 }: any) {
@@ -122,7 +123,7 @@ export default function({
   return (
     <>
       <TabBar
-        hasTwoLines={boolean('Has two lines', hasTwoLines)}
+        hasIconOnTop={boolean('Has two lines', hasIconOnTop)}
         palette={paletteKnob || undefined}
         activeTabId={select('Tab', ['0', '1', '2', '3', '4', '5'], activeTabId)}
         customCursorAnimation={
@@ -135,7 +136,7 @@ export default function({
             ? renderCustomCursor
             : undefined
         }
-        renderLeftIndicator={() => (
+        leftScrollButton={(
           <View
             style={{
               flex: 1,
@@ -146,7 +147,7 @@ export default function({
             <FontAwesome.default name="chevron-left" size={16} color="#ddd" />
           </View>
         )}
-        renderRightIndicator={() => (
+        rightScrollButton={(
           <View
             style={{
               flex: 1,
@@ -157,52 +158,38 @@ export default function({
             <FontAwesome.default name="chevron-right" size={16} color="#ddd" />
           </View>
         )}
-      >
-        {setProps => (
-          <>
-            <Tab
-              key={0}
-              id="0"
-              label={text('First tab label', firstTabLabel)}
-              isDisable={boolean('Disabled', isDisable)}
-              slot={notification}
-              renderIcon={iconStyle => (
-                <>
-                  {boolean('With icon', hasIcon) && (
+        tabs={
+          [
+            {
+              id: "0",
+              label: text('First tab label', firstTabLabel),
+              isDisable: boolean('Disabled', isDisable),
+              slot: notification,
+              renderIcon: boolean('With icon', hasIcon) && (iconStyle => (
+                <FontAwesome.default
+                  style={iconStyle}
+                  name="rocket"
+                  size={30}
+                  color="#900"
+                />
+              ))
+            },
+            ...Array.from(Array(number('Tab number', tabNumber)))
+                .map((_, i) => ({
+                  id: i + 1 + '',
+                  label: `${otherTabBarLabel} ${i + 1}`,
+                  renderIcon: boolean('With icon', hasIcon) && (iconStyle => (
                     <FontAwesome.default
                       style={iconStyle}
-                      name="rocket"
+                      name="check"
                       size={30}
                       color="#900"
                     />
-                  )}
-                </>
-              )}
-              {...setProps('0')}
-            />
-            {Array.from(Array(number('Tab number', tabNumber))).map((_, i) => (
-              <Tab
-                key={i + 1}
-                id={i + 1 + ''}
-                label={`${otherTabBarLabel} ${i + 1}`}
-                renderIcon={iconStyle => (
-                  <>
-                    {boolean('With icon', hasIcon) && (
-                      <FontAwesome.default
-                        style={iconStyle}
-                        name="check"
-                        size={30}
-                        color="#900"
-                      />
-                    )}
-                  </>
-                )}
-                {...setProps(i + 1 + '')}
-              />
-            ))}
-          </>
-        )}
-      </TabBar>
+                  ))
+                }))
+            ]
+          }
+      />
     </>
   )
 }

@@ -1,10 +1,11 @@
 import { Svg } from 'expo'
 import * as React from 'react'
-import { Types, View } from 'reactxp'
+import { View } from 'reactxp'
 
 import { StyleProp, Styles } from '../../styles'
+import { ViewStyle } from '../view'
 
-type Props = {
+export type ElevationProps = {
   width?: number
   height?: number
   color?: string
@@ -13,7 +14,7 @@ type Props = {
   opacity?: string
   x?: number
   y?: number
-  style: StyleProp<Types.ViewStyle>
+  style: StyleProp<ViewStyle>
   children?: JSX.Element
 }
 
@@ -41,7 +42,7 @@ function colorRgb(color: string) {
   }
 }
 
-export default (props: Props) => {
+export default (props: ElevationProps) => {
   // get the shadow settings and give them default values
   const {
     width = 0,

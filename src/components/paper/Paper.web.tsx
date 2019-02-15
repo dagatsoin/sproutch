@@ -1,19 +1,12 @@
 import * as React from 'react'
 import { findDOMNode } from 'react-dom'
-import { Types } from 'reactxp'
 
-import { StyleProp, Styles } from '../../styles/createStyle'
+import { Styles } from '../../styles/createStyle'
 import { View } from '../view'
+import { PaperProps } from './PaperProps'
 import { shadows } from './style'
 
-type Props = {
-  elevation?: number
-  style?: StyleProp<Types.ViewStyle>
-  square?: boolean
-  children?: React.ReactNode
-}
-
-export default class Paper extends React.Component<Props, {}> {
+export default class Paper extends React.Component<PaperProps, {}> {
   private containerRef: View
 
   private get shadow(): string {

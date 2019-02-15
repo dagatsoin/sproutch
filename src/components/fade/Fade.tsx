@@ -1,15 +1,19 @@
 import * as React from 'react'
+import { Animated, Styles } from 'reactxp'
 
-import { Animated, Styles, Types } from 'reactxp'
-import { View } from '../view'
+import {
+  AnimatedCompositeAnimation,
+  AnimatedViewStyleRuleSet,
+} from '../animated'
+import { ViewStyle } from '../view'
 import fadeStyle from './style'
 
-type Props = {
+export type FadeProps = {
   isVisible: boolean
   isAnimatedOnMount?: boolean
   duration?: number
   palette?: 'primary' | 'secondary'
-  style?: Types.ViewStyle
+  style?: ViewStyle
   onAnimationEnd?: () => void
   children: React.ReactNode
 }
@@ -18,14 +22,14 @@ type State = {
   isVisible: boolean
 }
 
-export default class Fade extends React.Component<Props, State> {
+export default class Fade extends React.Component<FadeProps, State> {
   public state: State = { isVisible: false }
   private animatedOpacity = Animated.createValue(0)
-  private animatedStyle: Types.AnimatedViewStyleRuleSet
-  private animation: Types.Animated.CompositeAnimation
+  private animatedStyle: AnimatedViewStyleRuleSet
+  private animation: AnimatedCompositeAnimation
   private duration: number
 
-  constructor(props: Props) {
+  constructor(props: FadeProps) {
     super(props)
     const { isAnimatedOnMount, isVisible } = props
     this.duration = props.duration || 15
@@ -69,7 +73,7 @@ export default class Fade extends React.Component<Props, State> {
     )
   }
 
-  public componentDidUpdate(prevProps: Props, _prevState: State) {
+  public componentDidUpdate(prevProps: FadeProps, _prevState: State) {
     if (this.props.isVisible !== prevProps.isVisible) {
       this.animation.stop()
       this.animation = this.getAnimation(this.props.isVisible ? 1 : 0)

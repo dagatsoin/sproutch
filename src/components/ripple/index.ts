@@ -1,1 +1,1 @@
-export { default as Ripple } from './RippleGenerator'
+export { default as Ripple, RippleProperties } from './RippleGenerator'
