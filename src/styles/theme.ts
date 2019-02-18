@@ -1,4 +1,4 @@
-import * as deepmerge from 'lodash.merge'
+import deepmerge from 'lodash.merge'
 import * as React from 'react'
 import { Color, colors } from './colors'
 

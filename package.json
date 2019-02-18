@@ -38,7 +38,7 @@
   },
   "scripts": {
     "build": "npm run clean && npm run tslint-check && npm run lint && npm run tsc",
-    "publish-local": "yalc publish && cd demo && yalc update",
+    "publish-local": "yalc publish",
     "clean": "rimraf lib",
     "lint": "tslint --config tslint.prod.json --project .",
     "prepare": "npm run build",
