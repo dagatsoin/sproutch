@@ -50,7 +50,7 @@ class RippleGenerator extends React.PureComponent<RippleProperties, State> {
               ref={(comp: View) => (this.containerRef = comp)}
               style={styleSheet.root}
             >
-              <Fade isVisible={this.state.isHover}>
+              <Fade isVisible={this.state.isHover} duration={75}>
                 <View style={styleSheet.overlay} />
               </Fade>
               <Button

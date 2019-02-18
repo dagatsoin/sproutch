@@ -24,7 +24,7 @@
     "types": ["node", "react", "react-dom", "react-native"]
   },
   "include": [
-    "src/**/*"
+    "src/**/*", "demo/stories/router-transition/story.native.tsx", "demo/stories/router-transition/App.tsx"
   ],
   "exclude": [
     "build",

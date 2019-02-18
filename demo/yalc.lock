@@ -2,7 +2,7 @@
   "version": "v1",
   "packages": {
     "@sproutch/ui": {
-      "signature": "3e5117f72df47a1f2f3d8c9ca683a413",
+      "signature": "cd95da81cca1686c181bf32a6cf09333",
       "file": true
     }
   }

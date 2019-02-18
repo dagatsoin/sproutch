@@ -32,7 +32,7 @@ export default class Fade extends React.Component<FadeProps, State> {
   constructor(props: FadeProps) {
     super(props)
     const { isAnimatedOnMount, isVisible } = props
-    this.duration = props.duration || 15
+    this.duration = props.duration || 250
     const opacityFrom = !!isAnimatedOnMount
       ? isVisible
         ? 0
