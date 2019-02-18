@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Animated, Platform, ScrollView } from 'reactxp'
+import { Animated, Button, Platform, ScrollView, Types } from 'reactxp'
 
 import { debounce } from '../../helpers'
 import { Styles } from '../../styles'
@@ -10,6 +10,7 @@ import {
   AnimatedViewStyleRuleSet,
 } from '../animated'
 import { Ripple } from '../ripple'
+import Emitter from '../ripple/Emitter'
 import { LayoutInfo, View } from '../view'
 import { TabBarStyleOverride, tabsBarStyle, TabsBarStyle } from './styles'
 import Tab, { TabProps } from './Tab'
@@ -123,7 +124,15 @@ class Tabs extends React.Component<TabBarProps, State> {
     )
   }
 
+  get tabs() {
+    return this.props.tabs.map(props => (
+      <Tab key={props.id} {...props} {...this.bindTab(props.id)} />
+    ))
+  }
+
   private static cursorTransitionDuration = 200
+  public rightIndicatorRipple: Emitter
+  public leftIndicatorRipple: Emitter
   public state: State = {
     activeTabId: '',
     isScrollEnabled: false,
@@ -322,12 +331,6 @@ class Tabs extends React.Component<TabBarProps, State> {
       hasIconOnTop,
       palette,
     }
-  }
-
-  get tabs() {
-    return this.props.tabs.map(props => (
-      <Tab key={props.id} {...props} {...this.bindTab(props.id)} />
-    ))
   }
 
   private updateCursorPosition() {
@@ -636,13 +639,34 @@ class Tabs extends React.Component<TabBarProps, State> {
     const { isScrollEnabled } = this.state
     const { palette, leftScrollButton } = this.props
 
-    return isScrollEnabled && leftScrollButton ? (
-      <View style={styles.leftIndicator} onStartShouldSetResponder={() => true}>
-        {leftScrollButton}
-        {<Ripple onPress={() => this.rollLeft()} palette={palette} />}
-      </View>
-    ) : (
-      <></>
+    return (
+      isScrollEnabled &&
+      leftScrollButton && (
+        <View
+          style={styles.leftIndicator}
+          onStartShouldSetResponder={() => true}
+        >
+          {leftScrollButton}
+          <Ripple
+            onRef={(emitter: Emitter) => (this.leftIndicatorRipple = emitter)}
+            palette={palette}
+          />
+          <View style={styles.touchDetector}>
+            <Button
+              style={Styles.createViewStyle({
+                flex: 1,
+              })}
+              onPress={() => this.rollLeft()}
+              onPressIn={(e: Types.SyntheticEvent) => {
+                this.leftIndicatorRipple.onPressIn(e)
+              }}
+              onPressOut={() => {
+                this.leftIndicatorRipple.onPressOut()
+              }}
+            />
+          </View>
+        </View>
+      )
     )
   }
 
@@ -650,16 +674,34 @@ class Tabs extends React.Component<TabBarProps, State> {
     const { isScrollEnabled } = this.state
     const { palette, rightScrollButton } = this.props
 
-    return isScrollEnabled && rightScrollButton ? (
-      <View
-        style={styles.rightIndicator}
-        onStartShouldSetResponder={() => true}
-      >
-        {rightScrollButton}
-        {<Ripple onPress={() => this.rollRight()} palette={palette} />}
-      </View>
-    ) : (
-      <></>
+    return (
+      isScrollEnabled &&
+      rightScrollButton && (
+        <View
+          style={styles.rightIndicator}
+          onStartShouldSetResponder={() => true}
+        >
+          {rightScrollButton}
+          <Ripple
+            onRef={(emitter: Emitter) => (this.rightIndicatorRipple = emitter)}
+            palette={palette}
+          />
+          <View style={styles.touchDetector}>
+            <Button
+              style={Styles.createViewStyle({
+                flex: 1,
+              })}
+              onPress={() => this.rollRight()}
+              onPressIn={(e: Types.SyntheticEvent) => {
+                this.rightIndicatorRipple.onPressIn(e)
+              }}
+              onPressOut={() => {
+                this.rightIndicatorRipple.onPressOut()
+              }}
+            />
+          </View>
+        </View>
+      )
     )
   }
 

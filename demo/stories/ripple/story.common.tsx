@@ -1,6 +1,7 @@
 import * as React from 'react'
+import { Button, Types } from 'reactxp'
 
-import { Paper, Ripple, Styles, Text, View } from '@sproutch/ui'
+import { IEmitter, Paper, Ripple, Styles, Text, View } from '@sproutch/ui'
 
 type State = {
   isClicked: boolean
@@ -10,6 +11,7 @@ export default class extends React.Component<{}, State> {
   public state: State = {
     isClicked: false
   }
+  private ripple: IEmitter
 
   public render() {
     return (
@@ -41,7 +43,34 @@ export default class extends React.Component<{}, State> {
               {this.state.isClicked ? "Clicked" : "Click! Click!"}
             </Text>
           </View>
-          <Ripple isOnPaper onPress={() => this.setState({ isClicked: true })}/>
+          <Ripple
+            isOnPaper
+            onRef={(e: IEmitter) => this.ripple = e}
+          />
+          <View
+            style={
+              Styles.createViewStyle({
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0
+              })
+            }
+          >
+            <Button
+              style={Styles.createViewStyle({ flex: 1 })}
+              onPress={() => {
+                this.setState({ isClicked: true })
+              }}
+              onPressIn={(e: Types.SyntheticEvent) => {
+                this.ripple && this.ripple.onPressIn(e)
+              }}
+              onPressOut={(e: Types.SyntheticEvent) => {
+                this.ripple && this.ripple.onPressOut(e)
+              }}
+            />
+          </View>
         </View>
       </Paper>
     )

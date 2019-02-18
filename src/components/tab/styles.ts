@@ -2,7 +2,7 @@ import { Platform, Types } from 'reactxp'
 
 import { colorManipulator } from '../../styles/colorManipulator'
 import { StyleProp, Styles } from '../../styles/createStyle'
-import { override, Theme } from '../../styles/theme'
+import { darkShadow, lightShadow, override, Theme } from '../../styles/theme'
 import { TextStyle } from '../text'
 import { ViewStyle } from '../view'
 
@@ -10,6 +10,8 @@ export type TabStyle = {
   root: StyleProp<ViewStyle>
   icon: StyleProp<Types.TextStyle>
   label: StyleProp<Types.TextStyle>
+  overlay: StyleProp<ViewStyle>
+  touchDetector: StyleProp<ViewStyle>
 }
 
 export type TabsBarStyle = {
@@ -21,6 +23,7 @@ export type TabsBarStyle = {
   cursor: StyleProp<ViewStyle>
   scrollView: StyleProp<Types.ScrollViewStyle>
   paddingHorizontal: number
+  touchDetector: StyleProp<ViewStyle>
 }
 
 export type TabStyleOverride = Partial<
@@ -74,6 +77,16 @@ export const tabStyle = function({
 
   const twoLinesPadding = theme.spacing * 1.5
 
+  const backgroundColor = palette
+    ? theme.palette[palette].main
+    : colorManipulator.getLuminance(theme.palette.primary.main) >= 0.5
+    ? '#000'
+    : '#fff'
+
+  const opacity =
+    colorManipulator.getLuminance(backgroundColor) >= 0.5
+      ? darkShadow.hover
+      : lightShadow.hover
   return {
     root: Styles.createViewStyle({
       height: tabHeight,
@@ -163,6 +176,19 @@ export const tabStyle = function({
       ...(style.label as object),
 
       ...override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'label'),
+    }),
+    overlay: Styles.createViewStyle({
+      flex: 1,
+
+      backgroundColor,
+      opacity,
+    }),
+    touchDetector: Styles.createViewStyle({
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
     }),
   }
 }
@@ -276,6 +302,13 @@ export const tabsBarStyle = function({
         'tabs',
         'scrollView'
       ),
+    }),
+    touchDetector: Styles.createViewStyle({
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
     }),
     // Custom values
     paddingHorizontal,

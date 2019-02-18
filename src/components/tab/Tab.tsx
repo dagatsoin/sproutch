@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Button, Styles, Types } from 'reactxp'
 import {
   LayoutInfo,
   StyleRuleSet,
@@ -6,7 +7,9 @@ import {
 } from 'reactxp/dist/common/Types'
 
 import { ThemeContext } from '../../styles/theme'
+import { Fade } from '../fade'
 import { Ripple } from '../ripple'
+import Emitter from '../ripple/Emitter'
 import { Text, TextStyle } from '../text'
 import { View, ViewProps } from '../view'
 import { tabStyle, TabStyleOverride } from './styles'
@@ -33,8 +36,16 @@ type CompleteProps = {
   onWillMount: (id: string) => void
 } & TabProps
 
-class Tab extends React.Component<CompleteProps & ViewProps> {
+type State = {
+  isHover: boolean
+}
+
+class Tab extends React.Component<CompleteProps & ViewProps, State> {
+  public state: State = {
+    isHover: false,
+  }
   private layout?: LayoutInfo
+  private ripple: Emitter
 
   public componentWillMount() {
     const { onWillMount = () => {} } = this.props
@@ -86,12 +97,35 @@ class Tab extends React.Component<CompleteProps & ViewProps> {
               {renderIcon && renderIcon(styles.icon)}
               {label && <Text style={styles.label}>{label}</Text>}
               {slot}
-              {
-                <Ripple
+              <Fade isVisible={this.state.isHover} duration={75}>
+                <View style={styles.overlay} />
+              </Fade>
+              <Ripple
+                onRef={(emitter: Emitter) => {
+                  this.ripple = emitter
+                }}
+                palette={palette}
+              />
+              <View style={styles.touchDetector}>
+                <Button
+                  style={Styles.createViewStyle({
+                    flex: 1,
+                  })}
                   onPress={() => !!onClick && onClick(id)}
-                  palette={palette}
+                  onPressIn={(e: Types.SyntheticEvent) => {
+                    this.ripple.onPressIn(e)
+                  }}
+                  onPressOut={() => {
+                    this.ripple.onPressOut()
+                  }}
+                  onHoverStart={() => {
+                    this.setState({ isHover: true })
+                  }}
+                  onHoverEnd={() => {
+                    this.setState({ isHover: false })
+                  }}
                 />
-              }
+              </View>
             </View>
           )
         }}

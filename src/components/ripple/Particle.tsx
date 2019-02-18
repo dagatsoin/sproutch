@@ -2,23 +2,12 @@ import * as React from 'react'
 import { Animated, Styles, Types } from 'reactxp'
 
 import { darkShadow, ThemeContext } from '../../styles/theme'
+import { ParticleProps } from './ParticleProps'
 import { rippleStyle } from './style'
 
 const fadeOutDuration = 150
 const scaleDuration = 225
 const easing = Animated.Easing.CubicBezier(0.4, 0, 0.2, 1)
-
-export type ParticleProps = {
-  id: number
-  isFading: boolean
-  x: number
-  y: number
-  radiusTo: number
-  radiusFrom: number
-  isOnPaper?: boolean
-  palette?: 'primary' | 'secondary'
-  onLifeEnd: () => void
-}
 
 class Particle extends React.PureComponent<ParticleProps, {}> {
   private animatedScale = Animated.createValue(1)
@@ -34,27 +23,32 @@ class Particle extends React.PureComponent<ParticleProps, {}> {
   }
 
   public componentDidMount() {
-    const { radiusFrom, radiusTo } = this.props
     this.runningAnimation = true
     Animated.timing(this.animatedScale, {
-      toValue: radiusTo / radiusFrom,
+      toValue: this.radiusTo / this.radiusFrom,
       duration: scaleDuration,
       easing,
     }).start(this.onAnimateRadiusEnd.bind(this))
   }
 
   public componentWillReceiveProps(newProps: ParticleProps) {
-    const { isFading: fading } = this.props
-    if (newProps.isFading !== fading && !this.runningAnimation) {
+    const { isDying: fading } = this.props
+    if (newProps.isDying !== fading && !this.runningAnimation) {
       this.fadeOut()
     }
   }
 
   public render() {
+    const { width, height } = this.props.emitterLayout
+    const radiusFrom = Math.min(width, height) / 2
     return (
       <ThemeContext.Consumer>
         {theme => {
-          const { isOnPaper, palette, radiusFrom, x, y } = this.props
+          const { options, x, y } = this.props
+          const { isOnPaper, palette } = options || {
+            isOnPaper: false,
+            palette: undefined,
+          }
           const styleSheet = rippleStyle({
             x,
             y,
@@ -83,9 +77,19 @@ class Particle extends React.PureComponent<ParticleProps, {}> {
     )
   }
 
+  private get radiusFrom() {
+    const { width, height } = this.props.emitterLayout
+    return Math.min(width, height) / 2
+  }
+
+  private get radiusTo() {
+    const { width, height } = this.props.emitterLayout
+    return Math.sqrt(width ** 2 + height ** 2)
+  }
+
   private onAnimateRadiusEnd() {
     this.runningAnimation = false
-    if (this.props.isFading) {
+    if (this.props.isDying) {
       this.fadeOut()
     }
   }
@@ -98,7 +102,7 @@ class Particle extends React.PureComponent<ParticleProps, {}> {
       toValue: 0,
       duration: fadeOutDuration,
       easing: Animated.Easing.Linear(),
-    }).start(this.props.onLifeEnd)
+    }).start(this.props.onDeath)
   }
 }
 
