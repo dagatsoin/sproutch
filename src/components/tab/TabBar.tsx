@@ -175,7 +175,7 @@ class Tabs extends React.Component<TabBarProps, State> {
    * 3 - Scroll
    */
   private rollRight = debounce(
-    (id?: string) => {
+    () => {
       /* 1 */
       const lastEntirelyDisplayedTab = getLastEntirelyDisplayedTab(
         this.layout,
@@ -184,7 +184,7 @@ class Tabs extends React.Component<TabBarProps, State> {
       if (lastEntirelyDisplayedTab === undefined) return
 
       /* 2 */
-      const tabId = id || lastEntirelyDisplayedTab.id
+      const tabId = lastEntirelyDisplayedTab.id
       const nextTabIndex =
         this.SAMmodel.tabsState.findIndex(tab => tab.id === tabId) + 1
       const nextTab = this.SAMmodel.tabsState[nextTabIndex]
@@ -205,7 +205,7 @@ class Tabs extends React.Component<TabBarProps, State> {
    * 3 - Scroll
    */
   private rollLeft = debounce(
-    (id?: string) => {
+    () => {
       /* 1 */
       const firstEntirelyDisplayedTab = getFirstEntirelyDisplayedTab(
         this.layout
@@ -214,10 +214,9 @@ class Tabs extends React.Component<TabBarProps, State> {
       if (firstEntirelyDisplayedTab === undefined) return
 
       /* 2 */
-      const tabId = id || firstEntirelyDisplayedTab.id
-      const previousTabIndex = this.SAMmodel.tabsState.findIndex(
-        tab => tab.id === tabId
-      )
+      const tabId = firstEntirelyDisplayedTab.id
+      const previousTabIndex =
+        this.SAMmodel.tabsState.findIndex(tab => tab.id === tabId) - 1
       const previousTab = this.SAMmodel.tabsState[previousTabIndex]
       if (!previousTab) return // that was the last tab
 
@@ -656,7 +655,9 @@ class Tabs extends React.Component<TabBarProps, State> {
               style={Styles.createViewStyle({
                 flex: 1,
               })}
-              onPress={() => this.rollLeft()}
+              onPress={() => {
+                this.rollLeft()
+              }}
               onPressIn={(e: Types.SyntheticEvent) => {
                 this.leftIndicatorRipple.onPressIn(e)
               }}
@@ -691,7 +692,9 @@ class Tabs extends React.Component<TabBarProps, State> {
               style={Styles.createViewStyle({
                 flex: 1,
               })}
-              onPress={() => this.rollRight()}
+              onPress={() => {
+                this.rollRight()
+              }}
               onPressIn={(e: Types.SyntheticEvent) => {
                 this.rightIndicatorRipple.onPressIn(e)
               }}
