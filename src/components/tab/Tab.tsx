@@ -141,13 +141,21 @@ class Tab extends React.Component<CompleteProps & ViewProps, State> {
       this.layout.width === layout.width &&
       this.layout.x === layout.x &&
       this.layout.y === layout.y
-    )
+    ) {
       return
-    this.layout = layout
+    }
+
+    // Round the layout value because hi density screen subpixel value could cause different behavior
+    this.layout = {
+      x: Math.round(layout.x),
+      y: Math.round(layout.y),
+      width: Math.round(layout.width),
+      height: Math.round(layout.height),
+    }
     onTabLayout &&
       onTabLayout({
         id,
-        layout,
+        layout: this.layout,
       })
   }
 }

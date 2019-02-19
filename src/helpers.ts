@@ -39,3 +39,35 @@ export function debounce<F extends Procedure>(
     }
   } as any
 }
+
+export function recall<F extends Procedure>(
+  func: F,
+  computeArg: (iteration: number, ...args: any[]) => any[],
+  timeout: number = 16
+): F {
+  let timeoutId: any
+  let iteration = 0
+
+  return function(this: any, ...args: any[]) {
+    // tslint:disable-next-line: no-this-assignment
+    const context = this
+
+    // The function has already been launched, it is a recall
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+      iteration++
+    }
+
+    // (Re)launch the timeout
+    timeoutId = setTimeout(() => {
+      timeoutId = undefined
+      iteration = 0
+    }, timeout)
+
+    // Compute the new arg with the current iteration
+    const newArg = computeArg(iteration, args)
+
+    // Execute the function
+    func.apply(context, newArg)
+  } as F
+}
