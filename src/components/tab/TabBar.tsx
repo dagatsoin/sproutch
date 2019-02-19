@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Animated, Button, Platform, ScrollView, Types } from 'reactxp'
 
-import { debounce } from '../../helpers'
+import { debounce, recall } from '../../helpers'
 import { Styles } from '../../styles'
 import { Theme } from '../../styles/theme'
 import { InjectedTheme, withTheme } from '../../styles/withTheme'
@@ -131,14 +131,14 @@ class Tabs extends React.Component<TabBarProps, State> {
   }
 
   private static cursorTransitionDuration = 200
-  public rightIndicatorRipple: Emitter
-  public leftIndicatorRipple: Emitter
   public state: State = {
     activeTabId: '',
     isScrollEnabled: false,
     hasLeftScrollIndicator: false,
     hasRightScrollIndicator: false,
   }
+  private rightIndicatorRipple: Emitter
+  private leftIndicatorRipple: Emitter
 
   private layout: TabsLayout = {
     currentScroll: 0,
@@ -174,8 +174,8 @@ class Tabs extends React.Component<TabBarProps, State> {
    * 2 - Find the next tab, if any, to display.
    * 3 - Scroll
    */
-  private rollRight = debounce(
-    () => {
+  private rollRight = recall(
+    (iteration: number = 0) => {
       /* 1 */
       const lastEntirelyDisplayedTab = getLastEntirelyDisplayedTab(
         this.layout,
@@ -185,16 +185,19 @@ class Tabs extends React.Component<TabBarProps, State> {
 
       /* 2 */
       const tabId = lastEntirelyDisplayedTab.id
-      const nextTabIndex =
-        this.SAMmodel.tabsState.findIndex(tab => tab.id === tabId) + 1
+      const nextTabIndex = Math.min(
+        this.SAMmodel.tabsState.findIndex(tab => tab.id === tabId) +
+          iteration +
+          1,
+        this.SAMmodel.tabsState.length - 1
+      )
       const nextTab = this.SAMmodel.tabsState[nextTabIndex]
-      if (!nextTab) return // that was the last tab
 
       /* 3 */
       this.scrollToTab(nextTab.id)
     },
-    200,
-    true
+    iteration => [iteration],
+    500
   )
 
   /**
@@ -204,8 +207,8 @@ class Tabs extends React.Component<TabBarProps, State> {
    * 2 - Find the provious tab, if any, to display.
    * 3 - Scroll
    */
-  private rollLeft = debounce(
-    () => {
+  private rollLeft = recall(
+    (iteration: number = 0) => {
       /* 1 */
       const firstEntirelyDisplayedTab = getFirstEntirelyDisplayedTab(
         this.layout
@@ -215,16 +218,19 @@ class Tabs extends React.Component<TabBarProps, State> {
 
       /* 2 */
       const tabId = firstEntirelyDisplayedTab.id
-      const previousTabIndex =
-        this.SAMmodel.tabsState.findIndex(tab => tab.id === tabId) - 1
+      const previousTabIndex = Math.max(
+        this.SAMmodel.tabsState.findIndex(tab => tab.id === tabId) -
+          (iteration + 1),
+        0
+      )
+
       const previousTab = this.SAMmodel.tabsState[previousTabIndex]
-      if (!previousTab) return // that was the last tab
 
       /* 3 */
       this.scrollToTab(previousTab.id)
     },
-    200,
-    true
+    iteration => [iteration],
+    500
   )
 
   public static getDerivedStateFromProps(nextProps: TabBarProps, state: State) {
@@ -616,11 +622,11 @@ class Tabs extends React.Component<TabBarProps, State> {
   private scrollTo(position: number, animated: boolean = true) {
     const value = this.limit(position)
     this.scrollViewRef && this.scrollViewRef.setScrollLeft(value, animated)
-    this.layout.currentScroll = value
+    this.layout.currentScroll = Math.round(value) // Round to prevent sub pixel edge case behaviors
   }
 
   private onScroll = (_newScrollTop: number, newScrollLeft: number) => {
-    this.layout.currentScroll = Math.round(newScrollLeft)
+    this.layout.currentScroll = Math.round(newScrollLeft) // Round to prevent sub pixel edge case behaviors
     if (
       this.layout.currentScroll > 0 !== this.state.hasLeftScrollIndicator ||
       this.layout.currentScroll < this.layout.maxScroll !==
@@ -818,7 +824,7 @@ function getTabsWidth(model: SAMModel): number {
   const firstTabRect = getFirstTab(model)!.layout!
   const lastTabRect = getLastTab(model)!.layout!
   return !!firstTabRect && !!lastTabRect // Tabs are not mounted yet
-    ? Math.round(lastTabRect.x + lastTabRect.width - firstTabRect.x) // Some weird float value may happen. Round for consistency.
+    ? Math.round(lastTabRect.x + lastTabRect.width - firstTabRect.x) // Round to prevent sub pixel edge case behaviors
     : 0
 }
 
@@ -837,7 +843,7 @@ function getTabRightOffset(
   )
 }
 
-function getTabLeftOffset(tab: TabLayout, tabsLayout: TabsLayout) {
+function getTabLeftOffset(tab: TabLayout, tabsLayout: TabsLayout): number {
   return tab.layout!.x - tabsLayout.currentScroll - tabsLayout.barLayout!.x
 }
 
@@ -845,11 +851,14 @@ function isTabOutsideOnRight(
   tabState: TabLayout,
   tabsLayout: TabsLayout,
   paddingHorizontal: number
-) {
+): boolean {
   return getTabRightOffset(tabState, tabsLayout, paddingHorizontal) > 0
 }
 
-function isTabOutsideOnLeft(tabState: TabLayout, tabsLayout: TabsLayout) {
+function isTabOutsideOnLeft(
+  tabState: TabLayout,
+  tabsLayout: TabsLayout
+): boolean {
   return getTabLeftOffset(tabState, tabsLayout) < 0
 }
 
@@ -874,8 +883,7 @@ function getFirstEntirelyDisplayedTab(
 ): TabLayout | undefined {
   return tabsLayout.tabsState
     .slice()
-    .reverse()
-    .find(t => isTabOutsideOnLeft(t, tabsLayout))
+    .find(t => !isTabOutsideOnLeft(t, tabsLayout))
 }
 
 export default withTheme()(Tabs)
