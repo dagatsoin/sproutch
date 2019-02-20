@@ -71,3 +71,34 @@ export function recall<F extends Procedure>(
     func.apply(context, newArg)
   } as F
 }
+
+/**
+ * This makes a shallow comparaison of the state and other props than style and a deep comparaison of the style prop.
+ */
+export function shouldComponentUpdate(
+  nextProps: any,
+  nextState: any,
+  currentProps: any,
+  currentState: any
+): boolean {
+  // Extract the style for a deeper comparaison.
+  const { style: nextStyle, ...otherProps } = nextProps
+  return (
+    // Did props change
+    Object.keys(otherProps).some(
+      key => otherProps[key] !== currentProps[key]
+    ) ||
+    // if the style is removed
+    (nextStyle === undefined && currentProps.style !== undefined) ||
+    // or the style is added
+    (nextStyle !== undefined && currentProps.style === undefined) ||
+    // or the style is changed
+    (nextStyle !== undefined &&
+      currentProps.style !== undefined &&
+      Object.keys(nextStyle).some(
+        key => nextStyle![key] !== currentProps.style![key]
+      )) ||
+    // Did the state change
+    Object.keys(nextState).some(key => nextState[key] !== currentState[key])
+  )
+}

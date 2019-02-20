@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Animated, Button, Platform, ScrollView, Types } from 'reactxp'
 
-import { debounce, recall } from '../../helpers'
+import { recall, shouldComponentUpdate } from '../../helpers'
 import { Styles } from '../../styles'
 import { Theme } from '../../styles/theme'
 import { InjectedTheme, withTheme } from '../../styles/withTheme'
@@ -27,8 +27,8 @@ export type TabBarProps = {
     barLayout: LayoutInfo,
     theme: Theme<any, any>
   ) => React.ReactNode
-  leftScrollButton?: JSX.Element | JSX.Element[]
-  rightScrollButton?: JSX.Element | JSX.Element[]
+  leftScrollButton?: React.ReactNode
+  rightScrollButton?: React.ReactNode
   onChange?: (tabId: string) => void
 } & InjectedTheme<Theme<any, any>>
 
@@ -124,7 +124,7 @@ class Tabs extends React.Component<TabBarProps, State> {
     )
   }
 
-  get tabs() {
+  get tabs(): React.ReactNodeArray {
     return this.props.tabs.map(props => (
       <Tab key={props.id} {...props} {...this.bindTab(props.id)} />
     ))
@@ -277,6 +277,10 @@ class Tabs extends React.Component<TabBarProps, State> {
     }
   }
 
+  public shouldComponentUpdate(nextProps: TabBarProps, nextState: State) {
+    return shouldComponentUpdate(nextProps, nextState, this.props, this.state)
+  }
+
   public render() {
     const {
       hasLeftScrollIndicator,
@@ -390,7 +394,7 @@ class Tabs extends React.Component<TabBarProps, State> {
   }
 
   private renderInScrollView(
-    tabs: JSX.Element | JSX.Element[],
+    tabs: React.ReactNode,
     styles: TabsBarStyle,
     isScrollEnabled: boolean,
     hasLeftScrollIndicator: boolean,

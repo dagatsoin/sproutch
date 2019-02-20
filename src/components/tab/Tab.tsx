@@ -6,6 +6,7 @@ import {
   StyleRuleSetRecursive,
 } from 'reactxp/dist/common/Types'
 
+import { shouldComponentUpdate } from '../../helpers'
 import { ThemeContext } from '../../styles/theme'
 import { Fade } from '../fade'
 import { Ripple } from '../ripple'
@@ -59,6 +60,13 @@ class Tab extends React.Component<CompleteProps & ViewProps, State> {
   public componentWillUnmount() {
     const { onUnmount = () => {} } = this.props
     onUnmount(this.props.id)
+  }
+
+  public shouldComponentUpdate(
+    nextProps: CompleteProps,
+    nextState: State
+  ): boolean {
+    return shouldComponentUpdate(nextProps, nextState, this.props, this.state)
   }
 
   public render() {

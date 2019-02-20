@@ -1,6 +1,7 @@
-import deepmerge from 'lodash.merge'
 import * as React from 'react'
 import { Color, colors } from './colors'
+// tslint:disable-next-line: no-var-requires
+const deepmerge = require('lodash.merge')
 
 export type Typography = {
   fontFamily: string
