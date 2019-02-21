@@ -72,10 +72,10 @@ class Emitter extends React.PureComponent<Props, State> implements IEmitter {
   }
 
   private async addParticle(event: Types.MouseEvent) {
+    this.processingOnPressInHandler = true
     const rect = await UserInterface.measureLayoutRelativeToWindow(
       this.containerRef
     )
-    this.processingOnPressInHandler = true
     const { width, height, x, y } = rect
 
     // Get the particle layout
@@ -91,32 +91,36 @@ class Emitter extends React.PureComponent<Props, State> implements IEmitter {
     const posY = cursorY - radiusFrom
     const { isOnPaper, palette } = this.props.options
 
-    this.setState(state => {
-      return {
-        nextKey: state.nextKey + 1,
-        particlesInfos: [
-          {
-            id: state.nextKey,
-            x: posX,
-            y: posY,
-            isDying: false,
-            emitterLayout: rect,
-            options: {
-              isOnPaper,
-              palette,
+    this.setState(
+      state => {
+        return {
+          nextKey: state.nextKey + 1,
+          particlesInfos: [
+            {
+              id: state.nextKey,
+              x: posX,
+              y: posY,
+              isDying: false,
+              emitterLayout: rect,
+              options: {
+                isOnPaper,
+                palette,
+              },
+              onDeath: this.onParticleDeath.bind(this),
             },
-            onDeath: this.onParticleDeath.bind(this),
-          },
-          ...state.particlesInfos,
-        ],
+            ...state.particlesInfos,
+          ],
+        }
+      },
+      () => {
+        // On slow mobile the onPressOut event comes before the onPressIn
+        // because onPressIn is still busy with the layout measurement.
+        // So we buffer all the remove actions to execute until the end of the onPressIn handler execution.
+        this.removeQueue.forEach(remove => remove())
+        this.removeQueue = []
+        this.processingOnPressInHandler = false
       }
-    })
-    // On slow mobile the onPressOut event comes befor the onPressIn
-    // because onPressIn is still busy with the layout measurement.
-    // So we buffer all the remove actions to execute until the end of the onPressIn handler execution.
-    this.removeQueue.forEach(remove => remove())
-    this.removeQueue = []
-    this.processingOnPressInHandler = false
+    )
   }
 
   private killNextParticle(cb?: () => void) {
@@ -131,7 +135,6 @@ class Emitter extends React.PureComponent<Props, State> implements IEmitter {
             ? { ...r, isDying: true }
             : r
         })
-
       this.setState(
         {
           particlesInfos,

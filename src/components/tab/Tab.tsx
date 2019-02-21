@@ -119,7 +119,9 @@ class Tab extends React.Component<CompleteProps & ViewProps, State> {
                   style={Styles.createViewStyle({
                     flex: 1,
                   })}
-                  onPress={() => !!onClick && onClick(id)}
+                  onPress={() => {
+                    !!onClick && onClick(id)
+                  }}
                   onPressIn={(e: Types.SyntheticEvent) => {
                     this.ripple.onPressIn(e)
                   }}
@@ -130,6 +132,9 @@ class Tab extends React.Component<CompleteProps & ViewProps, State> {
                     this.setState({ isHover: true })
                   }}
                   onHoverEnd={() => {
+                    // prevents a bug on Web where onPressOut
+                    // is not called whend the touch is released outside
+                    this.ripple.onPressOut()
                     this.setState({ isHover: false })
                   }}
                 />
