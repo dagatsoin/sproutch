@@ -12,100 +12,87 @@ import SceneContainer from './SceneContainer'
 import { containerStyle, createCardStyle } from './style'
 
 export type SceneTransitionProps = {
-  nextScene: React.ReactNode
+  scene: React.ReactNode
   onTransitionEnd?: (finished: boolean) => void
   delayRender?: number
   dummyScene?: React.ReactNode
 }
 
 type State = {
-  isTransitionFinished: boolean
+  isAnimating: boolean
+  oldScene: React.ReactNode
   currentScene: React.ReactNode
-  nextScene: React.ReactNode
 }
 
-export default class SceneTransition extends React.PureComponent<
+const DURATION = 500
+
+export default class SceneTransition extends React.Component<
   SceneTransitionProps,
   State
 > {
   public state: State
-  private animatedCurrentCardOpacity = Animated.createValue(1)
+  private animatedOldCardOpacity = Animated.createValue(1)
+  private animatedOldCardTranslateX = Animated.createValue(0.0)
   private animatedCurrentCardTranslateX = Animated.createValue(0.0)
-  private animatedNextCardTranslateX = Animated.createValue(0.0)
-  private animation: {
-    currentCardFading: AnimatedCompositeAnimation
+  private animation?: {
+    oldCardFading: AnimatedCompositeAnimation
+    oldCardTranslateX: AnimatedCompositeAnimation
     currentCardTranslateX: AnimatedCompositeAnimation
-    nextCardTranslateX: AnimatedCompositeAnimation
   }
+  private controlState:
+    | 'isReady'
+    | 'isStale'
+    | 'isAnimating'
+    | 'isAnimationFinished' = 'isReady'
 
   private animatedStyle: {
+    oldCard: AnimatedViewStyleRuleSet
     currentCard: AnimatedViewStyleRuleSet
-    nextCard: AnimatedViewStyleRuleSet
   } = {
-    currentCard: Styles.createAnimatedViewStyle({
-      opacity: this.animatedCurrentCardOpacity,
-      transform: [{ translateX: this.animatedCurrentCardTranslateX }],
+    oldCard: Styles.createAnimatedViewStyle({
+      opacity: this.animatedOldCardOpacity,
+      transform: [{ translateX: this.animatedOldCardTranslateX }],
     }),
-    nextCard: Styles.createAnimatedViewStyle({
-      transform: [{ translateX: this.animatedNextCardTranslateX }],
+    currentCard: Styles.createAnimatedViewStyle({
+      transform: [{ translateX: this.animatedCurrentCardTranslateX }],
     }),
   }
   private layout: LayoutInfo
   private displaySceneDelayHandler: any
 
-  public static getDerivedStateFromProps(
-    nextProps: SceneTransitionProps,
-    currentState: State
-  ) {
-    // Should component update
-    const shouldUpdate = nextProps.nextScene !== currentState.nextScene
-
-    if (shouldUpdate) {
-      return {
-        currentScene: currentState.nextScene,
-        nextScene: nextProps.nextScene,
-        isTransitionFinished: false,
-      }
-    } else {
-      return null
-    }
-  }
-
-  public componentDidMount() {
-    this.setState({ isTransitionFinished: true })
-  }
-
   constructor(props: SceneTransitionProps) {
     super(props)
     this.state = {
-      isTransitionFinished: true,
-      currentScene: props.nextScene,
-      nextScene: <></>,
+      isAnimating: false,
+      oldScene: <></>,
+      currentScene: <></>,
     }
   }
 
   public render() {
     const { dummyScene } = this.props
-    const { nextScene, currentScene, isTransitionFinished } = this.state
-    const shouldDisplayDummy = !!dummyScene && !isTransitionFinished
+    const { isAnimating, oldScene, currentScene } = this.state
+    const shouldDisplayDummy = !!dummyScene && isAnimating
     return (
       <ThemeContext.Consumer>
         {(theme: Theme<any, any>) => {
           const cardStyle = createCardStyle(theme)
           return (
             <View style={containerStyle} onLayout={this.onLayout}>
-              {!isTransitionFinished && (
+              {/* Fading the old scene*/}
+              <Animated.View style={[cardStyle, this.animatedStyle.oldCard]}>
+                {isAnimating && oldScene}
+              </Animated.View>
+              {/* Display the (new) current scene */
+              currentScene && (
                 <Animated.View
                   style={[cardStyle, this.animatedStyle.currentCard]}
                 >
-                  {currentScene}
+                  <SceneContainer>
+                    {shouldDisplayDummy ? dummyScene : currentScene}
+                  </SceneContainer>
                 </Animated.View>
               )}
-              <Animated.View style={[cardStyle, this.animatedStyle.nextCard]}>
-                <SceneContainer>
-                  {shouldDisplayDummy ? dummyScene : nextScene}
-                </SceneContainer>
-              </Animated.View>
             </View>
           )
         }}
@@ -118,33 +105,85 @@ export default class SceneTransition extends React.PureComponent<
     prevState: State
   ) {
     if (!this.layout) return
-    const hasFinishedAnimation =
-      !prevState.isTransitionFinished && this.state.isTransitionFinished
     const { delayRender } = this.props
-    // Trigger side effects
-    if (!hasFinishedAnimation) {
-      if (this.animation) {
+    const { isAnimating } = this.state
+
+    // Did the state or the props changed?
+    // As the child will be always equal, we need to determine if the state has change.
+    // If the state did not change, this means that the update has been triggered by a prop change.
+    const stateDidUpdate = Object.keys(prevState).some(
+      k => prevState[k] !== this.state[k]
+    )
+    const newSceneHasBeenReceived = !stateDidUpdate
+
+    /**
+     * Control State
+     * After the component update, this will tell us in which state (as a state machine) is the component.
+     */
+
+    if (this.controlState === 'isReady' && newSceneHasBeenReceived) {
+      this.controlState = 'isStale'
+    } else if (this.controlState === 'isStale' && isAnimating) {
+      this.controlState = 'isAnimating'
+    } else if (this.controlState === 'isAnimating') {
+      if (!isAnimating) {
+        this.controlState = 'isReady'
+      } else if (newSceneHasBeenReceived) {
+        this.controlState = 'isStale'
+      }
+    }
+
+    /**
+     * Next action predicate
+     * What to do next?
+     */
+    if (this.controlState === 'isStale') {
+      if (isAnimating) {
+        // The user click on another router during the animation.
+        // Let's continue the animation but change the next scene.
+        this.setState({
+          currentScene: this.props.scene,
+        })
+      } else {
+        // The component was doing nothing and was ready to start a new transition.
         this.stopAnimation()
         if (this.displaySceneDelayHandler) {
           clearTimeout(this.displaySceneDelayHandler)
         }
-      }
-      this.animatedCurrentCardTranslateX.setValue(0)
-      this.animatedCurrentCardOpacity.setValue(1)
-      this.animatedNextCardTranslateX.setValue(this.layout.width)
-      this.animation = this.getAnimation({
-        currentCardTranslateX: -30,
-        nextCardTranslateX: 0,
-      })
-      // If the user set a delay used it tro display the next scene, otherwize display the scene at the transition end
-      if (delayRender) {
-        this.startAnimation()
-        this.displaySceneDelayHandler = setTimeout(
-          () => this.onTransitionEnd({ finished: true }),
-          delayRender
-        )
-      } else {
-        this.startAnimation(this.onTransitionEnd)
+        this.animatedOldCardTranslateX.setValue(0)
+        this.animatedOldCardOpacity.setValue(1)
+        this.animatedCurrentCardTranslateX.setValue(this.layout.width)
+        this.animation = this.getAnimation({
+          oldCardTranslateX: -30,
+          currentCardTranslateX: 0,
+        })
+        const onTransitionEnd = ({ finished }: { finished: boolean }) => {
+          if (finished) {
+            this.setState({
+              isAnimating: false,
+              oldScene: <></>,
+              currentScene: React.cloneElement(this.state.currentScene as any),
+            })
+            this.animation = undefined
+          }
+          this.props.onTransitionEnd && this.props.onTransitionEnd(finished)
+        }
+
+        // If the user set a delay used it tro display the next scene, otherwize display the scene at the transition end
+        if (delayRender) {
+          this.startAnimation()
+          this.displaySceneDelayHandler = setTimeout(
+            () => onTransitionEnd({ finished: true }),
+            delayRender
+          )
+        } else {
+          this.startAnimation(onTransitionEnd)
+        }
+        this.setState({
+          oldScene: this.state.currentScene,
+          currentScene: this.props.scene,
+          isAnimating: true,
+        })
       }
     }
   }
@@ -152,51 +191,46 @@ export default class SceneTransition extends React.PureComponent<
   private startAnimation(
     callBack?: ({ finished }: { finished: boolean }) => void
   ) {
-    this.animation.currentCardFading.start()
-    this.animation.currentCardTranslateX.start()
-    this.animation.nextCardTranslateX.start(callBack)
+    if (!this.animation) return
+    this.animation.oldCardFading.start()
+    this.animation.oldCardTranslateX.start()
+    this.animation.currentCardTranslateX.start(callBack)
   }
 
   private stopAnimation() {
-    this.animation.currentCardFading.stop()
+    if (!this.animation) return
+    this.animation.oldCardFading.stop()
+    this.animation.oldCardTranslateX.stop()
     this.animation.currentCardTranslateX.stop()
-    this.animation.nextCardTranslateX.stop()
   }
 
   private onLayout = (layout: LayoutInfo) => {
     this.layout = layout
   }
 
-  private onTransitionEnd = ({ finished }: { finished: boolean }) => {
-    if (finished) {
-      this.setState({ isTransitionFinished: true })
-    }
-    this.props.onTransitionEnd && this.props.onTransitionEnd(finished)
-  }
-
   private getAnimation(to: {
+    oldCardTranslateX: number
     currentCardTranslateX: number
-    nextCardTranslateX: number
   }) {
     return {
-      currentCardFading: Animated.timing(this.animatedCurrentCardOpacity, {
+      oldCardFading: Animated.timing(this.animatedOldCardOpacity, {
         toValue: 0.5,
-        duration: 500,
+        duration: DURATION,
+        easing: Animated.Easing.InOut(),
+      }),
+      oldCardTranslateX: Animated.timing(this.animatedOldCardTranslateX, {
+        toValue: to.oldCardTranslateX,
+        duration: DURATION,
         easing: Animated.Easing.InOut(),
       }),
       currentCardTranslateX: Animated.timing(
         this.animatedCurrentCardTranslateX,
         {
           toValue: to.currentCardTranslateX,
-          duration: 500,
+          duration: DURATION,
           easing: Animated.Easing.InOut(),
         }
       ),
-      nextCardTranslateX: Animated.timing(this.animatedNextCardTranslateX, {
-        toValue: to.nextCardTranslateX,
-        duration: 500,
-        easing: Animated.Easing.InOut(),
-      }),
     }
   }
 }

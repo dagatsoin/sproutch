@@ -1,35 +1,28 @@
-import { SceneTransition, Spinner, Styles, Text, View } from '@sproutch/ui'
+import {
+  SceneTransition,
+  Spinner,
+  Styles,
+  TabBar,
+  Text,
+  View,
+} from '@sproutch/ui'
 import * as React from 'react'
-import { Button } from 'reactxp'
-
-enum Screen {
-  first,
-  second,
-}
-
-type State = {
-  currentScreen: Screen
-}
+import { Platform } from 'reactxp'
+import { Redirect, Route, Router, Switch } from './router'
 
 const style = {
-  pageLayout: Styles.createViewStyle({
+  appLayout: Styles.createViewStyle({
+    marginTop: 60,
     width: 300,
-    height: 500,
-  }),
-  button: Styles.createButtonStyle({
+    alignSelf: Platform.getType() === 'web' ? 'stretch' : 'auto',
     flex: 1,
-    marginLeft: 10,
-    padding: 10,
-    backgroundColor: '#d89209',
-    borderRadius: 4,
   }),
-  buttonText: Styles.createTextStyle({
-    textAlign: 'center',
-    color: 'white',
-  }),
-  header: Styles.createViewStyle({
-    flexDirection: 'row',
-  }),
+  header: {
+    root: Styles.createViewStyle({
+      flexGrow: 0,
+      flexShrink: 1,
+    }),
+  },
   sceneContainer: Styles.createViewStyle({
     flex: 1,
   }),
@@ -37,20 +30,13 @@ const style = {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  })
+  }),
 }
 
-const Scene1 = (
-  <View style={style.scene}>
-    <Text>1</Text>
-  </View>
-)
-
-const Scene2 = (
-  <View style={style.scene}>
-    <Text>2</Text>
-  </View>
-)
+const labelStyle = {
+  shadowColor: '#fff',
+  shadowRadius: 8,
+}
 
 const dummyScene = (
   <View style={style.scene}>
@@ -58,54 +44,67 @@ const dummyScene = (
   </View>
 )
 
+const Scene = ({ children }: { children: React.ReactNode }) => (
+  <View style={style.sceneContainer}>
+    <SceneTransition scene={children} dummyScene={dummyScene} />
+  </View>
+)
 
-export default class Story extends React.Component<{}, State> {
-  public state: State = {
-    currentScreen: Screen.first,
-  }
 
-  public render() {
-    const nextScreen =
-      this.state.currentScreen === Screen.first ? Scene1 : Scene2
-
-    return (
-      <View style={style.pageLayout}>
-        <View style={style.header}>
-          <Button
-            style={style.button}
-            disabled={this.state.currentScreen === Screen.first}
-            onPress={this.goToFirstScreen}
-          >
-            <Text style={style.buttonText}>First screen</Text>
-          </Button>
-          <Button
-            style={style.button}
-            disabled={this.state.currentScreen === Screen.second}
-            onPress={this.goToSecondScreen}
-          >
-            <Text style={style.buttonText}>Second screen</Text>
-          </Button>
-        </View>
-        <View style={style.sceneContainer}>
-          <SceneTransition
-            nextScene={nextScreen}
-            delayRender={1000}
-            dummyScene={dummyScene}
+export default function() {
+  return (
+    <View style={style.appLayout}>
+      <Router>
+        <> 
+          <Route
+            path="/"
+            render={props => (
+              <TabBar
+                style={style.header}
+                activeTabId="profile"
+                onChange={id => {
+                  props.history.push('/' + id)
+                }}
+                tabs={[
+                  {
+                    id: 'profile',
+                    label: 'Profile',
+                    style: {
+                      isActiveLabel: labelStyle,
+                    },
+                  },
+                  {
+                    id: 'portfolio',
+                    label: 'Portfolio',
+                    style: {
+                      isActiveLabel: labelStyle,
+                    },
+                  },
+                  {
+                    id: 'contact',
+                    label: 'Contact',
+                    style: {
+                      isActiveLabel: labelStyle,
+                    },
+                  },
+                ]}
+              />
+            )}
           />
-        </View>
-      </View>
-    )
-  }
 
-  private goToFirstScreen = () => {
-    this.setState({
-      currentScreen: Screen.first,
-    })
-  }
-
-  private goToSecondScreen = () => {
-    this.setState({
-      currentScreen: Screen.second,
-    })
-  }
+          <Route render={({location}) => (
+            <Scene>
+              <Switch location={location}>
+                <Route path="/profile" component={() => <Text>Profile</Text>} />
+                <Route path="/portfolio" component={() => <Text>Portfolio</Text>} />
+                <Route path="/contact" component={() => <Text>Contact</Text>} />
+                <Redirect to="/profile" />
+              </Switch>
+            </Scene>
+          )}
+        />
+        </>
+      </Router>
+    </View>
+  )
 }

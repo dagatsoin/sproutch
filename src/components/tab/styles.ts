@@ -243,7 +243,8 @@ export const tabsBarStyle = function({
   return {
     root: Styles.createViewStyle({
       height: tabHeight,
-      flex: 1,
+      flexGrow: 1,
+      flexShrink: 1,
       backgroundColor: tabBackgroundColor,
       paddingHorizontal,
       ...(style.root as object),

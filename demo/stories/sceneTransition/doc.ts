@@ -3,9 +3,10 @@ export default `
 \`SceneTransition\`
 ### Usage
 This component is used where you want to make a transition between two scene. For example with a router or in a caroussel.
+#### Use with basic component
 \`\`\`
 <SceneTransition
-  nextScene={nextScreen}
+  scene={nextScreen}
   delayRender={400}
   dummyScene={
     <View style={{ alignItems: 'center' }}>
@@ -14,9 +15,29 @@ This component is used where you want to make a transition between two scene. Fo
   }
 />
 \`\`\`
+
+#### Use with React Router:
+You can use SceneTransition with the react router Switch component. Make sure to pass the location props to the switch.
+Otherwize the previous component won't be display during its exit.
+
+\`\`\`
+<Route render={({location}) => (
+  <Scene>
+    <Switch location={location}>
+      <Route path="/profile" component={() => <Text>Profile</Text>} />
+      <Route path="/portfolio" component={() => <Text>Portfolio</Text>} />
+      <Route path="/contact" component={() => <Text>Contact</Text>} />
+      <Redirect to="/profile" />
+    </Switch>
+  </Scene>
+)}
+\`\`\`
+
+/>
+
 ### Properties
 
-#### nextScene *optional*
+#### scene *optional*
 \`type: React.ReactNode\`
 
 Your next scene component.
