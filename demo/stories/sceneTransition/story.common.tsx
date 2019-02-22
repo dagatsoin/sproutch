@@ -38,19 +38,6 @@ const labelStyle = {
   shadowRadius: 8,
 }
 
-const dummyScene = (
-  <View style={style.scene}>
-    <Spinner size="small" color="#809" />
-  </View>
-)
-
-const Scene = ({ children }: { children: React.ReactNode }) => (
-  <View style={style.sceneContainer}>
-    <SceneTransition scene={children} dummyScene={dummyScene} />
-  </View>
-)
-
-
 export default function() {
   return (
     <View style={style.appLayout}>
@@ -93,14 +80,25 @@ export default function() {
           />
 
           <Route render={({location}) => (
-            <Scene>
-              <Switch location={location}>
-                <Route path="/profile" component={() => <Text>Profile</Text>} />
-                <Route path="/portfolio" component={() => <Text>Portfolio</Text>} />
-                <Route path="/contact" component={() => <Text>Contact</Text>} />
-                <Redirect to="/profile" />
-              </Switch>
-            </Scene>
+            <View style={style.sceneContainer}>
+              <SceneTransition
+                dummyScene={
+                <View style={style.scene}>
+                  <Spinner size="small" color="#809" />
+                </View>
+                }
+                render={
+                  () => (
+                    <Switch location={location}>
+                      <Route path="/profile" component={() => <Text>Profile</Text>} />
+                      <Route path="/portfolio" component={() => <Text>Portfolio</Text>} />
+                      <Route path="/contact" component={() => <Text>Contact</Text>} />
+                      <Redirect to="/profile" />
+                    </Switch>
+                  )
+                }
+              />
+            </View>
           )}
         />
         </>

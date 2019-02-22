@@ -7,5 +7,5 @@ import Story from './story.common'
 
 storiesOf('Sproutch', module)
   .addDecorator(withKnobs)
-  .add('Scene transition', () => <Story/>, { notes: { markdown }}
+  .add('Scene transition', Story, { notes: { markdown }}
   )

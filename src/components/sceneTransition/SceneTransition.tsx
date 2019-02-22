@@ -12,7 +12,7 @@ import SceneContainer from './SceneContainer'
 import { containerStyle, createCardStyle } from './style'
 
 export type SceneTransitionProps = {
-  scene: React.ReactNode
+  render: () => React.ReactNode
   onTransitionEnd?: (finished: boolean) => void
   delayRender?: number
   dummyScene?: React.ReactNode
@@ -20,8 +20,8 @@ export type SceneTransitionProps = {
 
 type State = {
   isAnimating: boolean
-  oldScene: React.ReactNode
-  currentScene: React.ReactNode
+  oldRenderScene: () => React.ReactNode
+  currentRenderScene: () => React.ReactNode
 }
 
 const DURATION = 500
@@ -64,14 +64,14 @@ export default class SceneTransition extends React.Component<
     super(props)
     this.state = {
       isAnimating: false,
-      oldScene: <></>,
-      currentScene: <></>,
+      oldRenderScene: () => <></>,
+      currentRenderScene: this.props.render,
     }
   }
 
   public render() {
     const { dummyScene } = this.props
-    const { isAnimating, oldScene, currentScene } = this.state
+    const { isAnimating, oldRenderScene, currentRenderScene } = this.state
     const shouldDisplayDummy = !!dummyScene && isAnimating
     return (
       <ThemeContext.Consumer>
@@ -81,15 +81,15 @@ export default class SceneTransition extends React.Component<
             <View style={containerStyle} onLayout={this.onLayout}>
               {/* Fading the old scene*/}
               <Animated.View style={[cardStyle, this.animatedStyle.oldCard]}>
-                {isAnimating && oldScene}
+                {isAnimating && oldRenderScene()}
               </Animated.View>
               {/* Display the (new) current scene */
-              currentScene && (
+              currentRenderScene && (
                 <Animated.View
                   style={[cardStyle, this.animatedStyle.currentCard]}
                 >
                   <SceneContainer>
-                    {shouldDisplayDummy ? dummyScene : currentScene}
+                    {shouldDisplayDummy ? dummyScene : currentRenderScene()}
                   </SceneContainer>
                 </Animated.View>
               )}
@@ -142,7 +142,7 @@ export default class SceneTransition extends React.Component<
         // The user click on another router during the animation.
         // Let's continue the animation but change the next scene.
         this.setState({
-          currentScene: this.props.scene,
+          currentRenderScene: this.props.render,
         })
       } else {
         // The component was doing nothing and was ready to start a new transition.
@@ -161,8 +161,8 @@ export default class SceneTransition extends React.Component<
           if (finished) {
             this.setState({
               isAnimating: false,
-              oldScene: <></>,
-              currentScene: React.cloneElement(this.state.currentScene as any),
+              oldRenderScene: () => <></>,
+              currentRenderScene: this.state.currentRenderScene,
             })
             this.animation = undefined
           }
@@ -180,8 +180,8 @@ export default class SceneTransition extends React.Component<
           this.startAnimation(onTransitionEnd)
         }
         this.setState({
-          oldScene: this.state.currentScene,
-          currentScene: this.props.scene,
+          oldRenderScene: this.state.currentRenderScene,
+          currentRenderScene: this.props.render,
           isAnimating: true,
         })
       }

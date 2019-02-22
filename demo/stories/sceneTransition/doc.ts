@@ -6,7 +6,7 @@ This component is used where you want to make a transition between two scene. Fo
 #### Use with basic component
 \`\`\`
 <SceneTransition
-  scene={nextScreen}
+  render={() => <NextScene/>}
   delayRender={400}
   dummyScene={
     <View style={{ alignItems: 'center' }}>
@@ -22,14 +22,18 @@ Otherwize the previous component won't be display during its exit.
 
 \`\`\`
 <Route render={({location}) => (
-  <Scene>
-    <Switch location={location}>
-      <Route path="/profile" component={() => <Text>Profile</Text>} />
-      <Route path="/portfolio" component={() => <Text>Portfolio</Text>} />
-      <Route path="/contact" component={() => <Text>Contact</Text>} />
-      <Redirect to="/profile" />
-    </Switch>
-  </Scene>
+  <Scene
+    render={
+      ()=>(
+        <Switch location={location}>
+          <Route path="/profile" component={() => <Text>Profile</Text>} />
+          <Route path="/portfolio" component={() => <Text>Portfolio</Text>} />
+          <Route path="/contact" component={() => <Text>Contact</Text>} />
+          <Redirect to="/profile" />
+        </Switch>
+      )
+    }
+  />
 )}
 \`\`\`
 
