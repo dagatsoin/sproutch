@@ -14,6 +14,7 @@ export const TextComp = ({ children, style, ...props }: TextProps) => (
             fontFamily: theme.typography.fontFamily,
             fontSize: theme.typography.fontSize,
             fontWeight: theme.typography.fontWeightLight,
+            color: theme.palette.text.primary,
           }),
           style,
         ]}
