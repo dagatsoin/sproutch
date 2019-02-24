@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { findDOMNode } from 'react-dom'
 
+import { ThemeContext } from '../../styles'
 import { Styles } from '../../styles/createStyle'
 import { View } from '../view'
 import { PaperProps } from './PaperProps'
@@ -22,19 +23,24 @@ export default class Paper extends React.Component<PaperProps, {}> {
     const { children, square } = this.props
 
     return (
-      <View
-        ref={(comp: View) => (this.containerRef = comp)}
-        style={[
-          this.props.style,
-          square
-            ? Styles.createViewStyle({
-                borderRadius: 0,
-              })
-            : undefined,
-        ]}
-      >
-        {children}
-      </View>
+      <ThemeContext.Consumer>
+        {theme => {
+          return (
+            <View
+              ref={(comp: View) => (this.containerRef = comp)}
+              style={[
+                Styles.createViewStyle({
+                  backgroundColor: theme.palette.background.paper,
+                  borderRadius: square ? 0 : undefined,
+                }),
+                this.props.style,
+              ]}
+            >
+              {children}
+            </View>
+          )
+        }}
+      </ThemeContext.Consumer>
     )
   }
 }

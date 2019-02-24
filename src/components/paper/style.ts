@@ -1,3 +1,4 @@
+import { Theme } from '../../styles'
 import { StyleProp, Styles } from '../../styles/createStyle'
 import { ViewStyle } from '../view'
 
@@ -10,28 +11,32 @@ export type PaperStyle = {
   shadow2: StyleProp<ViewStyle>
 }
 
-export const styles = {
-  root: Styles.createViewStyle({
-    overflow: 'visible',
-  }),
-  isAndroid: Styles.createViewStyle({
-    borderWidth: 0,
-  }),
-  nativeShadowContainer: Styles.createViewStyle({
-    overflow: 'visible',
-    position: 'absolute',
-    right: 0,
-    bottom: 0,
-  }),
-  contentContainer: Styles.createViewStyle({
-    flex: 1,
-    borderRadius: 4,
-    backgroundColor: 'white',
-    overflow: 'visible',
-  }),
-  roundBorder: Styles.createViewStyle({
-    borderRadius: 2,
-  }),
+export function nativePaperStyle(theme: Theme<any, any>) {
+  return {
+    root: Styles.createViewStyle({
+      overflow: 'visible',
+
+      backgroundColor: theme.palette.background.paper,
+    }),
+    isAndroid: Styles.createViewStyle({
+      borderWidth: 0,
+    }),
+    nativeShadowContainer: Styles.createViewStyle({
+      overflow: 'visible',
+      position: 'absolute',
+      right: 0,
+      bottom: 0,
+    }),
+    contentContainer: Styles.createViewStyle({
+      flex: 1,
+      borderRadius: 4,
+      backgroundColor: 'white',
+      overflow: 'visible',
+    }),
+    roundBorder: Styles.createViewStyle({
+      borderRadius: 2,
+    }),
+  }
 }
 
 // credit to Material UI
