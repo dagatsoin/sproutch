@@ -15,13 +15,28 @@ export default class BackgroundImage extends React.PureComponent<
   }
 
   public componentDidUpdate(prevProps: BackgroundImageProps) {
-    if (prevProps.uri !== this.props.uri) this.setStyle()
+    if (
+      prevProps.uri !== this.props.uri ||
+      (prevProps.position === undefined && this.props.position !== undefined) ||
+      (prevProps.position !== undefined && this.props.position === undefined) ||
+      (prevProps.position !== undefined &&
+        this.props.position !== undefined &&
+        (prevProps.position[0] !== this.props.position[0] ||
+          prevProps.position[1] !== this.props.position[1])) ||
+      prevProps.repeat !== this.props.repeat ||
+      prevProps.resizeMode !== this.props.resizeMode
+    ) {
+      this.setStyle()
+    }
   }
 
   private setStyle = () => {
     const element = findDOMNode(this.viewRef) as HTMLElement
     if (element) {
-      const { uri, resizeMode } = this.props
+      const { position: center, uri, resizeMode, repeat } = this.props
+      const position = center ? center.join(' ') : '50% 50%'
+      const size = resizeMode === 'stretch' ? '100% 100%' : resizeMode
+
       element.setAttribute(
         'style',
         `
@@ -31,7 +46,9 @@ export default class BackgroundImage extends React.PureComponent<
         bottom: 0;
         left: 0;
         background-image: url(${uri});
-        background-size: ${resizeMode}
+        background-position: ${position};
+        background-size: ${size};
+        background-repeat: ${!repeat && 'no-'}repeat
       `
       )
     }

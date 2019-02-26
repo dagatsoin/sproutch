@@ -1,4 +1,4 @@
-import { boolean, number, select, array } from '@storybook/addon-knobs'
+import { array, boolean, number, select } from '@storybook/addon-knobs'
 import * as React from 'react'
 
 import { RadialGradient, RadialGradientProps } from '@sproutch/ui'
