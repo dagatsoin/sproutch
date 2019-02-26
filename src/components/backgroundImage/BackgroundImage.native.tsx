@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Image } from 'react-native'
 import { Styles, View } from 'reactxp'
 
-import { LayoutInfo } from '../View'
+import { LayoutInfo } from '../view'
 import { BackgroundImageProps } from './BackgroundImageProps'
 
 type State = {
