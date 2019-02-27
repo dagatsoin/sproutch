@@ -27,7 +27,7 @@ export default class Paper extends React.Component<PaperProps, {}> {
         {theme => {
           return (
             <View
-              ref={(comp: View) => (this.containerRef = comp)}
+              ref={(comp: any) => (this.containerRef = comp)}
               style={[
                 Styles.createViewStyle({
                   backgroundColor: theme.palette.background.paper,

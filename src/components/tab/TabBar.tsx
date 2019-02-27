@@ -405,7 +405,7 @@ class Tabs extends React.Component<TabBarProps, State> {
         {hasLeftScrollIndicator && this.renderLeftIndicator(styles)}
         {hasRightScrollIndicator && this.renderRightIndicator(styles)}
         <ScrollView
-          ref={(comp: ScrollView) => (this.scrollViewRef = comp)}
+          ref={(comp: any) => (this.scrollViewRef = comp)}
           scrollEnabled={isScrollEnabled}
           horizontal={true}
           vertical={false}

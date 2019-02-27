@@ -11,7 +11,12 @@ export default class BorderImage extends React.PureComponent<
   private viewRef: View
 
   public render() {
-    return <View ref={view => (this.viewRef = view)} onLayout={this.setStyle} />
+    return (
+      <View
+        ref={(view: any) => (this.viewRef = view)}
+        onLayout={this.setStyle}
+      />
+    )
   }
 
   public componentDidUpdate(prevProps: BorderImageProps) {

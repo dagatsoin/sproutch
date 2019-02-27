@@ -57,10 +57,11 @@
   },
   "peerDependencies": {
     "expo": "^32.0.0",
-    "reactxp": "^1.5.0"
+    "reactxp": "^1.6.0-rc.1"
   },
   "devDependencies": {
     "@types/expo": "^32.0.0",
+    "@types/node": "^11.9.5",
     "@types/react": "^16.7.18",
     "@types/react-dom": "^16.0.11",
     "@types/react-native": "^0.57.23",
@@ -73,7 +74,7 @@
     "pretty-quick": "^1.10.0",
     "react": "16.5.1",
     "react-art": "^16.7.0",
-    "reactxp": "^1.5.0",
+    "reactxp": "^1.6.0-rc.1",
     "rimraf": "^2.6.2",
     "tslint": "^5.12.0",
     "tslint-config-prettier": "^1.17.0",

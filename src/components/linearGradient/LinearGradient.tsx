@@ -26,9 +26,9 @@ class LinearGradient extends React.PureComponent<LinearGradientProps, {}> {
       <View
         style={style}
         onLayout={this.measure}
-        ref={(comp: View) => (this.rootRef = comp)}
+        ref={(comp: any) => (this.rootRef = comp)}
       >
-        <View ref={(comp: View) => (this.backgroundImageRef = comp)} />
+        <View ref={(comp: any) => (this.backgroundImageRef = comp)} />
       </View>
     )
   }

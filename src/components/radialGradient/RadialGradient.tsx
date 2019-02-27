@@ -12,7 +12,7 @@ class RadialGradient extends React.Component<RadialGradientProps, {}> {
 
     return (
       <View style={style}>
-        <View ref={(comp: View) => (this.backgroundImageRef = comp)} />
+        <View ref={(comp: any) => (this.backgroundImageRef = comp)} />
       </View>
     )
   }
