@@ -10,6 +10,9 @@ import * as React from 'react'
 import { Platform } from 'reactxp'
 import { Redirect, Route, Router, Switch } from './router'
 
+// tslint:disable-next-line: no-var-requires
+const FontAwesome = require('react-native-vector-icons/FontAwesome')
+
 const style = {
   appLayout: Styles.createViewStyle({
     marginTop: 60,
@@ -52,6 +55,28 @@ export default function() {
                 onChange={id => {
                   props.history.push('/' + id)
                 }}
+                leftScrollButton={(
+                  <View
+                    style={{
+                      flex: 1,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <FontAwesome.default name="chevron-left" size={16} color="#ddd" />
+                  </View>
+                )}
+                rightScrollButton={(
+                  <View
+                    style={{
+                      flex: 1,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <FontAwesome.default name="chevron-right" size={16} color="#ddd" />
+                  </View>
+                )}
                 tabs={[
                   {
                     id: 'profile',

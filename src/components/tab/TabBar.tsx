@@ -575,10 +575,11 @@ class Tabs extends React.Component<TabBarProps, State> {
       this.SAMmodel.tabsWidth = getTabsWidth(this.SAMmodel)
       this.computeState()
     }
-    // Always sort the tabs state by ID
-    this.SAMmodel.tabsState.sort((a, b) => {
-      return a.id.toUpperCase() < b.id.toUpperCase() ? -1 : 1
-    })
+    // Always sort the tabs state in the same order as the props.
+    this.props.tabs.reduce((newOrderedArray, tab) => {
+      const tabToOrder = this.SAMmodel.tabsState.findIndex(t => t.id === tab.id)
+      return !!tabToOrder ? [tabToOrder, ...newOrderedArray] : newOrderedArray
+    }, [])
   }
 
   private setScrollState() {
