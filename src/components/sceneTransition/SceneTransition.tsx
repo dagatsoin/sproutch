@@ -100,7 +100,7 @@ export default class SceneTransition extends React.Component<
       isMounting: true,
       isWaitingForNextScene: false,
       isAnimating: false,
-      currentScene: () => <></>,
+      currentScene: <></>,
       renderNextScene: this.props.render,
     }
   }
