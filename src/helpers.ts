@@ -1,3 +1,5 @@
+import { StyleProp } from './styles'
+
 // @credit https://github.com/chodorowicz/ts-debounce/blob/master/src/index.ts
 /**
  * A function that emits a side effect and does not return anything.
@@ -76,7 +78,7 @@ export function recall<F extends Procedure>(
  * This makes a shallow comparaison of the state and other props than style and a deep comparaison of the style prop.
  */
 export function shouldComponentUpdate(
-  nextProps: any,
+  nextProps: object & { style?: StyleProp<any> },
   nextState: any,
   currentProps: any,
   currentState: any
@@ -95,8 +97,12 @@ export function shouldComponentUpdate(
     // or the style is changed
     (nextStyle !== undefined &&
       currentProps.style !== undefined &&
-      Object.keys(nextStyle).some(
-        key => nextStyle![key] !== currentProps.style![key]
+      Object.keys(nextStyle).some(key =>
+        typeof nextStyle[key] === 'object'
+          ? Object.keys(nextStyle[key]).some(
+              k => nextStyle![k] !== currentProps.style![k]
+            )
+          : nextStyle![key] !== currentProps.style![key]
       )) ||
     // Did the state change
     Object.keys(nextState).some(key => nextState[key] !== currentState[key])
