@@ -89,15 +89,15 @@ const notification = (
     style={Styles.createViewStyle({
       backgroundColor: 'red',
       borderRadius: 10,
-      width: 16,
-      height: 16,
+      minWidth: 20,
+      padding: 4,
       position: 'absolute',
       top: 0,
       right: 0,
     })}
   >
     <Text
-      style={Styles.createTextStyle({ color: 'black', textAlign: 'center' })}
+      style={Styles.createTextStyle({ color: 'white', textAlign: 'center', fontSize: 10})}
     >
       1
     </Text>
