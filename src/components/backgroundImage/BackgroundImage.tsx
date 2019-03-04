@@ -53,7 +53,7 @@ export default class BackgroundImage extends React.PureComponent<
         background-image: url(${uri});
         background-position: ${position};
         background-size: ${size};
-        background-repeat: ${!repeat && 'no-'}repeat
+        background-repeat: ${repeat ? 'repeat' : 'no-repeat'}
       `
       )
     }
