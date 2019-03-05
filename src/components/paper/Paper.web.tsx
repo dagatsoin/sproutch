@@ -20,7 +20,7 @@ export default class Paper extends React.Component<PaperProps, {}> {
   }
 
   public render() {
-    const { children, square } = this.props
+    const { children } = this.props
 
     return (
       <ThemeContext.Consumer>
@@ -31,7 +31,6 @@ export default class Paper extends React.Component<PaperProps, {}> {
               style={[
                 Styles.createViewStyle({
                   backgroundColor: theme.palette.background.paper,
-                  borderRadius: square ? 0 : undefined,
                 }),
                 this.props.style,
               ]}

@@ -33,9 +33,6 @@ export function nativePaperStyle(theme: Theme<any, any>) {
       backgroundColor: 'white',
       overflow: 'visible',
     }),
-    roundBorder: Styles.createViewStyle({
-      borderRadius: 2,
-    }),
   }
 }
 

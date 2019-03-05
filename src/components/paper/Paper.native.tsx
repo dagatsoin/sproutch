@@ -33,7 +33,7 @@ export default class Paper extends React.Component<PaperProps, State> {
   }
 
   public render() {
-    const { elevation, children, square, style } = this.props
+    const { elevation, children, style, ...props } = this.props
     const { width, height } = this.state
     const nativeShadows =
       !!elevation && elevation > 0
@@ -45,7 +45,7 @@ export default class Paper extends React.Component<PaperProps, State> {
         {theme => {
           const styles = nativePaperStyle(theme)
           return (
-            <View onLayout={this.onLayout} style={[style, styles.root]}>
+            <View onLayout={this.onLayout} style={[styles.root, style]}>
               {width !== 0 &&
                 height !== 0 &&
                 nativeShadows.map((shadow, index) => (
@@ -53,7 +53,6 @@ export default class Paper extends React.Component<PaperProps, State> {
                     key={index}
                     style={{
                       ...(styles.nativeShadowContainer as object),
-                      ...(!square && (styles.roundBorder as object)),
                       ...(shadow.style as object),
                     }}
                     {...shadow.setting}
