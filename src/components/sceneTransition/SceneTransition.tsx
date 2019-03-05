@@ -193,8 +193,13 @@ export default class SceneTransition extends React.Component<
     this.animation.nextCardTranslateX.start(callBack)
   }
 
+  /**
+   * Store the layout.
+   * Push the next scene container on the left
+   */
   private onLayout = (layout: LayoutInfo) => {
     this.layout = layout
+    this.animatedNextCardTranslateX.setValue(layout.width)
   }
 
   private getAnimation(to: {
