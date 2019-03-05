@@ -7,17 +7,16 @@ import {
   View,
 } from '@sproutch/ui'
 import * as React from 'react'
-import { Platform } from 'reactxp'
-import { Redirect, Route, Router, Switch } from './router'
+import { Route, Router, Switch } from './router'
 
 // tslint:disable-next-line: no-var-requires
 const FontAwesome = require('react-native-vector-icons/FontAwesome')
 
 const style = {
-  appLayout: Styles.createViewStyle({
+  section: Styles.createViewStyle({
     marginTop: 60,
     width: 300,
-    alignSelf: Platform.getType() === 'web' ? 'stretch' : 'auto',
+    height: 100, // alignSelf: Platform.getType() === 'web' ? 'stretch' : 'auto',
     flex: 1,
   }),
   header: {
@@ -41,21 +40,26 @@ const labelStyle = {
   shadowRadius: 8,
 }
 
-export default function() {
+type State = {
+  activeId: string
+}
+
+function WithRouter() {
   return (
-    <View style={style.appLayout}>
+    <View style={style.section}>
+      <Text> With React router </Text>
       <Router>
-        <> 
+        <>
           <Route
             path="/"
             render={props => (
               <TabBar
                 style={style.header}
-                activeTabId="profile"
+                activeTabId={'profile'}
                 onChange={id => {
                   props.history.push('/' + id)
                 }}
-                leftScrollButton={(
+                leftScrollButton={
                   <View
                     style={{
                       flex: 1,
@@ -63,10 +67,14 @@ export default function() {
                       justifyContent: 'center',
                     }}
                   >
-                    <FontAwesome.default name="chevron-left" size={16} color="#ddd" />
+                    <FontAwesome.default
+                      name="chevron-left"
+                      size={16}
+                      color="#ddd"
+                    />
                   </View>
-                )}
-                rightScrollButton={(
+                }
+                rightScrollButton={
                   <View
                     style={{
                       flex: 1,
@@ -74,9 +82,13 @@ export default function() {
                       justifyContent: 'center',
                     }}
                   >
-                    <FontAwesome.default name="chevron-right" size={16} color="#ddd" />
+                    <FontAwesome.default
+                      name="chevron-right"
+                      size={16}
+                      color="#ddd"
+                    />
                   </View>
-                )}
+                }
                 tabs={[
                   {
                     id: 'profile',
@@ -104,30 +116,132 @@ export default function() {
             )}
           />
 
-          <Route render={({location}) => (
-            <View style={style.sceneContainer}>
-              <SceneTransition
-                dummyScene={
-                <View style={style.scene}>
-                  <Spinner size="small" color="#809" />
-                </View>
-                }
-                render={
-                  () => (
+          <Route
+            render={({location}) => (
+              <View style={style.sceneContainer}>
+                <SceneTransition
+                  dummyScene={
+                    <View style={style.scene}>
+                      <Spinner size="small" color="#809" />
+                    </View>
+                  }
+                  render={() => (
                     <Switch location={location}>
-                      <Route path="/profile" component={() => <Text>Profile</Text>} />
-                      <Route path="/portfolio" component={() => <Text>Portfolio</Text>} />
-                      <Route path="/contact" component={() => <Text>Contact</Text>} />
-                      <Redirect to="/profile" />
+                      <Route
+                        path="/profile"
+                        component={() => <Text>Profile</Text>}
+                      />
+                      <Route
+                        path="/portfolio"
+                        component={() => <Text>Portfolio</Text>}
+                      />
+                      <Route
+                        path="/contact"
+                        component={() => <Text>Contact</Text>}
+                      />
+                      <Route component={() => <Text>Profile</Text>}/>
                     </Switch>
-                  )
-                }
-              />
-            </View>
-          )}
-        />
+                  )}
+                />
+              </View>
+            )}
+          />
         </>
       </Router>
+    </View>
+  )
+}
+
+class WithoutRouter extends React.Component<{}, State> {
+  public state: State = {
+    activeId: 'section0',
+  }
+  public render() {
+    return (
+      <View style={style.section}>
+        <Text> Without router </Text>
+        <TabBar
+          palette="secondary"
+          style={style.header}
+          activeTabId={this.state.activeId}
+          onChange={activeId => this.setState({ activeId })}
+          leftScrollButton={
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <FontAwesome.default name="chevron-left" size={16} color="#ddd" />
+            </View>
+          }
+          rightScrollButton={
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <FontAwesome.default
+                name="chevron-right"
+                size={16}
+                color="#ddd"
+              />
+            </View>
+          }
+          tabs={[
+            {
+              id: 'section0',
+              label: 'Section 0',
+              style: {
+                isActiveLabel: labelStyle,
+              },
+            },
+            {
+              id: 'section1',
+              label: 'Section 1',
+              style: {
+                isActiveLabel: labelStyle,
+              },
+            },
+            {
+              id: 'section2',
+              label: 'Section 2',
+              style: {
+                isActiveLabel: labelStyle,
+              },
+            },
+          ]}
+        />
+        <View style={style.sceneContainer}>
+          <SceneTransition
+            render={() => {
+              switch (this.state.activeId) {
+                default:
+                case 'section0':
+                  return <Text>Section 0</Text>
+
+                case 'section1':
+                  return <Text>Section 1</Text>
+
+                case 'section2':
+                  return <Text>Section 2</Text>
+              }
+            }}
+          />
+        </View>
+      </View>
+    )
+  }
+}
+
+export default function Story() {
+  return (
+    <View>
+      <WithRouter/>
+      <WithoutRouter/>
     </View>
   )
 }

@@ -20,7 +20,6 @@ export type SceneTransitionProps = {
 }
 
 type State = {
-  isMounting: boolean
   isWaitingForNextScene: boolean
   isAnimating: boolean
   currentScene: React.ReactNode
@@ -63,9 +62,11 @@ export default class SceneTransition extends React.Component<
     props: SceneTransitionProps,
     state: State
   ) {
-    if (state.isMounting) {
+    // Initial mount state
+    if (state.isWaitingForNextScene && state.isAnimating) {
       return {
-        isMounting: false,
+        isWaitingForNextScene: true,
+        isAnimating: false,
       }
     }
     // A new scene has been received.
@@ -91,17 +92,17 @@ export default class SceneTransition extends React.Component<
         currentScene: state.renderNextScene && state.renderNextScene(),
         renderNextScene: undefined,
       }
-    } else return null
+    }
+    return null
   }
 
   constructor(props: SceneTransitionProps) {
     super(props)
     this.state = {
-      isMounting: true,
-      isWaitingForNextScene: false,
+      isWaitingForNextScene: true,
       isAnimating: false,
-      currentScene: <></>,
-      renderNextScene: this.props.render,
+      currentScene: props.render(),
+      renderNextScene: () => <></>,
     }
   }
 

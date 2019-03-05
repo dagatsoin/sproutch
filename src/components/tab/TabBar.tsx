@@ -246,7 +246,8 @@ class Tabs extends React.Component<TabBarProps, State> {
     }
   }
 
-  public componentDidMount() {
+  constructor(props: TabBarProps) {
+    super(props)
     const rotateX = this.cursorAnimatedValues.rotateX.interpolate({
       inputRange: [0, 1],
       outputRange: Platform.getType() === 'web' ? [0, 360] : ['0deg', '360deg'],
@@ -271,6 +272,9 @@ class Tabs extends React.Component<TabBarProps, State> {
         { scaleY: this.cursorAnimatedValues.scaleY },
       ].filter(t => !!t),
     })
+  }
+
+  public componentDidMount() {
     const firstTabId = getFirstTabId(this.SAMmodel)
     if (!!this.props.activeTabId || !!firstTabId) {
       this.setState({ activeTabId: this.props.activeTabId || firstTabId! })
@@ -319,8 +323,8 @@ class Tabs extends React.Component<TabBarProps, State> {
       this.controlState === 'isLayoutReady'
     ) {
       this.scrollToTab(this.state.activeTabId)
-      this.updateCursorPosition()
     }
+    if (this.activeTab && this.activeTab.layout) this.updateCursorPosition()
   }
 
   /**
