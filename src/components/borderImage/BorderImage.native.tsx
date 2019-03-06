@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Image, Styles, Types, View } from 'reactxp'
+import { Image, Styles, View } from 'reactxp'
 
 import { LayoutInfo } from '../view'
 import { BorderImageProps } from './BorderImageProps'
@@ -40,6 +40,7 @@ function renderBorders(props: BorderImageProps, state: State) {
     <View
       style={{
         position: 'absolute',
+        overflow: 'hidden',
         display: 'flex',
         alignItems: 'center',
         top: 0,
@@ -64,6 +65,7 @@ function renderBorders(props: BorderImageProps, state: State) {
     <View
       style={{
         position: 'absolute',
+        overflow: 'hidden',
         top: 0,
         right: 0,
         width: borderWidth,
@@ -73,6 +75,7 @@ function renderBorders(props: BorderImageProps, state: State) {
       <Image
         style={{
           position: 'absolute',
+          overflow: 'hidden',
           right: 0,
           height: borderWidth * 2,
           width: borderWidth * 2,
@@ -87,6 +90,7 @@ function renderBorders(props: BorderImageProps, state: State) {
     <View
       style={{
         position: 'absolute',
+        overflow: 'hidden',
         display: 'flex',
         justifyContent: 'center',
         top: 0,
@@ -98,6 +102,7 @@ function renderBorders(props: BorderImageProps, state: State) {
       <Image
         style={{
           position: 'absolute',
+          overflow: 'hidden',
           right: 0,
           width: borderWidth * 2,
           height: 1,
@@ -113,6 +118,7 @@ function renderBorders(props: BorderImageProps, state: State) {
     <View
       style={{
         position: 'absolute',
+        overflow: 'hidden',
         bottom: 0,
         right: 0,
         width: borderWidth,
@@ -122,6 +128,7 @@ function renderBorders(props: BorderImageProps, state: State) {
       <Image
         style={{
           position: 'absolute',
+          overflow: 'hidden',
           right: 0,
           bottom: 0,
           height: borderWidth * 2,
@@ -137,6 +144,7 @@ function renderBorders(props: BorderImageProps, state: State) {
     <View
       style={{
         position: 'absolute',
+        overflow: 'hidden',
         display: 'flex',
         alignItems: 'center',
         right: 0,
@@ -148,6 +156,7 @@ function renderBorders(props: BorderImageProps, state: State) {
       <Image
         style={{
           position: 'absolute',
+          overflow: 'hidden',
           bottom: 0,
           height: borderWidth * 2,
           width: 1,
@@ -163,6 +172,7 @@ function renderBorders(props: BorderImageProps, state: State) {
     <View
       style={{
         position: 'absolute',
+        overflow: 'hidden',
         bottom: 0,
         left: 0,
         width: borderWidth,
@@ -172,6 +182,7 @@ function renderBorders(props: BorderImageProps, state: State) {
       <Image
         style={{
           position: 'absolute',
+          overflow: 'hidden',
           bottom: 0,
           height: borderWidth * 2,
           width: borderWidth * 2,
@@ -186,6 +197,7 @@ function renderBorders(props: BorderImageProps, state: State) {
     <View
       style={{
         position: 'absolute',
+        overflow: 'hidden',
         display: 'flex',
         justifyContent: 'center',
         top: 0,
@@ -210,6 +222,7 @@ function renderBorders(props: BorderImageProps, state: State) {
     <View
       style={{
         position: 'absolute',
+        overflow: 'hidden',
         width: borderWidth,
         height: borderWidth,
       }}

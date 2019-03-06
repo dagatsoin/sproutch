@@ -33,7 +33,7 @@ export default class Paper extends React.Component<PaperProps, State> {
   }
 
   public render() {
-    const { elevation, children, style, ...props } = this.props
+    const { elevation, children, style } = this.props
     const { width, height } = this.state
     const nativeShadows =
       !!elevation && elevation > 0

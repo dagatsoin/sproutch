@@ -1,4 +1,4 @@
-import { getTheme, ThemeContext } from '@sproutch/ui'
+import { getTheme, Styles, ThemeContext } from '@sproutch/ui'
 import {
   addDecorator,
   configure,
@@ -7,29 +7,55 @@ import {
 } from '@storybook/react-native'
 import { Font } from 'expo'
 import * as React from 'react'
-import { ScrollView, StyleSheet as RNStyles } from 'react-native'
-import { Platform } from 'reactxp'
+import { Platform, ScrollView, View, UserInterface } from 'reactxp'
 
 import './rn-addons'
 import { loadStories } from './storyLoader'
 
-const styles = RNStyles.create({
-  contentContainer: {
+const styles = {
+  scrollView: Styles.createViewStyle({
+    flex: 1
+  }),
+  contentContainer: Styles.createViewStyle({
     flexGrow: 1,
     flexWrap: 'wrap',
-    flexDirection: 'row',
     justifyContent: 'space-around',
     display: 'flex',
     flex: 1,
     alignItems: 'center',
-  },
-})
+  }),
+}
+
+type ScrollViewAutoMinHeightProps = {
+  children: React.ReactNode
+}
+
+type ScrollViewAutoMinHeightState = {
+  minHeight: number
+}
+
+class ScrollViewAutoMinHeight extends React.Component<ScrollViewAutoMinHeightProps, ScrollViewAutoMinHeightState> {
+  public state: ScrollViewAutoMinHeightState = {
+    minHeight: 0
+  }
+
+  public render() {
+    const { minHeight } = this.state
+    return (
+      <ScrollView style={styles.scrollView} onLayout={({height}) => this.setState({ minHeight: height})}>
+        <View style={[styles.contentContainer, Styles.createViewStyle({minHeight})]}>
+          {this.props.children}      
+        </View>
+      </ScrollView>
+    )
+  }
+}
 
 // Center the story in the screen
 const Center = (storyFn: RenderFunction) => (
-  <ScrollView contentContainerStyle={styles.contentContainer}>
-    {storyFn()}
-  </ScrollView>
+  <ScrollViewAutoMinHeight>
+    {storyFn()}      
+  </ScrollViewAutoMinHeight>
 )
 
 // Add the Theme provider

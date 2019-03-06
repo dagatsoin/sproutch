@@ -22,6 +22,7 @@ export const backgroundImage = function({
         borderStyle: 'solid',
         borderColor: '#ddd',
         borderWidth: 10,
+        overflow: 'hidden',
         width: number('Container width', containerWidth, {
           range: true,
           min: 0,

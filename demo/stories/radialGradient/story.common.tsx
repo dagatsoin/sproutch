@@ -29,9 +29,6 @@ export default function({
   return (
     <RadialGradient
       style={{
-        borderStyle: 'solid',
-        borderWidth: 1,
-        borderColor: 'red',
         width: number('Container width', width, {
           range: true,
           min: 0,

@@ -5,6 +5,7 @@ import { Text } from 'reactxp'
 export default function() {
   return (
     <>
+    <View style={Styles.createViewStyle({ flexWrap: 'wrap', flexDirection: 'row' })}>
       <Paper
         style={Styles.createViewStyle({
           margin: 15,
@@ -479,6 +480,7 @@ export default function() {
           <Text>24dp</Text>
         </View>
       </Paper>
+      </View>
     </>
   )
 }

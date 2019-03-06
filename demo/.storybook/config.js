@@ -44,7 +44,7 @@ const Center = (storyFn) => (
     style={{
       flexGrow: 1,
       flexWrap: 'wrap',
-      flexDirection: 'row',
+      flexDirection: 'column',
       justifyContent: 'space-around',
       display: 'flex',
       height: '100vh',

@@ -15,8 +15,6 @@ export function nativePaperStyle(theme: Theme<any, any>) {
   return {
     root: Styles.createViewStyle({
       overflow: 'visible',
-
-      backgroundColor: theme.palette.background.paper,
     }),
     isAndroid: Styles.createViewStyle({
       borderWidth: 0,
@@ -30,8 +28,8 @@ export function nativePaperStyle(theme: Theme<any, any>) {
     contentContainer: Styles.createViewStyle({
       flex: 1,
       borderRadius: 4,
-      backgroundColor: 'white',
-      overflow: 'visible',
+      backgroundColor: theme.palette.background.paper,
+      overflow: 'hidden',
     }),
   }
 }
