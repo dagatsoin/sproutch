@@ -45,6 +45,7 @@ export function createSceneTransitionStyle(
     sceneContainer: Styles.createViewStyle({
       flex: 1,
       overflow: 'visible',
+      backgroundColor,
       ...(style.sceneContainer as object),
       ...override<'sceneTransition', SceneTransitionOverride>(
         theme.overrides,

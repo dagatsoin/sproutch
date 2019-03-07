@@ -5,7 +5,7 @@ import {
   DefaultTheme,
   TabBar,
   Text,
-  View
+  View,
 } from '@sproutch/ui'
 import { boolean, number, select, text } from '@storybook/addon-knobs'
 import * as React from 'react'
@@ -135,80 +135,80 @@ export default function({
   return (
     <View
       style={Styles.createViewStyle({
-        width: 300,
-        overflow: 'visible',
+        alignSelf: 'stretch',
+
       })}
-      ariaRoleDescription="parent"
-    >
-      <TabBar
-        hasIconOnTop={boolean('Has two lines', hasIconOnTop)}
-        palette={paletteKnob || undefined}
-        activeTabId={select('Tab', ['0', '1', '2', '3', '4', '5'], activeTabId)}
-        customCursorAnimation={
-          boolean('With custom cursor', customCursor)
-            ? customCursorAnimation
-            : undefined
-        }
-        renderCustomCursor={
-          boolean('With custom cursor', customCursor)
-            ? renderCustomCursor
-            : undefined
-        }
-        leftScrollButton={
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <FontAwesome.default name="chevron-left" size={16} color="#ddd" />
-          </View>
-        }
-        rightScrollButton={
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <FontAwesome.default name="chevron-right" size={16} color="#ddd" />
-          </View>
-        }
-        tabs={[
-          {
-            id: '0',
-            label: text('First tab label', firstTabLabel),
-            isDisable: boolean('Disabled', isDisable),
-            slot: notification,
-            renderIcon:
-              boolean('With icon', hasIcon) &&
-              (iconStyle => (
-                <FontAwesome.default
-                  style={iconStyle}
-                  name="rocket"
-                  size={30}
-                  color="#900"
-                />
-              )),
-          },
-          ...Array.from(Array(number('Tab number', tabNumber))).map((_, i) => ({
-            id: i + 1 + '',
-            label: `${otherTabBarLabel} ${i + 1}`,
-            renderIcon:
-              boolean('With icon', hasIcon) &&
-              (iconStyle => (
-                <FontAwesome.default
-                  style={iconStyle}
-                  name="check"
-                  size={30}
-                  color="#900"
-                />
-              )),
-          })),
-        ]}
-      />
+    > 
+    <TabBar
+      hasIconOnTop={boolean('Has two lines', hasIconOnTop)}
+      palette={paletteKnob || undefined}
+      activeTabId={select('Tab', ['0', '1', '2', '3', '4', '5'], activeTabId)}
+      customCursorAnimation={
+        boolean('With custom cursor', customCursor)
+          ? customCursorAnimation
+          : undefined
+      }
+      renderCustomCursor={
+        boolean('With custom cursor', customCursor)
+          ? renderCustomCursor
+          : undefined
+      }
+      leftScrollButton={
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <FontAwesome.default name="chevron-left" size={16} color="#ddd" />
+        </View>
+      }
+      rightScrollButton={
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <FontAwesome.default name="chevron-right" size={16} color="#ddd" />
+        </View>
+      }
+      tabs={[
+        {
+          id: '0',
+          label: text('First tab label', firstTabLabel),
+          isDisable: boolean('Disabled', isDisable),
+          slot: notification,
+          renderIcon:
+            boolean('With icon', hasIcon) &&
+            (iconStyle => (
+              <FontAwesome.default
+                style={iconStyle}
+                name="rocket"
+                size={30}
+                color="#900"
+              />
+            )),
+        },
+        ...Array.from(Array(number('Tab number', tabNumber))).map((_, i) => ({
+          id: i + 1 + '',
+          label: `${otherTabBarLabel} ${i + 1}`,
+          renderIcon:
+            boolean('With icon', hasIcon) &&
+            (iconStyle => (
+              <FontAwesome.default
+                style={iconStyle}
+                name="check"
+                size={30}
+                color="#900"
+              />
+            )),
+        })),
+      ]}
+    />
     </View>
+   
   )
 }

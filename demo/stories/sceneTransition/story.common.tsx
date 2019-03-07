@@ -14,8 +14,8 @@ const FontAwesome = require('react-native-vector-icons/FontAwesome')
 
 const style = {
   section: Styles.createViewStyle({
+    alignSelf: 'stretch',
     marginTop: 60,
-    width: 300,
     height: 100, // alignSelf: Platform.getType() === 'web' ? 'stretch' : 'auto',
     flex: 1,
   }),
@@ -107,6 +107,13 @@ function WithRouter() {
                   {
                     id: 'contact',
                     label: 'Contact',
+                    style: {
+                      isActiveLabel: labelStyle,
+                    },
+                  },
+                  {
+                    id: 'contact',
+                    label: 'Contact 2',
                     style: {
                       isActiveLabel: labelStyle,
                     },
@@ -239,9 +246,9 @@ class WithoutRouter extends React.Component<{}, State> {
 
 export default function Story() {
   return (
-    <View>
+    <>
       <WithRouter />
       <WithoutRouter />
-    </View>
+    </>
   )
 }

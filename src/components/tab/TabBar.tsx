@@ -71,6 +71,7 @@ type State = {
   isScrollEnabled: boolean
   hasLeftScrollIndicator: boolean
   hasRightScrollIndicator: boolean
+  wrapperWidth: number
 }
 
 type ControlState = 'stale' | 'isLayoutReady'
@@ -137,6 +138,7 @@ class Tabs extends React.Component<TabBarProps, State> {
     isScrollEnabled: false,
     hasLeftScrollIndicator: false,
     hasRightScrollIndicator: false,
+    wrapperWidth: 0,
   }
   private rightIndicatorRipple: Emitter
   private leftIndicatorRipple: Emitter
@@ -296,7 +298,7 @@ class Tabs extends React.Component<TabBarProps, State> {
     const styles = this.getStyles(isScrollEnabled)
 
     const tabs = (
-      <View style={styles.wrapper}>
+      <View style={[styles.wrapper, { minWidth: this.state.wrapperWidth }]}>
         {this.renderCursor(styles)}
         {this.tabs}
       </View>
@@ -594,9 +596,17 @@ class Tabs extends React.Component<TabBarProps, State> {
         this.layout.barLayout!.width +
         this.getStyles(isScrollEnabled).paddingHorizontal * 2
       : 0
-    this.setState({ isScrollEnabled, hasRightScrollIndicator }, () => {
-      this.scrollToTab(this.state.activeTabId, false)
-    })
+    const wrapperWidth =
+      ((this.layout && this.layout.barLayout && this.layout.barLayout.width) ||
+        0) -
+      this.paddingHorizontal * 2
+
+    this.setState(
+      { isScrollEnabled, hasRightScrollIndicator, wrapperWidth },
+      () => {
+        this.scrollToTab(this.state.activeTabId, false)
+      }
+    )
   }
 
   private scrollToTab(id: string, animated?: boolean) {
