@@ -27,7 +27,6 @@ export function nativePaperStyle(theme: Theme<any, any>) {
     }),
     contentContainer: Styles.createViewStyle({
       flex: 1,
-      borderRadius: 4,
       backgroundColor: theme.palette.background.paper,
       overflow: 'hidden',
     }),

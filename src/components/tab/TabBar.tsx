@@ -9,6 +9,7 @@ import {
   AnimatedCompositeAnimation,
   AnimatedViewStyleRuleSet,
 } from '../animated'
+import { Paper } from '../paper'
 import { Ripple } from '../ripple'
 import Emitter from '../ripple/Emitter'
 import { LayoutInfo, View } from '../view'
@@ -302,17 +303,15 @@ class Tabs extends React.Component<TabBarProps, State> {
     )
 
     return (
-      <View style={styles.root} onLayout={this.onLayout}>
-        {isScrollEnabled
-          ? this.renderInScrollView(
-              tabs,
-              styles,
-              isScrollEnabled,
-              hasLeftScrollIndicator,
-              hasRightScrollIndicator
-            )
-          : tabs}
-      </View>
+      <Paper elevation={2} style={styles.root} onLayout={this.onLayout}>
+        {this.renderInScrollView(
+          tabs,
+          styles,
+          isScrollEnabled,
+          hasLeftScrollIndicator,
+          hasRightScrollIndicator
+        )}
+      </Paper>
     )
   }
 

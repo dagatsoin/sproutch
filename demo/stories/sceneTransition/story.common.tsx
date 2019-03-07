@@ -117,7 +117,7 @@ function WithRouter() {
           />
 
           <Route
-            render={({location}) => (
+            render={({ location }) => (
               <View style={style.sceneContainer}>
                 <SceneTransition
                   dummyScene={
@@ -139,7 +139,7 @@ function WithRouter() {
                         path="/contact"
                         component={() => <Text>Contact</Text>}
                       />
-                      <Route component={() => <Text>Profile</Text>}/>
+                      <Route component={() => <Text>Profile</Text>} />
                     </Switch>
                   )}
                 />
@@ -240,8 +240,8 @@ class WithoutRouter extends React.Component<{}, State> {
 export default function Story() {
   return (
     <View>
-      <WithRouter/>
-      <WithoutRouter/>
+      <WithRouter />
+      <WithoutRouter />
     </View>
   )
 }

@@ -20,7 +20,7 @@ export default class Paper extends React.Component<PaperProps, {}> {
   }
 
   public render() {
-    const { children } = this.props
+    const { style, ...props } = this.props
 
     return (
       <ThemeContext.Consumer>
@@ -32,11 +32,10 @@ export default class Paper extends React.Component<PaperProps, {}> {
                 Styles.createViewStyle({
                   backgroundColor: theme.palette.background.paper,
                 }),
-                this.props.style,
+                style,
               ]}
-            >
-              {children}
-            </View>
+              {...props}
+            />
           )
         }}
       </ThemeContext.Consumer>

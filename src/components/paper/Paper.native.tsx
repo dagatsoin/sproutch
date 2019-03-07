@@ -24,16 +24,8 @@ export default class Paper extends React.Component<PaperProps, State> {
     if (!this.state.width) this.setState({ width, height })
   }
 
-  public shouldComponentUpdate(nextProps: PaperProps, nextState: State) {
-    return (
-      nextProps.elevation !== this.props.elevation ||
-      this.state.width !== nextState.width ||
-      this.state.height !== nextState.height
-    )
-  }
-
   public render() {
-    const { elevation, children, style } = this.props
+    const { elevation, style, ...props } = this.props
     const { width, height } = this.state
     const nativeShadows =
       !!elevation && elevation > 0
@@ -45,7 +37,7 @@ export default class Paper extends React.Component<PaperProps, State> {
         {theme => {
           const styles = nativePaperStyle(theme)
           return (
-            <View onLayout={this.onLayout} style={[styles.root, style]}>
+            <View onLayout={this.onLayout} style={[styles.root]}>
               {width !== 0 &&
                 height !== 0 &&
                 nativeShadows.map((shadow, index) => (
@@ -58,7 +50,7 @@ export default class Paper extends React.Component<PaperProps, State> {
                     {...shadow.setting}
                   />
                 ))}
-              <View style={[styles.contentContainer]}>{children}</View>
+              <View style={[styles.contentContainer, style]} {...props} />
             </View>
           )
         }}

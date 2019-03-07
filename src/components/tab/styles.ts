@@ -246,6 +246,7 @@ export const tabsBarStyle = function({
       maxHeight: tabHeight,
       flexGrow: 1,
       flexShrink: 1,
+      marginBottom: 4,
       backgroundColor: tabBackgroundColor,
       paddingHorizontal,
       ...(style.root as object),

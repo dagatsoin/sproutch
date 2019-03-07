@@ -1,4 +1,12 @@
-import { Animated, colorManipulator, CustomTabBarCursorAnimation, DefaultTheme, TabBar, Text, View } from '@sproutch/ui'
+import {
+  Animated,
+  colorManipulator,
+  CustomTabBarCursorAnimation,
+  DefaultTheme,
+  TabBar,
+  Text,
+  View
+} from '@sproutch/ui'
 import { boolean, number, select, text } from '@storybook/addon-knobs'
 import * as React from 'react'
 import { Styles } from 'reactxp'
@@ -23,7 +31,7 @@ function renderCustomCursor(
         backgroundColor: colorManipulator.fade(
           theme.business.warning.main,
           Math.max(x / Math.max(barWidth, 1), 0.1)
-        )
+        ),
       })}
     />
   )
@@ -97,7 +105,11 @@ const notification = (
     })}
   >
     <Text
-      style={Styles.createTextStyle({ color: 'white', textAlign: 'center', fontSize: 10})}
+      style={Styles.createTextStyle({
+        color: 'white',
+        textAlign: 'center',
+        fontSize: 10,
+      })}
     >
       1
     </Text>
@@ -111,8 +123,8 @@ export default function({
   isDisable = false,
   hasIconOnTop = false,
   palette,
-  activeTabId = '5',
-  tabNumber = 5,
+  activeTabId = '0',
+  tabNumber = 4,
   customCursor = false,
 }: any) {
   const paletteKnob = select(
@@ -121,7 +133,13 @@ export default function({
     palette
   )
   return (
-    <>
+    <View
+      style={Styles.createViewStyle({
+        width: 300,
+        overflow: 'visible',
+      })}
+      ariaRoleDescription="parent"
+    >
       <TabBar
         hasIconOnTop={boolean('Has two lines', hasIconOnTop)}
         palette={paletteKnob || undefined}
@@ -136,7 +154,7 @@ export default function({
             ? renderCustomCursor
             : undefined
         }
-        leftScrollButton={(
+        leftScrollButton={
           <View
             style={{
               flex: 1,
@@ -146,8 +164,8 @@ export default function({
           >
             <FontAwesome.default name="chevron-left" size={16} color="#ddd" />
           </View>
-        )}
-        rightScrollButton={(
+        }
+        rightScrollButton={
           <View
             style={{
               flex: 1,
@@ -157,39 +175,40 @@ export default function({
           >
             <FontAwesome.default name="chevron-right" size={16} color="#ddd" />
           </View>
-        )}
-        tabs={
-          [
-            {
-              id: "0",
-              label: text('First tab label', firstTabLabel),
-              isDisable: boolean('Disabled', isDisable),
-              slot: notification,
-              renderIcon: boolean('With icon', hasIcon) && (iconStyle => (
+        }
+        tabs={[
+          {
+            id: '0',
+            label: text('First tab label', firstTabLabel),
+            isDisable: boolean('Disabled', isDisable),
+            slot: notification,
+            renderIcon:
+              boolean('With icon', hasIcon) &&
+              (iconStyle => (
                 <FontAwesome.default
                   style={iconStyle}
                   name="rocket"
                   size={30}
                   color="#900"
                 />
-              ))
-            },
-            ...Array.from(Array(number('Tab number', tabNumber)))
-                .map((_, i) => ({
-                  id: i + 1 + '',
-                  label: `${otherTabBarLabel} ${i + 1}`,
-                  renderIcon: boolean('With icon', hasIcon) && (iconStyle => (
-                    <FontAwesome.default
-                      style={iconStyle}
-                      name="check"
-                      size={30}
-                      color="#900"
-                    />
-                  ))
-                }))
-            ]
-          }
+              )),
+          },
+          ...Array.from(Array(number('Tab number', tabNumber))).map((_, i) => ({
+            id: i + 1 + '',
+            label: `${otherTabBarLabel} ${i + 1}`,
+            renderIcon:
+              boolean('With icon', hasIcon) &&
+              (iconStyle => (
+                <FontAwesome.default
+                  style={iconStyle}
+                  name="check"
+                  size={30}
+                  color="#900"
+                />
+              )),
+          })),
+        ]}
       />
-    </>
+    </View>
   )
 }
