@@ -243,7 +243,7 @@ export function getTheme<B, O>(
   return deepmerge(defaultTheme, config) as Theme<Status & B, O> // fixme: why need to force the output type?
 }
 
-type Overridable = 'progressBar' | 'tab' | 'tabs'
+type Overridable = 'progressBar' | 'tab' | 'tabs' | 'sceneTransition' // @todo: decouple from component name
 
 export function override<C extends Overridable, T>(
   overrides: any,

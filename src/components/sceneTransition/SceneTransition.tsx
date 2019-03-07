@@ -10,13 +10,14 @@ import {
 import { LayoutInfo, View } from '../view'
 import Card from './Card'
 import ShouldComponentUpdate from './ShouldComponentUpdate'
-import { containerStyle, createCardStyle } from './style'
+import { createSceneTransitionStyle, SceneTransitionOverride } from './style'
 
 export type SceneTransitionProps = {
   render: () => React.ReactNode
   onTransitionEnd?: (finished: boolean) => void
   delayRender?: number
   dummyScene?: React.ReactNode
+  style?: SceneTransitionOverride
 }
 
 type State = {
@@ -107,7 +108,7 @@ export default class SceneTransition extends React.Component<
   }
 
   public render() {
-    const { dummyScene } = this.props
+    const { dummyScene, style } = this.props
     const {
       isAnimating,
       currentScene,
@@ -118,20 +119,27 @@ export default class SceneTransition extends React.Component<
     return (
       <ThemeContext.Consumer>
         {(theme: Theme<any, any>) => {
-          const cardStyle = createCardStyle(theme)
+          const styleSheet = createSceneTransitionStyle(theme, style)
           return (
-            <View style={containerStyle} onLayout={this.onLayout}>
+            <View style={styleSheet.root} onLayout={this.onLayout}>
               {/* Current scene container*/}
               <Animated.View
-                style={[cardStyle, this.animatedStyle.currentCard]}
+                style={[styleSheet.card, this.animatedStyle.currentCard]}
               >
                 <ShouldComponentUpdate shouldUpdate={isWaitingForNextScene}>
                   {currentScene}
                 </ShouldComponentUpdate>
               </Animated.View>
               {/* Next scene container*/}
-              <Animated.View style={[cardStyle, this.animatedStyle.nextCard]}>
-                <Card>
+              <Animated.View
+                style={[styleSheet.card, this.animatedStyle.nextCard]}
+              >
+                <Card
+                  styleSheet={{
+                    sceneContainer: styleSheet.sceneContainer,
+                    sceneContainerShadow: styleSheet.sceneContainerShadow,
+                  }}
+                >
                   {shouldDisplayDummy
                     ? dummyScene
                     : renderNextScene && renderNextScene()}
