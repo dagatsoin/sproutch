@@ -6,7 +6,7 @@ import { SceneTransitionStyle } from './style'
 
 type Props = {
   styleSheet: {
-    sceneContainer: SceneTransitionStyle['sceneContainer']
+    sceneContainer: SceneTransitionStyle['nextSceneContainer']
     sceneContainerShadow: SceneTransitionStyle['sceneContainerShadow']
   }
   children: React.ReactNode

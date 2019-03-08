@@ -3,8 +3,8 @@ import { ViewStyle } from '../view'
 
 export type SceneTransitionStyle = {
   root: StyleProp<ViewStyle>
-  card: StyleProp<ViewStyle>
-  sceneContainer: StyleProp<ViewStyle>
+  currentSceneContainer: StyleProp<ViewStyle>
+  nextSceneContainer: StyleProp<ViewStyle>
   sceneContainerShadow: StyleProp<ViewStyle>
 }
 
@@ -26,7 +26,7 @@ export function createSceneTransitionStyle(
         'root'
       ),
     }),
-    card: Styles.createViewStyle({
+    currentSceneContainer: Styles.createViewStyle({
       overflow: 'visible',
       flex: 1,
       position: 'absolute',
@@ -35,22 +35,22 @@ export function createSceneTransitionStyle(
       bottom: 0,
       left: 0,
       backgroundColor,
-      ...(style.card as object),
+      ...(style.currentSceneContainer as object),
       ...override<'sceneTransition', SceneTransitionOverride>(
         theme.overrides,
         'sceneTransition',
-        'card'
+        'currentSceneContainer'
       ),
     }),
-    sceneContainer: Styles.createViewStyle({
+    nextSceneContainer: Styles.createViewStyle({
       flex: 1,
       overflow: 'visible',
       backgroundColor,
-      ...(style.sceneContainer as object),
+      ...(style.nextSceneContainer as object),
       ...override<'sceneTransition', SceneTransitionOverride>(
         theme.overrides,
         'sceneTransition',
-        'sceneContainer'
+        'nextSceneContainer'
       ),
     }),
     sceneContainerShadow: Styles.createViewStyle({

@@ -124,7 +124,10 @@ export default class SceneTransition extends React.Component<
             <View style={styleSheet.root} onLayout={this.onLayout}>
               {/* Current scene container*/}
               <Animated.View
-                style={[styleSheet.card, this.animatedStyle.currentCard]}
+                style={[
+                  styleSheet.currentSceneContainer,
+                  this.animatedStyle.currentCard,
+                ]}
               >
                 <ShouldComponentUpdate shouldUpdate={isWaitingForNextScene}>
                   {currentScene}
@@ -132,11 +135,14 @@ export default class SceneTransition extends React.Component<
               </Animated.View>
               {/* Next scene container*/}
               <Animated.View
-                style={[styleSheet.card, this.animatedStyle.nextCard]}
+                style={[
+                  styleSheet.currentSceneContainer,
+                  this.animatedStyle.nextCard,
+                ]}
               >
                 <Card
                   styleSheet={{
-                    sceneContainer: styleSheet.sceneContainer,
+                    sceneContainer: styleSheet.nextSceneContainer,
                     sceneContainerShadow: styleSheet.sceneContainerShadow,
                   }}
                 >
@@ -161,7 +167,7 @@ export default class SceneTransition extends React.Component<
     if (isAnimating) {
       this.animatedCurrentCardTranslateX.setValue(0)
       this.animatedCurrentCardOpacity.setValue(1)
-      this.animatedNextCardTranslateX.setValue(this.layout.width)
+      this.animatedNextCardTranslateX.setValue(this.layout.width + 100)
       this.animatedNextCardOpacity.setValue(1)
       this.animation = this.getAnimation({
         currentCardTranslateX: -30,
@@ -172,7 +178,7 @@ export default class SceneTransition extends React.Component<
           // The transition has just finished. Replace the current scene container at initial position.
           this.animatedCurrentCardTranslateX.setValue(0)
           this.animatedCurrentCardOpacity.setValue(1)
-          this.animatedNextCardTranslateX.setValue(this.layout.width)
+          this.animatedNextCardTranslateX.setValue(this.layout.width + 100)
           this.animatedNextCardOpacity.setValue(0)
           this.setState({
             isAnimating: false,
