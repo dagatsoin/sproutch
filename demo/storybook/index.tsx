@@ -7,7 +7,7 @@ import {
 } from '@storybook/react-native'
 import { Font } from 'expo'
 import * as React from 'react'
-import { Platform, ScrollView, View, UserInterface } from 'reactxp'
+import { Platform, ScrollView, View } from 'reactxp'
 
 import './rn-addons'
 import { loadStories } from './storyLoader'
@@ -66,7 +66,7 @@ const ThemeInjector = (storyFn: RenderFunction) => (
   </ThemeContext.Provider>
 )
 
-addDecorator(Center)
+// addDecorator(Center)
 addDecorator(ThemeInjector)
 
 // import stories
@@ -80,6 +80,7 @@ type State = {
   areAssetLoaded: boolean
 }
 
+// tslint:disable-next-line: max-classes-per-file
 export default class App extends React.Component<{}, {}> {
   public state: State = {
     areAssetLoaded: false,

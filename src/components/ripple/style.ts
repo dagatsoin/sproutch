@@ -40,15 +40,16 @@ export const rippleStyle = function({
   isOnPaper?: boolean
   palette?: 'primary' | 'secondary'
 }): RippleStyle {
-  const backgroundColor = palette
-    ? theme.palette[palette].main
-    : isOnPaper
+  const backgroundColor = isOnPaper
     ? // The container used the paper background
-      theme.palette.type === 'light'
+      palette
+      ? theme.palette[palette].main
+      : theme.palette.type === 'light'
       ? '#000'
       : '#fff'
     : // The primary color is used as the container background
-    colorManipulator.getLuminance(theme.palette.primary.main) >= 0.5
+    colorManipulator.getLuminance(theme.palette[palette || 'primary'].main) >=
+      0.5
     ? '#000'
     : '#fff'
 

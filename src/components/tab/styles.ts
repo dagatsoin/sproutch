@@ -16,7 +16,8 @@ export type TabStyle = {
 
 export type TabsBarStyle = {
   root: StyleProp<ViewStyle>
-  wrapper: StyleProp<ViewStyle>
+  container: StyleProp<ViewStyle>
+  scrollContent: StyleProp<ViewStyle>
   leftIndicator: StyleProp<ViewStyle>
   rightIndicator: StyleProp<ViewStyle>
   cursorAnimatedContainer: StyleProp<ViewStyle>
@@ -51,7 +52,7 @@ export const tabStyle = function({
     hasIcon: boolean
     hasLabel: boolean
     isActive: boolean
-    isDisable: boolean
+    isDisabled: boolean
   }
 }): TabStyle {
   const tabHeight = options && options.hasIconOnTop ? 72 : 48
@@ -150,7 +151,7 @@ export const tabStyle = function({
           }),
 
         ...(!!options &&
-          options.isDisable && {
+          options.isDisabled && {
             color: tabDisabledColor,
           }),
 
@@ -180,7 +181,7 @@ export const tabStyle = function({
           }),
 
         ...(!!options &&
-          options.isDisable && {
+          options.isDisabled && {
             color: tabDisabledColor,
           }),
 
@@ -247,20 +248,22 @@ export const tabsBarStyle = function({
       flexGrow: 1,
       flexShrink: 1,
       marginBottom: 4,
-      backgroundColor: tabBackgroundColor,
-      paddingHorizontal,
       ...(style.root as object),
       ...override<'tabs', TabBarStyleOverride>(theme.overrides, 'tabs', 'root'),
     }),
-    wrapper: Styles.createViewStyle({
+    container: Styles.createViewStyle({
+      backgroundColor: tabBackgroundColor,
+      paddingHorizontal,
+    }),
+    scrollContent: Styles.createViewStyle({
       flexDirection: 'row',
       overflow: 'visible',
 
-      ...(style.wrapper as object),
+      ...(style.scrollContent as object),
       ...override<'tabs', TabBarStyleOverride>(
         theme.overrides,
         'tabs',
-        'wrapper'
+        'scrollContent'
       ),
     }),
     leftIndicator: Styles.createViewStyle({

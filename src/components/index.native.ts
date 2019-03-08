@@ -1,6 +1,7 @@
 export * from './animated'
 export * from './backgroundImage/index.native'
 export * from './borderImage/index.native'
+export * from './button'
 export * from './fade'
 export * from './linearGradient/index.native'
 export * from './paper/index.native'

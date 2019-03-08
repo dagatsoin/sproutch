@@ -7,11 +7,13 @@ export default function() {
     <>
     <View style={Styles.createViewStyle({ flexWrap: 'wrap', flexDirection: 'row' })}>
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={0}
       >
         <View
@@ -26,11 +28,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={1}
       >
         <View
@@ -45,11 +49,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={2}
       >
         <View
@@ -64,11 +70,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={3}
       >
         <View
@@ -83,11 +91,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={4}
       >
         <View
@@ -102,11 +112,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={5}
       >
         <View
@@ -121,11 +133,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={6}
       >
         <View
@@ -140,11 +154,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={7}
       >
         <View
@@ -159,11 +175,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={8}
       >
         <View
@@ -178,11 +196,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={9}
       >
         <View
@@ -197,11 +217,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={10}
       >
         <View
@@ -216,11 +238,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={11}
       >
         <View
@@ -235,11 +259,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={12}
       >
         <View
@@ -254,11 +280,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={13}
       >
         <View
@@ -273,11 +301,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={14}
       >
         <View
@@ -292,11 +322,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={15}
       >
         <View
@@ -311,11 +343,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={16}
       >
         <View
@@ -330,11 +364,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={17}
       >
         <View
@@ -349,11 +385,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={18}
       >
         <View
@@ -368,11 +406,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={19}
       >
         <View
@@ -387,11 +427,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={20}
       >
         <View
@@ -406,11 +448,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={21}
       >
         <View
@@ -425,11 +469,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={22}
       >
         <View
@@ -444,11 +490,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={23}
       >
         <View
@@ -463,11 +511,13 @@ export default function() {
       </Paper>
 
       <Paper
-        style={Styles.createViewStyle({
-          margin: 15,
-          width: 120,
-          height: 60,
-        })}
+        style={{
+          root: Styles.createViewStyle({
+            margin: 15,
+            width: 120,
+            height: 60,
+          })
+        }}
         elevation={24}
       >
         <View

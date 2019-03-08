@@ -17,13 +17,13 @@ import { tabStyle, TabStyleOverride } from './styles'
 
 export type TabProps = {
   id: string
-  renderIcon?: (
+  iconSlot?: (
     style: StyleRuleSetRecursive<StyleRuleSet<TextStyle>>
-  ) => JSX.Element
+  ) => React.ReactNode
   label?: string
   isDisable?: boolean
   style?: TabStyleOverride
-  slot?: JSX.Element
+  badgeSlot?: React.ReactNode
 }
 
 type CompleteProps = {
@@ -40,6 +40,8 @@ type CompleteProps = {
 type State = {
   isHover: boolean
 }
+
+function noop() {}
 
 class Tab extends React.Component<CompleteProps & ViewProps, State> {
   public state: State = {
@@ -70,57 +72,61 @@ class Tab extends React.Component<CompleteProps & ViewProps, State> {
   }
 
   public render() {
-    const {
-      renderIcon,
-      label,
-      isActive = false,
-      isDisable = false,
-      hasIconOnTop = false,
-      mustGrow = false,
-      palette,
-      slot,
-      style,
-    } = this.props
-
     return (
       <ThemeContext.Consumer>
         {theme => {
+          const {
+            id,
+            iconSlot,
+            label,
+            isActive = false,
+            isDisable = false,
+            hasIconOnTop = false,
+            mustGrow = false,
+            palette,
+            badgeSlot,
+            style,
+            onClick = noop,
+          } = this.props
+
           const styles = tabStyle({
             theme,
             palette,
             style,
             options: {
               hasIconOnTop,
-              isDisable,
+              isDisabled: isDisable,
               isActive,
               mustGrow,
-              hasIcon: !!renderIcon,
+              hasIcon: !!iconSlot,
               hasLabel: !!label,
             },
           })
-          const { id, onClick } = this.props
 
           return (
             <View onLayout={this.onLayout} style={styles.root}>
-              {renderIcon && renderIcon(styles.icon)}
+              {iconSlot && iconSlot(styles.icon)}
               {label && <Text style={styles.label}>{label}</Text>}
-              {slot}
+              {badgeSlot}
               <Fade isVisible={this.state.isHover} duration={75}>
                 <View style={styles.overlay} />
               </Fade>
-              <Ripple
-                onRef={(emitter: Emitter) => {
-                  this.ripple = emitter
-                }}
-                palette={palette}
-              />
+              {!isDisable && (
+                <Ripple
+                  onRef={(emitter: Emitter) => {
+                    this.ripple = emitter
+                  }}
+                  palette={palette}
+                />
+              )}
               <View style={styles.touchDetector}>
                 <Button
+                  disabled={isDisable}
                   style={Styles.createViewStyle({
                     flex: 1,
                   })}
                   onPress={() => {
-                    !!onClick && onClick(id)
+                    onClick(id)
                   }}
                   onPressIn={(e: Types.SyntheticEvent) => {
                     this.ripple.onPressIn(e)

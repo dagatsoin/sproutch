@@ -59,7 +59,7 @@ function WithRouter() {
                 onChange={id => {
                   props.history.push('/' + id)
                 }}
-                leftScrollButton={
+                leftScrollButton={(theme) => (
                   <View
                     style={{
                       flex: 1,
@@ -70,11 +70,11 @@ function WithRouter() {
                     <FontAwesome.default
                       name="chevron-left"
                       size={16}
-                      color="#ddd"
+                      color={theme.palette.primary.contrastText}
                     />
                   </View>
-                }
-                rightScrollButton={
+                )}
+                rightScrollButton={(theme) => (
                   <View
                     style={{
                       flex: 1,
@@ -85,10 +85,10 @@ function WithRouter() {
                     <FontAwesome.default
                       name="chevron-right"
                       size={16}
-                      color="#ddd"
+                      color={theme.palette.primary.contrastText}
                     />
                   </View>
-                }
+                )}
                 tabs={[
                   {
                     id: 'profile',
@@ -110,14 +110,7 @@ function WithRouter() {
                     style: {
                       isActiveLabel: labelStyle,
                     },
-                  },
-                  {
-                    id: 'contact',
-                    label: 'Contact 2',
-                    style: {
-                      isActiveLabel: labelStyle,
-                    },
-                  },
+                  }
                 ]}
               />
             )}
@@ -172,7 +165,7 @@ class WithoutRouter extends React.Component<{}, State> {
           style={style.header}
           activeTabId={this.state.activeId}
           onChange={activeId => this.setState({ activeId })}
-          leftScrollButton={
+          leftScrollButton={(theme) => (
             <View
               style={{
                 flex: 1,
@@ -180,10 +173,10 @@ class WithoutRouter extends React.Component<{}, State> {
                 justifyContent: 'center',
               }}
             >
-              <FontAwesome.default name="chevron-left" size={16} color="#ddd" />
+              <FontAwesome.default name="chevron-left" size={16} color={theme.palette.text.secondary} />
             </View>
-          }
-          rightScrollButton={
+          )}
+          rightScrollButton={(theme) => (
             <View
               style={{
                 flex: 1,
@@ -194,10 +187,10 @@ class WithoutRouter extends React.Component<{}, State> {
               <FontAwesome.default
                 name="chevron-right"
                 size={16}
-                color="#ddd"
+                color={theme.palette.text.secondary}
               />
             </View>
-          }
+          )}
           tabs={[
             {
               id: 'section0',

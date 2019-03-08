@@ -28,8 +28,8 @@ export type TabBarProps = {
     barLayout: LayoutInfo,
     theme: Theme<any, any>
   ) => React.ReactNode
-  leftScrollButton?: React.ReactNode
-  rightScrollButton?: React.ReactNode
+  leftScrollButton?: (theme: Theme<any, any>) => React.ReactNode
+  rightScrollButton?: (theme: Theme<any, any>) => React.ReactNode
   onChange?: (tabId: string) => void
 } & InjectedTheme<Theme<any, any>>
 
@@ -298,14 +298,23 @@ class Tabs extends React.Component<TabBarProps, State> {
     const styles = this.getStyles(isScrollEnabled)
 
     const tabs = (
-      <View style={[styles.wrapper, { minWidth: this.state.wrapperWidth }]}>
+      <View
+        style={[styles.scrollContent, { minWidth: this.state.wrapperWidth }]}
+      >
         {this.renderCursor(styles)}
         {this.tabs}
       </View>
     )
 
     return (
-      <Paper elevation={2} style={styles.root} onLayout={this.onLayout}>
+      <Paper
+        elevation={2}
+        style={{
+          root: styles.root,
+          content: styles.container,
+        }}
+        onLayout={this.onLayout}
+      >
         {this.renderInScrollView(
           tabs,
           styles,
@@ -669,7 +678,7 @@ class Tabs extends React.Component<TabBarProps, State> {
           style={styles.leftIndicator}
           onStartShouldSetResponder={() => true}
         >
-          {leftScrollButton}
+          {leftScrollButton(this.props.theme!)}
           <Ripple
             onRef={(emitter: Emitter) => (this.leftIndicatorRipple = emitter)}
             palette={palette}
@@ -706,7 +715,7 @@ class Tabs extends React.Component<TabBarProps, State> {
           style={styles.rightIndicator}
           onStartShouldSetResponder={() => true}
         >
-          {rightScrollButton}
+          {rightScrollButton(this.props.theme!)}
           <Ripple
             onRef={(emitter: Emitter) => (this.rightIndicatorRipple = emitter)}
             palette={palette}

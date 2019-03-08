@@ -2,7 +2,6 @@ import * as React from 'react'
 import { findDOMNode } from 'react-dom'
 
 import { ThemeContext } from '../../styles'
-import { Styles } from '../../styles/createStyle'
 import { View } from '../view'
 import { PaperProps } from './PaperProps'
 import { shadows } from './style'
@@ -20,20 +19,15 @@ export default class Paper extends React.Component<PaperProps, {}> {
   }
 
   public render() {
-    const { style, ...props } = this.props
+    const { style = {}, ...props } = this.props
 
     return (
       <ThemeContext.Consumer>
-        {theme => {
+        {_theme => {
           return (
             <View
               ref={(comp: any) => (this.containerRef = comp)}
-              style={[
-                Styles.createViewStyle({
-                  backgroundColor: theme.palette.background.paper,
-                }),
-                style,
-              ]}
+              style={[style.root, style.content]}
               {...props}
             />
           )

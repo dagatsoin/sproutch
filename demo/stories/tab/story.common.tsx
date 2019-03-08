@@ -135,8 +135,7 @@ export default function({
   return (
     <View
       style={Styles.createViewStyle({
-        alignSelf: 'stretch',
-
+        flex: 1
       })}
     > 
     <TabBar
@@ -153,7 +152,7 @@ export default function({
           ? renderCustomCursor
           : undefined
       }
-      leftScrollButton={
+      leftScrollButton={(theme) => (
         <View
           style={{
             flex: 1,
@@ -161,10 +160,10 @@ export default function({
             justifyContent: 'center',
           }}
         >
-          <FontAwesome.default name="chevron-left" size={16} color="#ddd" />
+          <FontAwesome.default name="chevron-left" size={16} color={theme.palette.primary.contrastText} />
         </View>
-      }
-      rightScrollButton={
+      )}
+      rightScrollButton={(theme) => (
         <View
           style={{
             flex: 1,
@@ -172,37 +171,35 @@ export default function({
             justifyContent: 'center',
           }}
         >
-          <FontAwesome.default name="chevron-right" size={16} color="#ddd" />
+          <FontAwesome.default name="chevron-right" size={16} color={theme.palette.primary.contrastText} />
         </View>
-      }
+      )}
       tabs={[
         {
           id: '0',
           label: text('First tab label', firstTabLabel),
           isDisable: boolean('Disabled', isDisable),
-          slot: notification,
-          renderIcon:
+          badgeSlot: notification,
+          iconSlot:
             boolean('With icon', hasIcon) &&
             (iconStyle => (
               <FontAwesome.default
                 style={iconStyle}
                 name="rocket"
                 size={30}
-                color="#900"
               />
             )),
         },
         ...Array.from(Array(number('Tab number', tabNumber))).map((_, i) => ({
           id: i + 1 + '',
           label: `${otherTabBarLabel} ${i + 1}`,
-          renderIcon:
+          iconSlot:
             boolean('With icon', hasIcon) &&
             (iconStyle => (
               <FontAwesome.default
                 style={iconStyle}
                 name="check"
                 size={30}
-                color="#900"
               />
             )),
         })),
