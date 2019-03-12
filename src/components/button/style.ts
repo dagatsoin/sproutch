@@ -8,7 +8,6 @@ import {
   StyleProp,
   Theme,
 } from '../../styles'
-import { TextStyle } from '../text'
 import { ViewStyle } from '../view'
 
 export type ButtonStyle = {
@@ -24,7 +23,6 @@ export type ButtonStyleOverride = Partial<
   ButtonStyle & {
     hasIcon: StyleProp<ViewStyle>
     hasLabel: StyleProp<ViewStyle>
-    isActiveLabel: StyleProp<TextStyle>
   }
 >
 
@@ -116,6 +114,7 @@ export default function({
         paddingHorizontal: 16,
         paddingVertical,
         flexDirection: 'row',
+        justifyContent: 'center',
 
         ...(style.content as object),
       },
@@ -129,6 +128,7 @@ export default function({
         textAlign: 'center',
         paddingRight: 8,
         color: tabColor,
+        alignSelf: 'center',
 
         ...(style.icon as object),
 
@@ -145,6 +145,7 @@ export default function({
         color: tabColor,
         fontSize,
         lineHeight,
+        alignSelf: 'center',
 
         ...(style.label as object),
 

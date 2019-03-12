@@ -113,6 +113,7 @@ export default function() {
       </Text>
       <View
         style={Styles.createViewStyle({
+          
           overflow: 'visible',
           flexDirection: 'row',
           justifyContent: 'space-between',
@@ -122,8 +123,10 @@ export default function() {
         <Button
           style={{
             root: {
+              height: 64,
+              width: 200,
               ...(style.root as object),
-              borderRadius: 24
+              borderRadius: 32
             },
             label: {
               color: '#FFE082',
@@ -149,7 +152,7 @@ export default function() {
             >
               <BorderImage
                 uri="https://i.ibb.co/Yhs3Ff5/btn-bg.png"
-                borderWidth={18}
+                borderWidth={32}
                 sliceWidth={127}
               />
             </View>
