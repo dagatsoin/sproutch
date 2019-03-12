@@ -1,14 +1,14 @@
 import * as React from 'react'
 import { Button as RXButton, Styles, Types } from 'reactxp'
-import { StyleRuleSet, StyleRuleSetRecursive } from 'reactxp/dist/common/Types'
 
+import { StyleProp } from '../../styles'
 import { Theme, ThemeContext } from '../../styles/theme'
 import { Fade } from '../fade'
 import { Paper } from '../paper'
 import { Ripple } from '../ripple'
 import Emitter from '../ripple/Emitter'
 import { Text, TextStyle } from '../text'
-import { View, ViewProps } from '../view'
+import { View } from '../view'
 import createButtonStyle, { ButtonStyleOverride } from './style'
 
 export type ButtonProps = {
@@ -18,14 +18,12 @@ export type ButtonProps = {
   isDense?: boolean
   palette?: 'primary' | 'secondary'
   variant?: 'contained' | 'outlined' | 'text'
-  iconSlot?: (
-    style: StyleRuleSetRecursive<StyleRuleSet<TextStyle>>
-  ) => React.ReactNode
+  iconSlot?: (style: StyleProp<TextStyle>) => React.ReactNode
   label?: string
   backgroundSlot?: (theme: Theme<any, any>) => React.ReactNode
   badgeSlot?: (theme: Theme<any, any>) => React.ReactNode
   onClick?: (e: Types.SyntheticEvent) => void
-} & ViewProps
+} & Exclude<Types.ButtonProps, 'children'>
 
 function noop() {}
 
