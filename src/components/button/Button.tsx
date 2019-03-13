@@ -88,9 +88,11 @@ class Button extends React.PureComponent<ButtonProps, State> {
               {iconSlot && iconSlot(styles.icon)}
               {label && <Text style={styles.label}>{label}</Text>}
               {badgeSlot}
-              <Fade isVisible={this.state.isHover} duration={75}>
-                <View style={styles.overlay} />
-              </Fade>
+              {!isDisabled && (
+                <Fade isVisible={this.state.isHover} duration={75}>
+                  <View style={styles.overlay} />
+                </Fade>
+              )}
               {!isDisabled && (
                 <Ripple
                   onRef={(emitter: Emitter) => {

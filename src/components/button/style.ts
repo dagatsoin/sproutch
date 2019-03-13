@@ -66,7 +66,9 @@ export default function({
       : 'transparent'
 
   const overlayColor =
-    variant === 'contained'
+    options && options.isDisabled
+      ? undefined
+      : variant === 'contained'
       ? colorManipulator.getLuminance(theme.palette[palette].main) >= 0.5
         ? '#000'
         : '#fff'
@@ -77,10 +79,11 @@ export default function({
 
   const borderWidth = variant === 'outlined' ? 1 : undefined
 
-  const opacity =
-    colorManipulator.getLuminance(overlayColor) >= 0.5
+  const overlayOpacity = !!overlayColor
+    ? colorManipulator.getLuminance(overlayColor) >= 0.5
       ? darkShadow.hover
       : lightShadow.hover
+    : 0
 
   return {
     root: Styles.createViewStyle(
@@ -162,7 +165,7 @@ export default function({
         flex: 1,
 
         backgroundColor: overlayColor,
-        opacity,
+        opacity: overlayOpacity,
       },
       false
     ),
