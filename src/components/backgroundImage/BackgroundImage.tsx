@@ -9,6 +9,12 @@ export default class BackgroundImage extends React.PureComponent<
   {}
 > {
   private viewRef: View
+  private element: HTMLElement
+
+  public componentDidMount() {
+    this.element = findDOMNode(this.viewRef) as HTMLElement
+    this.setStyle()
+  }
 
   public render() {
     return (
@@ -36,13 +42,12 @@ export default class BackgroundImage extends React.PureComponent<
   }
 
   private setStyle = () => {
-    const element = findDOMNode(this.viewRef) as HTMLElement
-    if (element) {
+    if (this.element) {
       const { position: center, uri, resizeMode, repeat } = this.props
       const position = center ? center.join(' ') : '50% 50%'
       const size = resizeMode === 'stretch' ? '100% 100%' : resizeMode
 
-      element.setAttribute(
+      this.element.setAttribute(
         'style',
         `
         position: absolute;
