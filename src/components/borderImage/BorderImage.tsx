@@ -9,6 +9,12 @@ export default class BorderImage extends React.PureComponent<
   {}
 > {
   private viewRef: View
+  private element: HTMLElement
+
+  public componentDidMount() {
+    this.element = findDOMNode(this.viewRef) as HTMLElement
+    this.setStyle()
+  }
 
   public render() {
     return (
@@ -24,10 +30,9 @@ export default class BorderImage extends React.PureComponent<
   }
 
   private setStyle = () => {
-    const element = findDOMNode(this.viewRef) as HTMLElement
-    if (element) {
+    if (this.element) {
       const { borderWidth, uri, sliceWidth } = this.props
-      element.setAttribute(
+      this.element.setAttribute(
         'style',
         `
         position: absolute;
