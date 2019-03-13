@@ -1,7 +1,7 @@
 import { BackgroundImage, View } from '@sproutch/ui'
 import { array, boolean, number, select } from '@storybook/addon-knobs'
 import * as React from 'react'
-import { Styles, UserInterface } from 'reactxp'
+import { Styles } from 'reactxp'
 
 export const backgroundImage = function({
   containerWidth=220,

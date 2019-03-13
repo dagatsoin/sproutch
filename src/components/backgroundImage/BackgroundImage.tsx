@@ -43,7 +43,7 @@ export default class BackgroundImage extends React.PureComponent<
 
   private setStyle = () => {
     if (this.element) {
-      const { position: center, uri, resizeMode, repeat } = this.props
+      const { position: center, uri, resizeMode = 'auto', repeat } = this.props
       const position = center ? center.join(' ') : '50% 50%'
       const size = resizeMode === 'stretch' ? '100% 100%' : resizeMode
 
