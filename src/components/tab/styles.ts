@@ -254,6 +254,12 @@ export const tabsBarStyle = function({
     container: Styles.createViewStyle({
       backgroundColor: tabBackgroundColor,
       paddingHorizontal,
+      ...(style.container as object),
+      ...override<'tabs', TabBarStyleOverride>(
+        theme.overrides,
+        'tabs',
+        'container'
+      ),
     }),
     scrollContent: Styles.createViewStyle({
       flexDirection: 'row',
