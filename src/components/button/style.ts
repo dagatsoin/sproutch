@@ -88,6 +88,7 @@ export default function({
   return {
     root: Styles.createViewStyle(
       {
+        alignSelf: 'center',
         borderRadius: theme.shape.borderRadius,
 
         ...(style.root as object),
