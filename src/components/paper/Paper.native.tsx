@@ -8,20 +8,28 @@ import { PaperProps } from './PaperProps'
 import { nativePaperStyle, shadows } from './style'
 
 type State = {
-  width: number
-  height: number
+  width?: number
+  height?: number
 }
 
 export default class Paper extends React.Component<PaperProps, State> {
   public childRef: View
 
-  public state: State = {
-    width: 0,
-    height: 0,
-  }
+  public state: State = {}
 
   public onLayout = ({ width, height }: Types.ViewOnLayoutEvent) => {
     if (!this.state.width) this.setState({ width, height })
+  }
+
+  constructor(props: PaperProps) {
+    super(props)
+    const { style = {} } = props
+    const width = style && style.root && style.root['width']
+    const height = style && style.root && style.root['height']
+    this.state = {
+      width,
+      height,
+    }
   }
 
   public render() {
@@ -30,7 +38,10 @@ export default class Paper extends React.Component<PaperProps, State> {
     const borderRadius =
       (style && style.root && style.root['borderRadius']) || 0
     const nativeShadows =
-      !!elevation && elevation > 0
+      !!elevation &&
+      elevation > 0 &&
+      width !== undefined &&
+      height !== undefined
         ? shadows.native[elevation - 1](width, height, borderRadius)
         : []
     return (
