@@ -47,7 +47,7 @@ export default class BackgroundImage extends React.Component<
 
   public render() {
     const { width: imageWidth, height: imageHeight } = this.state.imageSize
-    const { position, resizeMode, repeat, uri } = this.props
+    const { borderRadius = 0, position, resizeMode, repeat, uri } = this.props
 
     const {
       width: containerWidth,
@@ -86,6 +86,7 @@ export default class BackgroundImage extends React.Component<
         onLayout={this.onLayout}
         style={Styles.createViewStyle({
           position: 'absolute',
+          borderRadius,
           left: 0,
           top: 0,
           right: 0,

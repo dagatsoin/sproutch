@@ -5,4 +5,5 @@ export type BackgroundImageProps = {
   repeat?: boolean
   resizeMode?: Exclude<Types.ImageResizeMode, 'repeat'>
   position?: [string, string] // ['50px', '50px'] || ['50%', '50%']
+  borderRadius?: number
 }

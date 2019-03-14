@@ -43,7 +43,13 @@ export default class BackgroundImage extends React.PureComponent<
 
   private setStyle = () => {
     if (this.element) {
-      const { position: center, uri, resizeMode = 'auto', repeat } = this.props
+      const {
+        borderRadius = 0,
+        position: center,
+        uri,
+        resizeMode = 'auto',
+        repeat,
+      } = this.props
       const position = center ? center.join(' ') : '50% 50%'
       const size = resizeMode === 'stretch' ? '100% 100%' : resizeMode
 
@@ -55,6 +61,7 @@ export default class BackgroundImage extends React.PureComponent<
         right: 0;
         bottom: 0;
         left: 0;
+        border-radius: ${borderRadius}px;
         background-image: url(${uri});
         background-position: ${position};
         background-size: ${size};
