@@ -22,7 +22,6 @@ export type ButtonProps = {
   label?: string
   backgroundSlot?: (theme: Theme<any, any>) => React.ReactNode
   badgeSlot?: (theme: Theme<any, any>) => React.ReactNode
-  onClick?: (e: Types.SyntheticEvent) => void
 } & Exclude<Types.ButtonProps, 'children'>
 
 function noop() {}
@@ -51,7 +50,7 @@ class Button extends React.PureComponent<ButtonProps, State> {
             iconSlot,
             backgroundSlot,
             badgeSlot,
-            onClick = noop,
+            onPress = noop,
             style,
           } = this.props
 
@@ -108,7 +107,7 @@ class Button extends React.PureComponent<ButtonProps, State> {
                   style={Styles.createViewStyle({
                     flex: 1,
                   })}
-                  onPress={onClick}
+                  onPress={onPress}
                   onPressIn={e => this.ripple.onPressIn(e)}
                   onPressOut={() => this.ripple.onPressOut()}
                   onHoverStart={() => {
