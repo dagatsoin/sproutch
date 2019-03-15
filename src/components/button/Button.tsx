@@ -69,6 +69,10 @@ class Button extends React.PureComponent<ButtonProps, State> {
           const borderRadius =
             (style && style.root && style.root['borderRadius']) || 0
 
+          const rippleColor =
+            (style && style.overlay && style.overlay['backgroundColor']) ||
+            undefined
+
           return (
             <Paper
               elevation={elevation}
@@ -97,6 +101,7 @@ class Button extends React.PureComponent<ButtonProps, State> {
                   onRef={(emitter: Emitter) => {
                     this.ripple = emitter
                   }}
+                  color={rippleColor}
                   palette={palette}
                   isOnPaper={variant !== 'contained'}
                 />
