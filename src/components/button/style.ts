@@ -167,6 +167,14 @@ export default function({
 
         backgroundColor: overlayColor,
         opacity: overlayOpacity,
+
+        ...(style.overlay as object),
+
+        ...override<'button', ButtonStyleOverride>(
+          theme.overrides,
+          'button',
+          'overlay'
+        ),
       },
       false
     ),
