@@ -55,4 +55,9 @@ Amount of time while the dummyScene will be displayed. If ommitted, it will stic
 \`type: 'primary' | 'secondary'\`
 
 The dummy scene to display while the transition is going on. Id ommitted, the scene will be rendered at the start of the transition.
+
+#### sceneContainerSlot *optional*
+\`type: React.ReactNode\`
+
+A slot to inject some components in the current and next scene container. For example to set a \`BackgroundImage\` behind the scene.
 `

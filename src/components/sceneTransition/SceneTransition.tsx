@@ -16,6 +16,7 @@ export type SceneTransitionProps = {
   render: () => React.ReactNode
   onTransitionEnd?: (finished: boolean) => void
   delayRender?: number
+  sceneContainerSlot?: React.ReactNode
   dummyScene?: React.ReactNode
   style?: SceneTransitionOverride
 }
@@ -108,7 +109,7 @@ export default class SceneTransition extends React.Component<
   }
 
   public render() {
-    const { dummyScene, style } = this.props
+    const { dummyScene, sceneContainerSlot, style } = this.props
     const {
       isAnimating,
       currentScene,
@@ -130,6 +131,7 @@ export default class SceneTransition extends React.Component<
                 ]}
               >
                 <ShouldComponentUpdate shouldUpdate={isWaitingForNextScene}>
+                  {sceneContainerSlot}
                   {currentScene}
                 </ShouldComponentUpdate>
               </Animated.View>
@@ -141,6 +143,7 @@ export default class SceneTransition extends React.Component<
                 ]}
               >
                 <Card
+                  sceneContainerSlot={sceneContainerSlot}
                   styleSheet={{
                     sceneContainer: styleSheet.nextSceneContainer,
                     sceneContainerShadow: styleSheet.sceneContainerShadow,

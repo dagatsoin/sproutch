@@ -9,10 +9,11 @@ type Props = {
     sceneContainer: SceneTransitionStyle['nextSceneContainer']
     sceneContainerShadow: SceneTransitionStyle['sceneContainerShadow']
   }
+  sceneContainerSlot?: React.ReactNode
   children: React.ReactNode
 }
 
-export default ({ children, styleSheet }: Props) => (
+export default ({ children, sceneContainerSlot, styleSheet }: Props) => (
   <View style={styleSheet.sceneContainer}>
     <LinearGradient
       colors={['#0005', '#0001', '#0000']}
@@ -21,6 +22,7 @@ export default ({ children, styleSheet }: Props) => (
       end={[0, 0]}
       style={styleSheet.sceneContainerShadow}
     />
+    {sceneContainerSlot}
     {children}
   </View>
 )
