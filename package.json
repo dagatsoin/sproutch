@@ -57,7 +57,7 @@
   },
   "peerDependencies": {
     "expo": "^32.0.0",
-    "reactxp": "^1.6.0-rc.1"
+    "reactxp": "^1.6.0-rc.3"
   },
   "devDependencies": {
     "@types/expo": "^32.0.0",
