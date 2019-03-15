@@ -28,6 +28,11 @@ Note: due to an [issue](https://github.com/Microsoft/reactxp/issues/1012) in Rea
 
 If true, set the color of the ripple according to the paper background of your theme.
 
+#### color *optional*
+\`type: string\`
+
+The ripple teint. Take the precedence on \`palette\` attribute.
+
 #### palette *optional*
 \`type: 'primary' | 'secondary'\`
 

@@ -49,6 +49,7 @@ export default class extends React.Component<{}, State> {
           </View>
           <Ripple
             isOnPaper
+            color="#ff0000"
             onRef={(e: IEmitter) => this.ripple0 = e}
           />
           <View

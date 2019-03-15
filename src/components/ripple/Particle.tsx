@@ -45,7 +45,8 @@ class Particle extends React.PureComponent<ParticleProps, {}> {
       <ThemeContext.Consumer>
         {theme => {
           const { options, x, y } = this.props
-          const { isOnPaper, palette } = options || {
+          const { color, isOnPaper, palette } = options || {
+            color: undefined,
             isOnPaper: false,
             palette: undefined,
           }
@@ -54,6 +55,7 @@ class Particle extends React.PureComponent<ParticleProps, {}> {
             y,
             isOnPaper,
             radius: radiusFrom,
+            color,
             palette,
             theme,
           })

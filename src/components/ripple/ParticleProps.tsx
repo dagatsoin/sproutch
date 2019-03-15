@@ -8,6 +8,7 @@ export type ParticleProps = {
   y: number
   options?: {
     isOnPaper?: boolean
+    color?: string
     palette?: 'primary' | 'secondary'
   }
   onDeath: () => void

@@ -31,6 +31,7 @@ export const rippleStyle = function({
   radius,
   theme,
   palette,
+  color,
   isOnPaper = false,
 }: {
   x: number
@@ -38,20 +39,23 @@ export const rippleStyle = function({
   radius: number
   theme: Theme<any, any>
   isOnPaper?: boolean
+  color?: string
   palette?: 'primary' | 'secondary'
 }): RippleStyle {
-  const backgroundColor = isOnPaper
-    ? // The container used the paper background
-      palette
-      ? theme.palette[palette].main
-      : theme.palette.type === 'light'
+  const backgroundColor =
+    color ||
+    (isOnPaper
+      ? // The container used the paper background
+        palette
+        ? theme.palette[palette].main
+        : theme.palette.type === 'light'
+        ? '#000'
+        : '#fff'
+      : // The primary color is used as the container background
+      colorManipulator.getLuminance(theme.palette[palette || 'primary'].main) >=
+        0.5
       ? '#000'
-      : '#fff'
-    : // The primary color is used as the container background
-    colorManipulator.getLuminance(theme.palette[palette || 'primary'].main) >=
-      0.5
-    ? '#000'
-    : '#fff'
+      : '#fff')
 
   return {
     ripple: Styles.createViewStyle({
