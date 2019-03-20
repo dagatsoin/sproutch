@@ -6,7 +6,9 @@ import {
   Text,
   View,
 } from '@sproutch/ui'
+import { boolean } from '@storybook/addon-knobs'
 import * as React from 'react'
+
 import { Route, Router, Switch } from './router'
 
 // tslint:disable-next-line: no-var-requires
@@ -121,9 +123,9 @@ function WithRouter() {
               <View style={style.sceneContainer}>
                 <SceneTransition
                   dummyScene={
-                    <View style={style.scene}>
+                    boolean('Display dummy while animating', false) && (<View style={style.scene}>
                       <Spinner size="small" color="#809" />
-                    </View>
+                    </View>)
                   }
                   render={() => (
                     <Switch location={location}>
