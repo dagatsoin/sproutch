@@ -11,6 +11,8 @@ import { Text, TextStyle } from '../text'
 import { View } from '../view'
 import createButtonStyle, { ButtonStyleOverride } from './style'
 
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+
 export type ButtonProps = {
   isDisabled?: boolean
   elevation?: number
@@ -22,7 +24,7 @@ export type ButtonProps = {
   label?: string
   backgroundSlot?: (theme: Theme<any, any>) => React.ReactNode
   badgeSlot?: (theme: Theme<any, any>) => React.ReactNode
-} & Exclude<Types.ButtonProps, 'children'>
+} & Omit<Types.ButtonProps, 'children'>
 
 function noop() {}
 

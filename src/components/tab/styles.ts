@@ -35,7 +35,9 @@ export type TabStyleOverride = Partial<
   }
 >
 
-export type TabBarStyleOverride = Exclude<TabsBarStyle, 'paddingHorizontal'>
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+
+export type TabBarStyleOverride = Omit<TabsBarStyle, 'paddingHorizontal'>
 
 export const tabStyle = function({
   theme,
