@@ -216,7 +216,7 @@ export default class SceneTransition extends React.Component<
    */
   private onLayout = (layout: LayoutInfo) => {
     this.layout = layout
-    this.animatedNextCardTranslateX.setValue(layout.width)
+    this.animatedNextCardTranslateX.setValue(layout.width + 100)
   }
 
   private getAnimation(to: {
