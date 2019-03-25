@@ -76,7 +76,7 @@ type State = {
 
 type ControlState = 'stale' | 'isLayoutReady'
 
-type MutationType = 'registerTab' | 'removeTab' | 'setLayout'
+type MutationType = 'registerTab' | 'removeTab' | 'setTabLayout'
 
 type PayloadLayout = TabState
 
@@ -162,7 +162,7 @@ class Tabs extends React.Component<TabBarProps, State> {
     rotateY: Animated.createValue(0),
     rotateZ: Animated.createValue(0),
     scaleX: Animated.createValue(0),
-    scaleY: Animated.createValue(0),
+    scaleY: Animated.createValue(1),
   }
   private animatedStyle: AnimatedViewStyleRuleSet
   private cursorAnimation: {
@@ -270,10 +270,10 @@ class Tabs extends React.Component<TabBarProps, State> {
         { translateY: this.cursorAnimatedValues.translateY },
         { rotateX },
         { rotateY },
-        Platform.getType() !== 'web' ? { rotateZ } : (undefined as any), // waiting for ReactXP to fix the rotateZ issue for web
+        { rotateZ },
         { scaleX: this.cursorAnimatedValues.scaleX },
         { scaleY: this.cursorAnimatedValues.scaleY },
-      ].filter(t => !!t),
+      ],
     })
   }
 
@@ -464,6 +464,7 @@ class Tabs extends React.Component<TabBarProps, State> {
   }
 
   private computeState() {
+    const previousControlState = this.controlState
     /*
      * Compute control state
      */
@@ -489,6 +490,11 @@ class Tabs extends React.Component<TabBarProps, State> {
       .map(({ id, layout }) => ({ id, layout: layout! }))
 
     if (this.controlState === 'isLayoutReady' && this.activeTab) {
+      // ALl the layouts are known. Set the initial cursor layout.
+      if (previousControlState === 'stale' && this.activeTab.layout) {
+        this.cursorAnimatedValues.translateX.setValue(this.activeTab.layout.x)
+        this.cursorAnimatedValues.scaleX.setValue(this.activeTab.layout.width)
+      }
       this.updateCursorPosition()
     }
 
@@ -540,7 +546,7 @@ class Tabs extends React.Component<TabBarProps, State> {
    */
   private setTabLayout = (payload: { id: string; layout: LayoutInfo }) => {
     this.present({
-      mutation: 'setLayout',
+      mutation: 'setTabLayout',
       payload,
     } as Proposal<PayloadLayout>)
   }
@@ -559,7 +565,7 @@ class Tabs extends React.Component<TabBarProps, State> {
       // Let add this tab
       this.SAMmodel.tabsState.push({ id: payload.id, isStale: true })
       this.computeState()
-    } else if (proposal.mutation === 'setLayout') {
+    } else if (proposal.mutation === 'setTabLayout') {
       const payload = proposal.payload as PayloadLayout
       if (!payload.layout) return
       if (this.isLayoutReady) {
