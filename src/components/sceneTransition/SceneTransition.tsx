@@ -24,6 +24,8 @@ export type SceneTransitionProps = {
 type State = {
   isWaitingForNextScene: boolean
   isAnimating: boolean
+  isReady: boolean
+  layout?: LayoutInfo
   currentScene: React.ReactNode
   renderNextScene?: () => React.ReactNode
 }
@@ -58,37 +60,54 @@ export default class SceneTransition extends React.Component<
       transform: [{ translateX: this.animatedNextCardTranslateX }],
     }),
   }
-  private layout: LayoutInfo
 
   public static getDerivedStateFromProps(
     props: SceneTransitionProps,
     state: State
   ) {
-    // Initial mount state
-    if (state.isWaitingForNextScene && state.isAnimating) {
+    // Initial state, wait for the layout
+    // -> set component as ready
+    if (
+      state.isWaitingForNextScene &&
+      !state.isAnimating &&
+      !state.isReady &&
+      state.layout
+    ) {
       return {
-        isWaitingForNextScene: true,
-        isAnimating: false,
+        isReady: true,
       }
     }
+
     // A new scene has been received.
-    if (state.isWaitingForNextScene && !state.isAnimating) {
+    // -> Render the new scene and start animation.
+    if (state.isReady && state.isWaitingForNextScene && !state.isAnimating) {
       return {
         isWaitingForNextScene: false,
         isAnimating: true,
+        isStale: true,
         renderNextScene: props.render,
       }
     }
     // The user click on another router during the animation.
-    // Let's continue the animation but change the next scene.
-    else if (!state.isWaitingForNextScene && state.isAnimating) {
+    // -> Let's continue the animation but change the next scene.
+    else if (
+      state.isReady &&
+      !state.isWaitingForNextScene &&
+      state.isAnimating
+    ) {
       return {
         renderNextScene: props.render,
+        isStale: false,
       }
     }
     // Transition is complete.
-    // Wait for new scene.
-    else if (!state.isWaitingForNextScene && !state.isAnimating) {
+    // -> Wait for new scene
+    // (Transfert he next scene to the current scene slot and empty the next scene renderer slot.)
+    else if (
+      state.isReady &&
+      !state.isWaitingForNextScene &&
+      !state.isAnimating
+    ) {
       return {
         isWaitingForNextScene: true,
         currentScene: state.renderNextScene && state.renderNextScene(),
@@ -100,11 +119,13 @@ export default class SceneTransition extends React.Component<
 
   constructor(props: SceneTransitionProps) {
     super(props)
+    // Iniital state: wait for a new scene to render
     this.state = {
       isWaitingForNextScene: true,
       isAnimating: false,
+      isReady: false,
       currentScene: props.render(),
-      renderNextScene: () => <></>,
+      renderNextScene: undefined,
     }
   }
 
@@ -162,15 +183,15 @@ export default class SceneTransition extends React.Component<
   }
 
   public componentDidUpdate() {
-    if (!this.layout) return
     const { delayRender } = this.props
-    const { isAnimating } = this.state
+    const { isAnimating, layout } = this.state
+    if (!layout) return
 
     // The component was doing nothing and was ready to start a new transition.
     if (isAnimating) {
       this.animatedCurrentCardTranslateX.setValue(0)
       this.animatedCurrentCardOpacity.setValue(1)
-      this.animatedNextCardTranslateX.setValue(this.layout.width + 100)
+      this.animatedNextCardTranslateX.setValue(layout.width + 100)
       this.animatedNextCardOpacity.setValue(1)
       this.animation = this.getAnimation({
         currentCardTranslateX: -30,
@@ -181,7 +202,7 @@ export default class SceneTransition extends React.Component<
           // The transition has just finished. Replace the current scene container at initial position.
           this.animatedCurrentCardTranslateX.setValue(0)
           this.animatedCurrentCardOpacity.setValue(1)
-          this.animatedNextCardTranslateX.setValue(this.layout.width + 100)
+          this.animatedNextCardTranslateX.setValue(layout.width + 100)
           this.animatedNextCardOpacity.setValue(0)
           this.setState({
             isAnimating: false,
@@ -215,8 +236,13 @@ export default class SceneTransition extends React.Component<
    * Push the next scene container on the left
    */
   private onLayout = (layout: LayoutInfo) => {
-    this.layout = layout
     this.animatedNextCardTranslateX.setValue(layout.width + 100)
+    // @todo this should not be here, coupling too much the general
+    // scene transition concept to the card transition effect.
+    // This should be the responsability of the choosen transition effect.
+    if (!this.state.layout || this.state.layout.width !== layout.width) {
+      this.setState({ layout })
+    }
   }
 
   private getAnimation(to: {
