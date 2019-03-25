@@ -114,7 +114,13 @@ export default class SceneTransition extends React.Component<
         renderNextScene: undefined,
       }
     }
-    return null
+
+    // Still waiting for the component to be ready. Meanwhile, the current scene may be changed.
+    // For eg. a React Router redirection, the initial rendered scene has been redirected to another scene.
+    // But as we captured the initial scene in the constructor, we need to refresh it now.
+    return {
+      currentScene: props.render(),
+    }
   }
 
   constructor(props: SceneTransitionProps) {

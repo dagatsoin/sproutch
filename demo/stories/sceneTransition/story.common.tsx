@@ -9,6 +9,7 @@ import {
 import { boolean } from '@storybook/addon-knobs'
 import * as React from 'react'
 
+import Redirect from './Redirect'
 import { Route, Router, Switch } from './router'
 
 // tslint:disable-next-line: no-var-requires
@@ -141,7 +142,7 @@ function WithRouter() {
                         path="/contact"
                         component={() => <Text>Contact</Text>}
                       />
-                      <Route component={() => <Text>Profile</Text>} />
+                      <Route component={Signin} />
                     </Switch>
                   )}
                 />
@@ -153,6 +154,17 @@ function WithRouter() {
     </View>
   )
 }
+
+function Signin() {
+  return (
+    <>
+      <Text>Signin</Text>
+      <Redirect to="/profile"/>
+    </>
+  )
+}
+
+const Profile = <Text>Profile</Text>
 
 class WithoutRouter extends React.Component<{}, State> {
   public state: State = {
