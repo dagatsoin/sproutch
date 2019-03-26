@@ -103,6 +103,10 @@ class Tab extends React.Component<CompleteProps & ViewProps, State> {
             },
           })
 
+          const rippleColor =
+            (style && style.overlay && style.overlay['backgroundColor']) ||
+            undefined
+
           return (
             <View onLayout={this.onLayout} style={styles.root}>
               {iconSlot && iconSlot(styles.icon)}
@@ -116,6 +120,7 @@ class Tab extends React.Component<CompleteProps & ViewProps, State> {
                   onRef={(emitter: Emitter) => {
                     this.ripple = emitter
                   }}
+                  color={rippleColor}
                   palette={palette}
                 />
               )}

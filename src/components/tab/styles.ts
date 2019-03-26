@@ -80,16 +80,17 @@ export const tabStyle = function({
 
   const twoLinesPadding = theme.spacing * 1.5
 
-  const backgroundColor = palette
-    ? theme.palette[palette].main
-    : colorManipulator.getLuminance(theme.palette.primary.main) >= 0.5
-    ? '#000'
-    : '#fff'
+  const overlayColor =
+    options && options.isDisabled
+      ? undefined
+      : theme.palette[palette || 'primary'].main
 
-  const opacity =
-    colorManipulator.getLuminance(backgroundColor) >= 0.5
+  const overlayOpacity = !!overlayColor
+    ? colorManipulator.getLuminance(overlayColor) >= 0.5
       ? darkShadow.hover
       : lightShadow.hover
+    : 0
+
   return {
     root: Styles.createViewStyle(
       {
@@ -197,8 +198,12 @@ export const tabStyle = function({
       {
         flex: 1,
 
-        backgroundColor,
-        opacity,
+        backgroundColor: overlayColor,
+        opacity: overlayOpacity,
+
+        ...(style.overlay as object),
+
+        ...override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'overlay'),
       },
       false
     ),
