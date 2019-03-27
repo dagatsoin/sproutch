@@ -222,12 +222,14 @@ export default class SceneTransition extends React.Component<
   }
 
   public onComponentWillUnmount() {
-    this.onTransitionEnd({ finished: this.state.isWaitingForNextScene })
+    if (this.timeout) {
+      clearTimeout(this.timeout)
+      this.timeout = undefined
+    }
   }
 
   private onTransitionEnd = ({ finished }: { finished: boolean }) => {
     if (this.timeout) {
-      clearTimeout(this.timeout)
       this.timeout = undefined
     }
     const { layout } = this.state
