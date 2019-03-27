@@ -46,6 +46,7 @@ export default class SceneTransition extends React.Component<
     currentCardTranslateX: AnimatedCompositeAnimation
     nextCardTranslateX: AnimatedCompositeAnimation
   }
+  private timeout: any
 
   private animatedStyle: {
     currentCard: AnimatedViewStyleRuleSet
@@ -195,6 +196,10 @@ export default class SceneTransition extends React.Component<
 
     // The component was doing nothing and was ready to start a new transition.
     if (isAnimating) {
+      if (this.timeout) {
+        clearTimeout(this.timeout)
+        this.timeout = undefined
+      }
       this.animatedCurrentCardTranslateX.setValue(0)
       this.animatedCurrentCardOpacity.setValue(1)
       this.animatedNextCardTranslateX.setValue(layout.width + 100)
@@ -203,29 +208,45 @@ export default class SceneTransition extends React.Component<
         currentCardTranslateX: -30,
         nextCardTranslateX: 0,
       })
-      const onTransitionEnd = ({ finished }: { finished: boolean }) => {
-        if (finished) {
-          // The transition has just finished. Replace the current scene container at initial position.
-          this.animatedCurrentCardTranslateX.setValue(0)
-          this.animatedCurrentCardOpacity.setValue(1)
-          this.animatedNextCardTranslateX.setValue(layout.width + 100)
-          this.animatedNextCardOpacity.setValue(0)
-          this.setState({
-            isAnimating: false,
-          })
-          this.animation = undefined
-        }
-        this.props.onTransitionEnd && this.props.onTransitionEnd(finished)
-      }
-
       // If the user set a delay used it tro display the next scene, otherwize display the scene at the transition end
       if (delayRender) {
         this.startAnimation()
-        setTimeout(() => onTransitionEnd({ finished: true }), delayRender)
+        this.timeout = setTimeout(
+          () => this.onTransitionEnd({ finished: true }),
+          delayRender
+        )
       } else {
-        this.startAnimation(onTransitionEnd)
+        this.startAnimation(this.onTransitionEnd)
       }
     }
+  }
+
+  public onComponentWillUnmount() {
+    this.onTransitionEnd({ finished: this.state.isWaitingForNextScene })
+  }
+
+  private onTransitionEnd = ({ finished }: { finished: boolean }) => {
+    if (this.timeout) {
+      clearTimeout(this.timeout)
+      this.timeout = undefined
+    }
+    const { layout } = this.state
+    if (finished && layout) {
+      // The transition has just finished. Replace the current scene container at initial position.
+      this.animatedCurrentCardTranslateX.setValue(0)
+      this.animatedCurrentCardOpacity.setValue(1)
+      this.animatedNextCardTranslateX.setValue(layout.width + 100)
+      this.animatedNextCardOpacity.setValue(0)
+      this.setState(
+        {
+          isAnimating: false,
+        },
+        () => {
+          this.animation = undefined
+        }
+      )
+    }
+    this.props.onTransitionEnd && this.props.onTransitionEnd(finished)
   }
 
   private startAnimation(
@@ -234,7 +255,12 @@ export default class SceneTransition extends React.Component<
     if (!this.animation) return
     this.animation.currentCardFading.start()
     this.animation.currentCardTranslateX.start()
-    this.animation.nextCardTranslateX.start(callBack)
+    // Callack will be triggered a frame after animation complement to prevent a bug which swallows the last value on slow device.
+    this.animation.nextCardTranslateX.start(result =>
+      requestAnimationFrame(
+        () => callBack && callBack({ finished: result.finished })
+      )
+    )
   }
 
   /**
