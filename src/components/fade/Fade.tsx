@@ -12,7 +12,6 @@ export type FadeProps = {
   isVisible: boolean
   isAnimatedOnMount?: boolean
   duration?: number
-  palette?: 'primary' | 'secondary'
   style?: ViewStyle
   onAnimationEnd?: () => void
   children: React.ReactNode
@@ -31,7 +30,7 @@ export default class Fade extends React.Component<FadeProps, State> {
 
   constructor(props: FadeProps) {
     super(props)
-    const { isAnimatedOnMount, isVisible } = props
+    const { isAnimatedOnMount = true, isVisible } = props
     this.duration = props.duration || 250
     const opacityFrom = !!isAnimatedOnMount
       ? isVisible
