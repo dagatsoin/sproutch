@@ -4,6 +4,7 @@ import { UserInterface } from 'reactxp'
 
 import { StyleProp } from '../../styles/createStyle'
 import { View, ViewOnLayoutEvent, ViewStyle } from '../view'
+import * as styles from './styles'
 
 export type LinearGradientProps = {
   colors: string[]
@@ -21,14 +22,17 @@ class LinearGradient extends React.PureComponent<LinearGradientProps, {}> {
 
   public render() {
     const { style } = this.props
-
+    const gradientContainerStyle = styles.createGradientContainerStyle(style)
     return (
       <View
-        style={style}
+        style={[gradientContainerStyle, style]}
         onLayout={this.measure}
         ref={(comp: any) => (this.rootRef = comp)}
       >
-        <View ref={(comp: any) => (this.backgroundImageRef = comp)} />
+        <View
+          style={style}
+          ref={(comp: any) => (this.backgroundImageRef = comp)}
+        />
       </View>
     )
   }
