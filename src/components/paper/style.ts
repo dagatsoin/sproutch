@@ -2,7 +2,13 @@ import { Theme } from '../../styles'
 import { StyleProp, Styles } from '../../styles/createStyle'
 import { ShadowProps } from '../shadow/Shadow'
 import { ViewStyle } from '../view'
-import { PaperStyle, PaperStyleOverride } from './PaperStyle'
+
+export type PaperStyle = {
+  root: StyleProp<ViewStyle>
+  content: StyleProp<ViewStyle>
+}
+
+export type PaperStyleOverride = Partial<PaperStyle>
 
 // TODO: the keylight should be fixed at top
 type NativePaperStyle = {
@@ -38,6 +44,12 @@ export function nativePaperStyle(
       ...((style && style.content) as object),
     }),
   }
+}
+
+export function createWebPaperStyle(theme: Theme<any, any>) {
+  return Styles.createViewStyle({
+    backgroundColor: theme.palette.background.paper,
+  })
 }
 
 // Higly inspired from Material UI

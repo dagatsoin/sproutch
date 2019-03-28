@@ -4,7 +4,7 @@ import { findDOMNode } from 'react-dom'
 import { ThemeContext } from '../../styles'
 import { View } from '../view'
 import { PaperProps } from './PaperProps'
-import { shadows } from './style'
+import { createWebPaperStyle, shadows } from './style'
 
 export default class Paper extends React.Component<PaperProps, {}> {
   private containerRef: View
@@ -23,11 +23,12 @@ export default class Paper extends React.Component<PaperProps, {}> {
 
     return (
       <ThemeContext.Consumer>
-        {_theme => {
+        {theme => {
+          const rootStyle = createWebPaperStyle(theme)
           return (
             <View
               ref={(comp: any) => (this.containerRef = comp)}
-              style={[style.root, style.content]}
+              style={[rootStyle, style.root, style.content]}
               {...props}
             />
           )

@@ -1,5 +1,5 @@
 import { ViewProps } from '../view'
-import { PaperStyleOverride } from './PaperStyle'
+import { PaperStyleOverride } from './style'
 
 export type PaperProps = {
   elevation?: number
