@@ -16,11 +16,13 @@ export type ButtonStyle = {
   icon: StyleProp<Types.TextStyle>
   label: StyleProp<Types.TextStyle>
   overlay: StyleProp<ViewStyle>
-  touchDetector: StyleProp<ViewStyle>
+  fitParent: StyleProp<ViewStyle>
 }
 
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+
 export type ButtonStyleOverride = Partial<
-  ButtonStyle & {
+  Omit<ButtonStyle, 'fitParent'> & {
     hasIcon: StyleProp<ViewStyle>
     hasLabel: StyleProp<ViewStyle>
   }
@@ -178,7 +180,7 @@ export default function({
       },
       false
     ),
-    touchDetector: Styles.createViewStyle({
+    fitParent: Styles.createViewStyle({
       position: 'absolute',
       top: 0,
       right: 0,

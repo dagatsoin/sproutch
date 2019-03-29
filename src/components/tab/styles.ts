@@ -6,12 +6,14 @@ import { darkShadow, lightShadow, override, Theme } from '../../styles/theme'
 import { TextStyle } from '../text'
 import { ViewStyle } from '../view'
 
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+
 export type TabStyle = {
   root: StyleProp<ViewStyle>
   icon: StyleProp<Types.TextStyle>
   label: StyleProp<Types.TextStyle>
   overlay: StyleProp<ViewStyle>
-  touchDetector: StyleProp<ViewStyle>
+  fitParent: StyleProp<ViewStyle>
 }
 
 export type TabsBarStyle = {
@@ -24,20 +26,21 @@ export type TabsBarStyle = {
   cursor: StyleProp<ViewStyle>
   scrollView: StyleProp<Types.ScrollViewStyle>
   paddingHorizontal: number
-  touchDetector: StyleProp<ViewStyle>
+  fitParent: StyleProp<ViewStyle>
 }
 
 export type TabStyleOverride = Partial<
-  TabStyle & {
+  Omit<TabStyle, 'fitParent'> & {
     hasIcon: StyleProp<ViewStyle>
     hasLabel: StyleProp<ViewStyle>
     isActiveLabel: StyleProp<TextStyle>
   }
 >
 
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
-
-export type TabBarStyleOverride = Omit<TabsBarStyle, 'paddingHorizontal'>
+export type TabBarStyleOverride = Omit<
+  TabsBarStyle,
+  'paddingHorizontal' | 'fitParent'
+>
 
 export const tabStyle = function({
   theme,
@@ -207,16 +210,13 @@ export const tabStyle = function({
       },
       false
     ),
-    touchDetector: Styles.createViewStyle(
-      {
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0,
-      },
-      false
-    ),
+    fitParent: Styles.createViewStyle({
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+    }),
   }
 }
 
@@ -341,7 +341,7 @@ export const tabsBarStyle = function({
         'scrollView'
       ),
     }),
-    touchDetector: Styles.createViewStyle({
+    fitParent: Styles.createViewStyle({
       position: 'absolute',
       top: 0,
       right: 0,

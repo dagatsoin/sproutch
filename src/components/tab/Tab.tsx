@@ -112,7 +112,11 @@ class Tab extends React.Component<CompleteProps & ViewProps, State> {
               {iconSlot && iconSlot(styles.icon)}
               {label && <Text style={styles.label}>{label}</Text>}
               {badgeSlot}
-              <Fade isVisible={this.state.isHover} duration={75}>
+              <Fade
+                style={styles.fitParent}
+                isVisible={this.state.isHover}
+                duration={75}
+              >
                 <View style={styles.overlay} />
               </Fade>
               {!isDisable && (
@@ -124,7 +128,7 @@ class Tab extends React.Component<CompleteProps & ViewProps, State> {
                   palette={palette}
                 />
               )}
-              <View style={styles.touchDetector}>
+              <View style={styles.fitParent}>
                 <Button
                   disabled={isDisable}
                   style={Styles.createViewStyle({

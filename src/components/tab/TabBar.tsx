@@ -689,7 +689,7 @@ class Tabs extends React.Component<TabBarProps, State> {
             onRef={(emitter: Emitter) => (this.leftIndicatorRipple = emitter)}
             palette={palette}
           />
-          <View style={styles.touchDetector}>
+          <View style={styles.fitParent}>
             <Button
               style={Styles.createViewStyle({
                 flex: 1,
@@ -726,7 +726,7 @@ class Tabs extends React.Component<TabBarProps, State> {
             onRef={(emitter: Emitter) => (this.rightIndicatorRipple = emitter)}
             palette={palette}
           />
-          <View style={styles.touchDetector}>
+          <View style={styles.fitParent}>
             <Button
               style={Styles.createViewStyle({
                 flex: 1,

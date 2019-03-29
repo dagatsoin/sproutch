@@ -1,18 +1,18 @@
 import * as React from 'react'
 import { Animated, Styles } from 'reactxp'
 
+import { StyleProp } from '../../styles'
 import {
   AnimatedCompositeAnimation,
   AnimatedViewStyleRuleSet,
 } from '../animated'
 import { ViewStyle } from '../view'
-import fadeStyle from './style'
 
 export type FadeProps = {
   isVisible: boolean
   isAnimatedOnMount?: boolean
   duration?: number
-  style?: ViewStyle
+  style?: StyleProp<ViewStyle>
   onAnimationEnd?: () => void
   children: React.ReactNode
 }
@@ -66,7 +66,7 @@ export default class Fade extends React.Component<FadeProps, State> {
     const { isVisible } = this.state
     const { children, style } = this.props
     return (
-      <Animated.View style={[fadeStyle, style, this.animatedStyle]}>
+      <Animated.View style={[style, this.animatedStyle]}>
         {isVisible && children}
       </Animated.View>
     )

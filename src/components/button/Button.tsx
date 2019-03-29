@@ -94,7 +94,11 @@ class Button extends React.PureComponent<ButtonProps, State> {
               {label && <Text style={styles.label}>{label}</Text>}
               {badgeSlot}
               {!isDisabled && (
-                <Fade isVisible={this.state.isHover} duration={75}>
+                <Fade
+                  style={styles.fitParent}
+                  isVisible={this.state.isHover}
+                  duration={75}
+                >
                   <View style={styles.overlay} />
                 </Fade>
               )}
@@ -108,7 +112,7 @@ class Button extends React.PureComponent<ButtonProps, State> {
                   isOnPaper={variant !== 'contained'}
                 />
               )}
-              <View style={styles.touchDetector}>
+              <View style={styles.fitParent}>
                 <RXButton
                   disabled={isDisabled}
                   style={Styles.createViewStyle({
