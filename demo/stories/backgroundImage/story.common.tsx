@@ -19,30 +19,38 @@ export const backgroundImage = function({
   return (
     <View
       style={Styles.createViewStyle({
-        borderStyle: 'solid',
-        borderColor: '#ddd',
-        borderWidth: 10,
-        overflow: 'hidden',
-        width: number('Container width', containerWidth, {
-          range: true,
-          min: 0,
-          max: 500,
-          step: 20,
-        }),
-        height: number('Container height', containerHeight, {
-          range: true,
-          min: 0,
-          max: 500,
-          step: 20,
-        }),
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
       })}
     >
-      <BackgroundImage
-        uri="https://i.ibb.co/Yhs3Ff5/btn-bg.png"
-        resizeMode={select('Resize mode', ['stretch', 'cover', 'contain', 'auto'], resizeMode)}
-        repeat={boolean('Repeat image', repeat)}
-        position={array('Position in % or px', [position[0] + '%', position[1] + '%'], ', ')}
-      />
+      <View
+        style={Styles.createViewStyle({
+          borderStyle: 'solid',
+          borderColor: '#ddd',
+          borderWidth: 10,
+          overflow: 'hidden',
+          width: number('Container width', containerWidth, {
+            range: true,
+            min: 0,
+            max: 500,
+            step: 20,
+          }),
+          height: number('Container height', containerHeight, {
+            range: true,
+            min: 0,
+            max: 500,
+            step: 20,
+          }),
+        })}
+      >
+        <BackgroundImage
+          uri="https://i.ibb.co/Yhs3Ff5/btn-bg.png"
+          resizeMode={select('Resize mode', ['stretch', 'cover', 'contain', 'auto'], resizeMode)}
+          repeat={boolean('Repeat image', repeat)}
+          position={array('Position in % or px', [position[0] + '%', position[1] + '%'], ', ')}
+        />
+      </View>
     </View>
   )
 }

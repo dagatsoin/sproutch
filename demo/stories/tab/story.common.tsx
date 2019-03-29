@@ -135,9 +135,10 @@ export default function({
   return (
     <View
       style={Styles.createViewStyle({
-        flex: 1
+        flex: 1,
+        justifyContent: 'center'
       })}
-    > 
+    >
     <TabBar
       hasIconOnTop={boolean('Has two lines', hasIconOnTop)}
       palette={paletteKnob || undefined}
