@@ -47,7 +47,7 @@ class Button extends React.PureComponent<ButtonProps, State> {
             elevation = 0,
             isDisabled = false,
             palette = 'primary',
-            variant,
+            variant = 'contained',
             isDense = false,
             iconSlot,
             backgroundSlot,
