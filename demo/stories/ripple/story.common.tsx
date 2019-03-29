@@ -65,7 +65,6 @@ export default class extends React.Component<{}, State> {
                 </Text>
               </View>
               <Ripple
-                isOnPaper
                 color="#ff0000"
                 onRef={(e: IEmitter) => (this.ripple0 = e)}
               />
@@ -123,7 +122,7 @@ export default class extends React.Component<{}, State> {
                   {this.state.isClicked1 ? 'Clicked' : 'Click! Click!'}
                 </Text>
               </View>
-              <Ripple isOnPaper onRef={(e: IEmitter) => (this.ripple1 = e)} />
+              <Ripple onRef={(e: IEmitter) => (this.ripple1 = e)} />
               <View
                 style={Styles.createViewStyle({
                   position: 'absolute',

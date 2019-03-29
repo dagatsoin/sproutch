@@ -46,11 +46,13 @@ export const tabStyle = function({
   theme,
   palette,
   style = {},
+  overlayColor,
   options,
 }: {
   theme: Theme<any, any>
   palette?: 'primary' | 'secondary' | ''
   style?: Partial<TabStyleOverride>
+  overlayColor: string
   options?: {
     mustGrow: boolean
     hasIconOnTop: boolean
@@ -82,11 +84,6 @@ export const tabStyle = function({
       : theme.palette.text.disabled
 
   const twoLinesPadding = theme.spacing * 1.5
-
-  const overlayColor =
-    options && options.isDisabled
-      ? undefined
-      : theme.palette[palette || 'primary'].main
 
   const overlayOpacity = !!overlayColor
     ? colorManipulator.getLuminance(overlayColor) >= 0.5

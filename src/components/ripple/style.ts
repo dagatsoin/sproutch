@@ -1,6 +1,4 @@
-import { colorManipulator } from '../../styles/colorManipulator'
 import { StyleProp, Styles } from '../../styles/createStyle'
-import { Theme } from '../../styles/theme'
 import { ViewStyle } from '../view'
 
 type RootStyle = {
@@ -29,34 +27,13 @@ export const rippleStyle = function({
   x,
   y,
   radius,
-  theme,
-  palette,
-  color,
-  isOnPaper = false,
+  color: backgroundColor,
 }: {
   x: number
   y: number
   radius: number
-  theme: Theme<any, any>
-  isOnPaper?: boolean
   color?: string
-  palette?: 'primary' | 'secondary'
 }): RippleStyle {
-  const backgroundColor =
-    color ||
-    (isOnPaper
-      ? // The container used the paper background
-        palette
-        ? theme.palette[palette].main
-        : theme.palette.type === 'light'
-        ? '#000'
-        : '#fff'
-      : // The primary color is used as the container background
-      colorManipulator.getLuminance(theme.palette[palette || 'primary'].main) >=
-        0.5
-      ? '#000'
-      : '#fff')
-
   return {
     ripple: Styles.createViewStyle({
       position: 'absolute',

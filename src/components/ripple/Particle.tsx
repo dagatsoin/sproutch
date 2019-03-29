@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Animated, Styles, Types } from 'reactxp'
 
-import { darkShadow, ThemeContext } from '../../styles/theme'
+import { darkShadow } from '../../styles/theme'
 import { ParticleProps } from './ParticleProps'
 import { rippleStyle } from './style'
 
@@ -41,41 +41,32 @@ class Particle extends React.PureComponent<ParticleProps, {}> {
   public render() {
     const { width, height } = this.props.emitterLayout
     const radiusFrom = Math.min(width, height) / 2
+    const { options, x, y } = this.props
+    const { color, isOnPaper, palette } = options || {
+      color: undefined,
+      isOnPaper: false,
+      palette: undefined,
+    }
+    const styleSheet = rippleStyle({
+      x,
+      y,
+      radius: radiusFrom,
+      color,
+    })
     return (
-      <ThemeContext.Consumer>
-        {theme => {
-          const { options, x, y } = this.props
-          const { color, isOnPaper, palette } = options || {
-            color: undefined,
-            isOnPaper: false,
-            palette: undefined,
-          }
-          const styleSheet = rippleStyle({
-            x,
-            y,
-            isOnPaper,
-            radius: radiusFrom,
-            color,
-            palette,
-            theme,
-          })
-          return (
-            <Animated.View
-              style={[
-                styleSheet.ripple,
-                Styles.createViewStyle(
-                  {
-                    left: x - 5,
-                    top: y - 5,
-                  },
-                  false
-                ),
-                this.animatedStyle,
-              ]}
-            />
-          )
-        }}
-      </ThemeContext.Consumer>
+      <Animated.View
+        style={[
+          styleSheet.ripple,
+          Styles.createViewStyle(
+            {
+              left: x - 5,
+              top: y - 5,
+            },
+            false
+          ),
+          this.animatedStyle,
+        ]}
+      />
     )
   }
 

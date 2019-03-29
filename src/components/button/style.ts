@@ -33,11 +33,13 @@ export default function({
   palette = 'primary',
   variant = 'contained',
   style = {},
+  overlayColor,
   options,
 }: {
   theme: Theme<any, any>
   palette?: 'primary' | 'secondary'
   variant?: 'contained' | 'outlined' | 'text'
+  overlayColor: string
   style?: Partial<ButtonStyleOverride>
   options?: {
     isDense: boolean
@@ -68,15 +70,6 @@ export default function({
         ? colorManipulator.fade(theme.palette.text.disabled, 0.2)
         : theme.palette[palette].main
       : 'transparent'
-
-  const overlayColor =
-    options && options.isDisabled
-      ? undefined
-      : variant === 'contained'
-      ? colorManipulator.getLuminance(theme.palette[palette].main) >= 0.5
-        ? '#000'
-        : '#fff'
-      : theme.palette[palette].main
 
   const borderColor =
     variant === 'outlined' ? theme.palette.grey['500'] : undefined

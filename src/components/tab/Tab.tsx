@@ -7,6 +7,7 @@ import {
 } from 'reactxp/dist/common/Types'
 
 import { shouldComponentUpdate } from '../../helpers'
+import { getMaterialOverlayColor } from '../../styles/getMaterialOverlayColor'
 import { ThemeContext } from '../../styles/theme'
 import { Fade } from '../fade'
 import { Ripple } from '../ripple'
@@ -89,10 +90,17 @@ class Tab extends React.Component<CompleteProps & ViewProps, State> {
             onClick = noop,
           } = this.props
 
+          const isOnPaper = palette !== undefined
+          const overlayColor = getMaterialOverlayColor({
+            palette: isOnPaper ? palette : undefined,
+            theme,
+          })
+
           const styles = tabStyle({
             theme,
             palette,
             style,
+            overlayColor,
             options: {
               hasIconOnTop,
               isDisabled: isDisable,
@@ -102,10 +110,6 @@ class Tab extends React.Component<CompleteProps & ViewProps, State> {
               hasLabel: !!label,
             },
           })
-
-          const rippleColor =
-            (style && style.overlay && style.overlay['backgroundColor']) ||
-            undefined
 
           return (
             <View onLayout={this.onLayout} style={styles.root}>
@@ -124,8 +128,7 @@ class Tab extends React.Component<CompleteProps & ViewProps, State> {
                   onRef={(emitter: Emitter) => {
                     this.ripple = emitter
                   }}
-                  color={rippleColor}
-                  palette={palette}
+                  color={overlayColor}
                 />
               )}
               <View style={styles.fitParent}>

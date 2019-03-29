@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Button as RXButton, Styles, Types } from 'reactxp'
 
 import { StyleProp } from '../../styles'
+import { getMaterialOverlayColor } from '../../styles/getMaterialOverlayColor'
 import { Theme, ThemeContext } from '../../styles/theme'
 import { Fade } from '../fade'
 import { Paper } from '../paper'
@@ -56,24 +57,26 @@ class Button extends React.PureComponent<ButtonProps, State> {
             style,
           } = this.props
 
+          const borderRadius =
+            (style && style.root && style.root['borderRadius']) || 0
+          const isOnPaper = variant !== 'contained'
+          const overlayColor = getMaterialOverlayColor({
+            palette: isOnPaper ? palette : undefined,
+            theme,
+          })
+
           const styles = createButtonStyle({
             theme,
             palette,
             style,
             variant,
+            overlayColor,
             options: {
               isDense,
               isDisabled,
               hasIcon: !!iconSlot,
             },
           })
-
-          const borderRadius =
-            (style && style.root && style.root['borderRadius']) || 0
-
-          const rippleColor =
-            (style && style.overlay && style.overlay['backgroundColor']) ||
-            undefined
 
           return (
             <Paper
@@ -107,9 +110,7 @@ class Button extends React.PureComponent<ButtonProps, State> {
                   onRef={(emitter: Emitter) => {
                     this.ripple = emitter
                   }}
-                  color={rippleColor}
-                  palette={palette}
-                  isOnPaper={variant !== 'contained'}
+                  color={overlayColor}
                 />
               )}
               <View style={styles.fitParent}>

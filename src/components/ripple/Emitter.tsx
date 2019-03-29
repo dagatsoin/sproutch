@@ -10,9 +10,7 @@ import { containerStyle } from './style'
 type Props = {
   onRef?: (emitter: Emitter) => void
   options: {
-    isOnPaper?: boolean
     color?: string
-    palette?: 'primary' | 'secondary'
   }
 }
 
@@ -90,7 +88,7 @@ class Emitter extends React.PureComponent<Props, State> implements IEmitter {
     const radiusFrom = Math.min(width, height) / 2
     const posX = cursorX - radiusFrom
     const posY = cursorY - radiusFrom
-    const { color, isOnPaper, palette } = this.props.options
+    const { color } = this.props.options
 
     this.setState(
       state => {
@@ -105,8 +103,6 @@ class Emitter extends React.PureComponent<Props, State> implements IEmitter {
               emitterLayout: rect,
               options: {
                 color,
-                isOnPaper,
-                palette,
               },
               onDeath: this.onParticleDeath.bind(this),
             },

@@ -3,6 +3,7 @@ import { Animated, Button, Platform, ScrollView, Types } from 'reactxp'
 
 import { recall, shouldComponentUpdate } from '../../helpers'
 import { Styles } from '../../styles'
+import { getMaterialOverlayColor } from '../../styles/getMaterialOverlayColor'
 import { Theme } from '../../styles/theme'
 import { InjectedTheme, withTheme } from '../../styles/withTheme'
 import {
@@ -675,7 +676,7 @@ class Tabs extends React.Component<TabBarProps, State> {
 
   private renderLeftIndicator(styles: TabsBarStyle) {
     const { isScrollEnabled } = this.state
-    const { palette, leftScrollButton } = this.props
+    const { leftScrollButton, palette, theme } = this.props
 
     return (
       isScrollEnabled &&
@@ -686,8 +687,8 @@ class Tabs extends React.Component<TabBarProps, State> {
         >
           {leftScrollButton(this.props.theme!)}
           <Ripple
+            color={getMaterialOverlayColor({ palette, theme: theme! })}
             onRef={(emitter: Emitter) => (this.leftIndicatorRipple = emitter)}
-            palette={palette}
           />
           <View style={styles.fitParent}>
             <Button
@@ -712,7 +713,7 @@ class Tabs extends React.Component<TabBarProps, State> {
 
   private renderRightIndicator(styles: TabsBarStyle) {
     const { isScrollEnabled } = this.state
-    const { palette, rightScrollButton } = this.props
+    const { rightScrollButton, palette, theme } = this.props
 
     return (
       isScrollEnabled &&
@@ -723,8 +724,8 @@ class Tabs extends React.Component<TabBarProps, State> {
         >
           {rightScrollButton(this.props.theme!)}
           <Ripple
+            color={getMaterialOverlayColor({ palette, theme: theme! })}
             onRef={(emitter: Emitter) => (this.rightIndicatorRipple = emitter)}
-            palette={palette}
           />
           <View style={styles.fitParent}>
             <Button
