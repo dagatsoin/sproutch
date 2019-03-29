@@ -45,6 +45,8 @@ export default function({
     isDisabled: boolean
   }
 }): ButtonStyle {
+  const height = options && options.isDense ? 32 : 36
+
   const paddingVertical = options && options.isDense ? 9 : 8.5
 
   const fontSize = options && options.isDense ? 14 : 16
@@ -90,6 +92,7 @@ export default function({
   return {
     root: Styles.createViewStyle(
       {
+        height,
         alignSelf: 'center',
         borderRadius: theme.shape.borderRadius,
 
