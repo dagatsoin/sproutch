@@ -40,7 +40,7 @@ export class ScrollIndicator extends React.Component<Props, State> {
     const overlayStyle = createScrollIndicatorOverlayStyle(overlayColor, theme)
     return (
       <View style={style} onStartShouldSetResponder={() => true}>
-        {slot && slot(this.props.theme!)}
+        {slot && slot(theme)}
         <Ripple
           color={overlayColor}
           onRef={(emitter: Emitter) => (this.ripple = emitter)}

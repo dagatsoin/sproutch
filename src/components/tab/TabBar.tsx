@@ -31,7 +31,9 @@ export type TabBarProps = {
   leftScrollButton?: (theme: Theme<any, any>) => React.ReactNode
   rightScrollButton?: (theme: Theme<any, any>) => React.ReactNode
   onChange?: (tabId: string) => void
-} & InjectedTheme<Theme<any, any>>
+}
+
+type CompleteProps = TabBarProps & InjectedTheme<Theme<any, any>>
 
 export type CustomTabBarCursorAnimation = (
   cursorValues: AnimatedValues,
@@ -109,7 +111,7 @@ type TabsLayout = {
   tabsState: TabLayout[]
 }
 
-class Tabs extends React.Component<TabBarProps, State> {
+class Tabs extends React.Component<CompleteProps, State> {
   get activeTab(): TabState | undefined {
     return this.SAMmodel.tabsState.find(s => s.id === this.state.activeTabId)
   }
@@ -234,7 +236,10 @@ class Tabs extends React.Component<TabBarProps, State> {
     500
   )
 
-  public static getDerivedStateFromProps(nextProps: TabBarProps, state: State) {
+  public static getDerivedStateFromProps(
+    nextProps: CompleteProps,
+    state: State
+  ) {
     const hasActiveTabFromPropsChanged =
       nextProps.activeTabId !== state.activeIdFromProps
     return {
@@ -247,7 +252,7 @@ class Tabs extends React.Component<TabBarProps, State> {
     }
   }
 
-  constructor(props: TabBarProps) {
+  constructor(props: CompleteProps) {
     super(props)
     const rotateX = this.cursorAnimatedValues.rotateX.interpolate({
       inputRange: [0, 1],
@@ -282,7 +287,7 @@ class Tabs extends React.Component<TabBarProps, State> {
     }
   }
 
-  public shouldComponentUpdate(nextProps: TabBarProps, nextState: State) {
+  public shouldComponentUpdate(nextProps: CompleteProps, nextState: State) {
     return shouldComponentUpdate(nextProps, nextState, this.props, this.state)
   }
 
@@ -324,7 +329,7 @@ class Tabs extends React.Component<TabBarProps, State> {
     )
   }
 
-  public componentDidUpdate(_prevProps: TabBarProps, prevState: State) {
+  public componentDidUpdate(_prevProps: CompleteProps, prevState: State) {
     // Prevent cursor animation when scrolling with arrows
     if (
       this.state.activeTabId !== prevState.activeTabId &&
@@ -396,7 +401,7 @@ class Tabs extends React.Component<TabBarProps, State> {
           this.props.renderCustomCursor(
             activeTabLayout,
             barLayout,
-            this.props.theme!
+            this.props.theme
           )
         ) : (
           <View style={style.cursor} />
@@ -421,7 +426,7 @@ class Tabs extends React.Component<TabBarProps, State> {
             palette={palette}
             style={styles.leftIndicator}
             slot={leftScrollButton}
-            theme={theme!}
+            theme={theme}
             onPress={() => this.rollLeft()}
           />
         )}
@@ -430,7 +435,7 @@ class Tabs extends React.Component<TabBarProps, State> {
             palette={palette}
             style={styles.rightIndicator}
             slot={rightScrollButton}
-            theme={theme!}
+            theme={theme}
             onPress={() => this.rollRight()}
           />
         )}
@@ -452,10 +457,10 @@ class Tabs extends React.Component<TabBarProps, State> {
 
   private getStyles(isScrollEnabled: boolean) {
     const { hasIconOnTop, palette, theme, style } = this.props
-    const overlayColor = getMaterialOverlayColor({ palette, theme: theme! })
+    const overlayColor = getMaterialOverlayColor({ palette, theme })
 
     return tabsBarStyle({
-      theme: theme!,
+      theme,
       palette,
       style,
       overlayColor,
@@ -718,7 +723,7 @@ class Tabs extends React.Component<TabBarProps, State> {
       ? this.props.customCursorAnimation(
           this.cursorAnimatedValues,
           this.activeTab!.layout!,
-          this.props.theme!
+          this.props.theme
         )
       : {}
 
@@ -863,4 +868,4 @@ function getFirstEntirelyDisplayedTab(
     .find(t => !isTabOutsideOnLeft(t, tabsLayout))
 }
 
-export default withTheme()(Tabs)
+export default withTheme(Tabs)

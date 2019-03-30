@@ -11,14 +11,13 @@ export function getMaterialOverlayColor({
   return isOnPaper
     ? // The container used the paper background
       palette
-      ? theme && theme.palette[palette].main
-      : theme && theme.palette.type === 'light'
+      ? theme.palette[palette].main
+      : theme.palette.type === 'light'
       ? '#000'
       : '#fff'
     : // The primary color is used as the container background
-    colorManipulator.getLuminance(
-        theme && theme.palette[palette || 'primary'].main
-      ) >= 0.5
+    colorManipulator.getLuminance(theme.palette[palette || 'primary'].main) >=
+      0.5
     ? '#000'
     : '#fff'
 }
