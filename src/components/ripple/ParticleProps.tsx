@@ -1,15 +1,11 @@
 import { LayoutInfo } from '../view'
 
-export type ParticleProps = {
+export type ParticleProps<O> = {
   id: number
   isDying: boolean
   emitterLayout: LayoutInfo
   x: number
   y: number
-  options?: {
-    isOnPaper?: boolean
-    color?: string
-    palette?: 'primary' | 'secondary'
-  }
+  options: O
   onDeath: () => void
 }

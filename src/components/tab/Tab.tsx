@@ -7,14 +7,14 @@ import {
 } from 'reactxp/dist/common/Types'
 
 import { shouldComponentUpdate } from '../../helpers'
-import { getMaterialOverlayColor } from '../../styles/getMaterialOverlayColor'
+import { getMaterialOverlayColor } from '../../styles/helpers'
 import { ThemeContext } from '../../styles/theme'
 import { Fade } from '../fade'
 import { Ripple } from '../ripple'
 import Emitter from '../ripple/Emitter'
 import { Text, TextStyle } from '../text'
 import { View, ViewProps } from '../view'
-import { tabStyle, TabStyleOverride } from './styles'
+import { fitParent, tabStyle, TabStyleOverride } from './styles'
 
 export type TabProps = {
   id: string
@@ -117,7 +117,7 @@ class Tab extends React.Component<CompleteProps & ViewProps, State> {
               {label && <Text style={styles.label}>{label}</Text>}
               {badgeSlot}
               <Fade
-                style={styles.fitParent}
+                style={fitParent}
                 isVisible={this.state.isHover}
                 duration={75}
               >
@@ -131,7 +131,7 @@ class Tab extends React.Component<CompleteProps & ViewProps, State> {
                   color={overlayColor}
                 />
               )}
-              <View style={styles.fitParent}>
+              <View style={fitParent}>
                 <Button
                   disabled={isDisable}
                   style={Styles.createViewStyle({

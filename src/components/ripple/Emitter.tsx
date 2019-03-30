@@ -3,15 +3,13 @@ import { Button, Platform, Types, UserInterface } from 'reactxp'
 
 import { LayoutInfo, View } from '../view'
 import { IEmitter } from './IEmitter'
-import Particle from './Particle'
 import { ParticleProps } from './ParticleProps'
 import { containerStyle } from './style'
 
 type Props = {
+  particle: React.ComponentType
   onRef?: (emitter: Emitter) => void
-  options: {
-    color?: string
-  }
+  options: object
 }
 
 type State = {
@@ -20,7 +18,7 @@ type State = {
   rect: LayoutInfo
 }
 
-type ParticleInfos = ParticleProps & { id: number }
+type ParticleInfos = ParticleProps<any> & { id: number }
 
 class Emitter extends React.PureComponent<Props, State> implements IEmitter {
   private static isWeb = Platform.getType() === 'web'
@@ -35,6 +33,7 @@ class Emitter extends React.PureComponent<Props, State> implements IEmitter {
   private removeQueue: Array<() => void> = []
 
   public render() {
+    const Particle = this.props.particle
     return (
       <View ref={this.onRef} style={containerStyle.root}>
         <Button
@@ -88,7 +87,7 @@ class Emitter extends React.PureComponent<Props, State> implements IEmitter {
     const radiusFrom = Math.min(width, height) / 2
     const posX = cursorX - radiusFrom
     const posY = cursorY - radiusFrom
-    const { color } = this.props.options
+    const { options } = this.props
 
     this.setState(
       state => {
@@ -101,9 +100,7 @@ class Emitter extends React.PureComponent<Props, State> implements IEmitter {
               y: posY,
               isDying: false,
               emitterLayout: rect,
-              options: {
-                color,
-              },
+              options,
               onDeath: this.onParticleDeath.bind(this),
             },
             ...state.particlesInfos,

@@ -1,9 +1,9 @@
 import * as React from 'react'
-import { Animated, Button, Platform, ScrollView, Types } from 'reactxp'
+import { Animated, Platform, ScrollView } from 'reactxp'
 
 import { recall, shouldComponentUpdate } from '../../helpers'
 import { Styles } from '../../styles'
-import { getMaterialOverlayColor } from '../../styles/getMaterialOverlayColor'
+import { getMaterialOverlayColor } from '../../styles/helpers'
 import { Theme } from '../../styles/theme'
 import { InjectedTheme, withTheme } from '../../styles/withTheme'
 import {
@@ -11,9 +11,8 @@ import {
   AnimatedViewStyleRuleSet,
 } from '../animated'
 import { Paper } from '../paper'
-import { Ripple } from '../ripple'
-import Emitter from '../ripple/Emitter'
 import { LayoutInfo, View } from '../view'
+import { ScrollIndicator } from './ScrollIndicator'
 import { TabBarStyleOverride, tabsBarStyle, TabsBarStyle } from './styles'
 import Tab, { TabProps } from './Tab'
 
@@ -141,8 +140,6 @@ class Tabs extends React.Component<TabBarProps, State> {
     hasRightScrollIndicator: false,
     wrapperWidth: 0,
   }
-  private rightIndicatorRipple: Emitter
-  private leftIndicatorRipple: Emitter
 
   private layout: TabsLayout = {
     currentScroll: 0,
@@ -415,10 +412,28 @@ class Tabs extends React.Component<TabBarProps, State> {
     hasLeftScrollIndicator: boolean,
     hasRightScrollIndicator: boolean
   ) {
+    const { palette, theme, leftScrollButton, rightScrollButton } = this.props
+
     return (
       <>
-        {hasLeftScrollIndicator && this.renderLeftIndicator(styles)}
-        {hasRightScrollIndicator && this.renderRightIndicator(styles)}
+        {hasLeftScrollIndicator && leftScrollButton && (
+          <ScrollIndicator
+            palette={palette}
+            style={styles.leftIndicator}
+            slot={leftScrollButton}
+            theme={theme!}
+            onPress={() => this.rollLeft()}
+          />
+        )}
+        {hasRightScrollIndicator && rightScrollButton && (
+          <ScrollIndicator
+            palette={palette}
+            style={styles.rightIndicator}
+            slot={rightScrollButton}
+            theme={theme!}
+            onPress={() => this.rollRight()}
+          />
+        )}
         <ScrollView
           ref={(comp: any) => (this.scrollViewRef = comp)}
           scrollEnabled={isScrollEnabled}
@@ -437,11 +452,13 @@ class Tabs extends React.Component<TabBarProps, State> {
 
   private getStyles(isScrollEnabled: boolean) {
     const { hasIconOnTop, palette, theme, style } = this.props
+    const overlayColor = getMaterialOverlayColor({ palette, theme: theme! })
 
     return tabsBarStyle({
       theme: theme!,
       palette,
       style,
+      overlayColor,
       options: {
         hasIconOnTop,
         isScrollEnabled,
@@ -672,80 +689,6 @@ class Tabs extends React.Component<TabBarProps, State> {
           this.layout.currentScroll < this.layout.maxScroll,
       })
     }
-  }
-
-  private renderLeftIndicator(styles: TabsBarStyle) {
-    const { isScrollEnabled } = this.state
-    const { leftScrollButton, palette, theme } = this.props
-
-    return (
-      isScrollEnabled &&
-      leftScrollButton && (
-        <View
-          style={styles.leftIndicator}
-          onStartShouldSetResponder={() => true}
-        >
-          {leftScrollButton(this.props.theme!)}
-          <Ripple
-            color={getMaterialOverlayColor({ palette, theme: theme! })}
-            onRef={(emitter: Emitter) => (this.leftIndicatorRipple = emitter)}
-          />
-          <View style={styles.fitParent}>
-            <Button
-              style={Styles.createViewStyle({
-                flex: 1,
-              })}
-              onPress={() => {
-                this.rollLeft()
-              }}
-              onPressIn={(e: Types.SyntheticEvent) => {
-                this.leftIndicatorRipple.onPressIn(e)
-              }}
-              onPressOut={() => {
-                this.leftIndicatorRipple.onPressOut()
-              }}
-            />
-          </View>
-        </View>
-      )
-    )
-  }
-
-  private renderRightIndicator(styles: TabsBarStyle) {
-    const { isScrollEnabled } = this.state
-    const { rightScrollButton, palette, theme } = this.props
-
-    return (
-      isScrollEnabled &&
-      rightScrollButton && (
-        <View
-          style={styles.rightIndicator}
-          onStartShouldSetResponder={() => true}
-        >
-          {rightScrollButton(this.props.theme!)}
-          <Ripple
-            color={getMaterialOverlayColor({ palette, theme: theme! })}
-            onRef={(emitter: Emitter) => (this.rightIndicatorRipple = emitter)}
-          />
-          <View style={styles.fitParent}>
-            <Button
-              style={Styles.createViewStyle({
-                flex: 1,
-              })}
-              onPress={() => {
-                this.rollRight()
-              }}
-              onPressIn={(e: Types.SyntheticEvent) => {
-                this.rightIndicatorRipple.onPressIn(e)
-              }}
-              onPressOut={() => {
-                this.rightIndicatorRipple.onPressOut()
-              }}
-            />
-          </View>
-        </View>
-      )
-    )
   }
 
   private limit(value: number = 0) {

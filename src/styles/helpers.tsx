@@ -22,3 +22,13 @@ export function getMaterialOverlayColor({
     ? '#000'
     : '#fff'
 }
+
+export function getHoverOverlayOpacity(color: string, theme: Theme<any, any>) {
+  const hoverOverlayOpacity = theme.palette.state.hover
+  const overlayLuminance = colorManipulator.getLuminance(color)
+  return overlayLuminance < 0.3
+    ? hoverOverlayOpacity.dark
+    : overlayLuminance < 0.7
+    ? hoverOverlayOpacity.medium
+    : hoverOverlayOpacity.light
+}

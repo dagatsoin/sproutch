@@ -1,6 +1,8 @@
 import * as React from 'react'
 
+import { ThemeContext } from '../../styles'
 import Emitter from './Emitter'
+import Particle from './MDRippleParticle'
 
 export type RippleProperties = {
   color?: string
@@ -8,5 +10,16 @@ export type RippleProperties = {
 }
 
 export default ({ onRef, ...props }: RippleProperties) => (
-  <Emitter onRef={onRef} options={props} />
+  <ThemeContext.Consumer>
+    {theme => (
+      <Emitter
+        particle={Particle}
+        onRef={onRef}
+        options={{
+          theme,
+          ...props,
+        }}
+      />
+    )}
+  </ThemeContext.Consumer>
 )

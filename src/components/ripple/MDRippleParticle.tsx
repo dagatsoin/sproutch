@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Animated, Styles, Types } from 'reactxp'
 
-import { darkShadow } from '../../styles/theme'
+import { colorManipulator, Theme } from '../../styles'
 import { ParticleProps } from './ParticleProps'
 import { rippleStyle } from './style'
 
@@ -9,13 +9,33 @@ const fadeOutDuration = 150
 const scaleDuration = 225
 const easing = Animated.Easing.CubicBezier(0.4, 0, 0.2, 1)
 
-class Particle extends React.PureComponent<ParticleProps, {}> {
+type MDRippleParticleOptions = {
+  theme: Theme<any, any>
+  color: string
+}
+
+class Particle extends React.PureComponent<
+  ParticleProps<MDRippleParticleOptions>,
+  {}
+> {
   private animatedScale = Animated.createValue(1)
-  private animatedOpacity = Animated.createValue(darkShadow.press)
+  private animatedOpacity: Animated.Value
   private animatedStyle: Types.AnimatedViewStyleRuleSet
   private runningAnimation = false
 
   public componentWillMount() {
+    const { options } = this.props
+    const color = options.color || '#000'
+    const overlayLuminance = colorManipulator.getLuminance(color)
+    const pressedOverlayOpacity = options.theme.palette.state.pressed
+    const overlayOpacity =
+      overlayLuminance < 0.3
+        ? pressedOverlayOpacity.dark
+        : overlayLuminance < 0.7
+        ? pressedOverlayOpacity.medium
+        : pressedOverlayOpacity.light
+
+    this.animatedOpacity = Animated.createValue(overlayOpacity)
     this.animatedStyle = Styles.createAnimatedViewStyle({
       transform: [{ scale: this.animatedScale }],
       opacity: this.animatedOpacity,
@@ -31,7 +51,9 @@ class Particle extends React.PureComponent<ParticleProps, {}> {
     }).start(this.onAnimateRadiusEnd.bind(this))
   }
 
-  public componentWillReceiveProps(newProps: ParticleProps) {
+  public componentWillReceiveProps(
+    newProps: ParticleProps<MDRippleParticleOptions>
+  ) {
     const { isDying: fading } = this.props
     if (newProps.isDying !== fading && !this.runningAnimation) {
       this.fadeOut()
@@ -42,11 +64,7 @@ class Particle extends React.PureComponent<ParticleProps, {}> {
     const { width, height } = this.props.emitterLayout
     const radiusFrom = Math.min(width, height) / 2
     const { options, x, y } = this.props
-    const { color, isOnPaper, palette } = options || {
-      color: undefined,
-      isOnPaper: false,
-      palette: undefined,
-    }
+    const { color } = options
     const styleSheet = rippleStyle({
       x,
       y,

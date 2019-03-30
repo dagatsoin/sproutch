@@ -2,7 +2,8 @@ import { Platform, Types } from 'reactxp'
 
 import { colorManipulator } from '../../styles/colorManipulator'
 import { StyleProp, Styles } from '../../styles/createStyle'
-import { darkShadow, lightShadow, override, Theme } from '../../styles/theme'
+import { getHoverOverlayOpacity } from '../../styles/helpers'
+import { override, Theme } from '../../styles/theme'
 import { TextStyle } from '../text'
 import { ViewStyle } from '../view'
 
@@ -13,7 +14,6 @@ export type TabStyle = {
   icon: StyleProp<Types.TextStyle>
   label: StyleProp<Types.TextStyle>
   overlay: StyleProp<ViewStyle>
-  fitParent: StyleProp<ViewStyle>
 }
 
 export type TabsBarStyle = {
@@ -26,21 +26,17 @@ export type TabsBarStyle = {
   cursor: StyleProp<ViewStyle>
   scrollView: StyleProp<Types.ScrollViewStyle>
   paddingHorizontal: number
-  fitParent: StyleProp<ViewStyle>
 }
 
 export type TabStyleOverride = Partial<
-  Omit<TabStyle, 'fitParent'> & {
+  TabStyle & {
     hasIcon: StyleProp<ViewStyle>
     hasLabel: StyleProp<ViewStyle>
     isActiveLabel: StyleProp<TextStyle>
   }
 >
 
-export type TabBarStyleOverride = Omit<
-  TabsBarStyle,
-  'paddingHorizontal' | 'fitParent'
->
+export type TabBarStyleOverride = Omit<TabsBarStyle, 'paddingHorizontal'>
 
 export const tabStyle = function({
   theme,
@@ -84,12 +80,7 @@ export const tabStyle = function({
       : theme.palette.text.disabled
 
   const twoLinesPadding = theme.spacing * 1.5
-
-  const overlayOpacity = !!overlayColor
-    ? colorManipulator.getLuminance(overlayColor) >= 0.5
-      ? darkShadow.hover
-      : lightShadow.hover
-    : 0
+  const overlayOpacity = getHoverOverlayOpacity(overlayColor, theme)
 
   return {
     root: Styles.createViewStyle(
@@ -171,6 +162,7 @@ export const tabStyle = function({
           !!options && !options.hasIconOnTop && options.hasIcon
             ? theme.spacing
             : 0,
+        overflow: 'visible',
 
         textAlign: 'center',
         fontSize: 14,
@@ -207,13 +199,6 @@ export const tabStyle = function({
       },
       false
     ),
-    fitParent: Styles.createViewStyle({
-      position: 'absolute',
-      top: 0,
-      right: 0,
-      bottom: 0,
-      left: 0,
-    }),
   }
 }
 
@@ -221,11 +206,13 @@ export const tabsBarStyle = function({
   palette,
   theme,
   style = {},
+  overlayColor,
   options,
 }: {
   theme: Theme<any, any>
   palette?: 'primary' | 'secondary' | ''
   style?: Partial<TabBarStyleOverride>
+  overlayColor: string
   options?: {
     hasIconOnTop?: boolean
     isScrollEnabled?: boolean
@@ -244,6 +231,17 @@ export const tabsBarStyle = function({
     palette === undefined || palette === ''
       ? theme.palette.secondary.main
       : theme.palette[palette].main
+
+  const overlayLuminance = colorManipulator.getLuminance(overlayColor)
+
+  const hoverOverlayOpacity = theme.palette.state.hover
+  const overlayOpacity = !!overlayColor
+    ? overlayLuminance < 0.3
+      ? hoverOverlayOpacity.dark
+      : overlayLuminance < 0.7
+      ? hoverOverlayOpacity.medium
+      : hoverOverlayOpacity.light
+    : 0
 
   return {
     root: Styles.createViewStyle({
@@ -338,14 +336,30 @@ export const tabsBarStyle = function({
         'scrollView'
       ),
     }),
-    fitParent: Styles.createViewStyle({
-      position: 'absolute',
-      top: 0,
-      right: 0,
-      bottom: 0,
-      left: 0,
-    }),
     // Custom values
     paddingHorizontal,
   }
 }
+
+export function createScrollIndicatorOverlayStyle(
+  color: string,
+  theme: Theme<any, any>
+) {
+  return Styles.createViewStyle(
+    {
+      flex: 1,
+
+      backgroundColor: color,
+      opacity: getHoverOverlayOpacity(color, theme),
+    },
+    false
+  )
+}
+
+export const fitParent = Styles.createViewStyle({
+  position: 'absolute',
+  top: 0,
+  right: 0,
+  bottom: 0,
+  left: 0,
+})

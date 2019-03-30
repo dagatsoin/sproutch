@@ -136,77 +136,88 @@ export default function({
     <View
       style={Styles.createViewStyle({
         flex: 1,
-        justifyContent: 'center'
+        justifyContent: 'center',
       })}
     >
-    <TabBar
-      hasIconOnTop={boolean('Has two lines', hasIconOnTop)}
-      palette={paletteKnob || undefined}
-      activeTabId={select('Tab', ['0', '1', '2', '3', '4', '5'], activeTabId)}
-      customCursorAnimation={
-        boolean('With custom cursor', customCursor)
-          ? customCursorAnimation
-          : undefined
-      }
-      renderCustomCursor={
-        boolean('With custom cursor', customCursor)
-          ? renderCustomCursor
-          : undefined
-      }
-      leftScrollButton={(theme) => (
-        <View
-          style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <FontAwesome.default name="chevron-left" size={16} color={theme.palette.primary.contrastText} />
-        </View>
-      )}
-      rightScrollButton={(theme) => (
-        <View
-          style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <FontAwesome.default name="chevron-right" size={16} color={theme.palette.primary.contrastText} />
-        </View>
-      )}
-      tabs={[
-        {
-          id: '0',
-          label: text('First tab label', firstTabLabel),
-          isDisable: boolean('Disabled', isDisable),
-          badgeSlot: notification,
-          iconSlot:
-            boolean('With icon', hasIcon) &&
-            (iconStyle => (
-              <FontAwesome.default
-                style={iconStyle}
-                name="rocket"
-                size={30}
-              />
-            )),
-        },
-        ...Array.from(Array(number('Tab number', tabNumber))).map((_, i) => ({
-          id: i + 1 + '',
-          label: `${otherTabBarLabel} ${i + 1}`,
-          iconSlot:
-            boolean('With icon', hasIcon) &&
-            (iconStyle => (
-              <FontAwesome.default
-                style={iconStyle}
-                name="check"
-                size={30}
-              />
-            )),
-        })),
-      ]}
-    />
+      <TabBar
+        hasIconOnTop={boolean('Has two lines', hasIconOnTop)}
+        palette={paletteKnob || undefined}
+        activeTabId={select('Tab', ['0', '1', '2', '3', '4', '5'], activeTabId)}
+        customCursorAnimation={
+          boolean('With custom cursor', customCursor)
+            ? customCursorAnimation
+            : undefined
+        }
+        renderCustomCursor={
+          boolean('With custom cursor', customCursor)
+            ? renderCustomCursor
+            : undefined
+        }
+        leftScrollButton={theme => (
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <FontAwesome.default
+              name="chevron-left"
+              size={16}
+              color={
+                paletteKnob
+                  ? theme.palette[paletteKnob].main
+                  : theme.palette.primary.contrastText
+              }
+            />
+          </View>
+        )}
+        rightScrollButton={theme => (
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <FontAwesome.default
+              name="chevron-right"
+              size={16}
+              color={
+                paletteKnob
+                  ? theme.palette[paletteKnob].main
+                  : theme.palette.primary.contrastText
+              }
+            />{' '}
+          </View>
+        )}
+        tabs={[
+          {
+            id: '0',
+            label: text('First tab label', firstTabLabel),
+            isDisable: boolean('Disabled', isDisable),
+            badgeSlot: notification,
+            iconSlot:
+              boolean('With icon', hasIcon) &&
+              (iconStyle => (
+                <FontAwesome.default
+                  style={iconStyle}
+                  name="rocket"
+                  size={30}
+                />
+              )),
+          },
+          ...Array.from(Array(number('Tab number', tabNumber))).map((_, i) => ({
+            id: i + 1 + '',
+            label: `${otherTabBarLabel} ${i + 1}`,
+            iconSlot:
+              boolean('With icon', hasIcon) &&
+              (iconStyle => (
+                <FontAwesome.default style={iconStyle} name="check" size={30} />
+              )),
+          })),
+        ]}
+      />
     </View>
-   
   )
 }

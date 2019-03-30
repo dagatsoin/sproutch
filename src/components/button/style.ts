@@ -1,13 +1,7 @@
 import { Styles, Types } from 'reactxp'
 
-import {
-  colorManipulator,
-  darkShadow,
-  lightShadow,
-  override,
-  StyleProp,
-  Theme,
-} from '../../styles'
+import { colorManipulator, override, StyleProp, Theme } from '../../styles'
+import { getHoverOverlayOpacity } from '../../styles/helpers'
 import { ViewStyle } from '../view'
 
 export type ButtonStyle = {
@@ -76,11 +70,7 @@ export default function({
 
   const borderWidth = variant === 'outlined' ? 1 : undefined
 
-  const overlayOpacity = !!overlayColor
-    ? colorManipulator.getLuminance(overlayColor) >= 0.5
-      ? darkShadow.hover
-      : lightShadow.hover
-    : 0
+  const overlayOpacity = getHoverOverlayOpacity(overlayColor, theme)
 
   return {
     root: Styles.createViewStyle(

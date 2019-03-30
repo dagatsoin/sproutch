@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Button as RXButton, Styles, Types } from 'reactxp'
 
 import { StyleProp } from '../../styles'
-import { getMaterialOverlayColor } from '../../styles/getMaterialOverlayColor'
+import { getMaterialOverlayColor } from '../../styles/helpers'
 import { Theme, ThemeContext } from '../../styles/theme'
 import { Fade } from '../fade'
 import { Paper } from '../paper'
