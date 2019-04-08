@@ -3,17 +3,25 @@ export default `
 \`SceneTransition\`
 ### Usage
 This component is used where you want to make a transition between two scene. For example with a router or in a caroussel.
+
+** Important: ** you will need to set \`display: flex\` and and a height to the parent or the scene.
+
 #### Use with basic component
 \`\`\`
-<SceneTransition
-  render={() => <NextScene/>}
-  delayRender={400}
-  dummyScene={
-    <View style={{ alignItems: 'center' }}>
-      <Spinner size='small' color='#809'/>
-    </View>
-  }
-/>
+<div style={{
+  display: 'flex',
+  height: '300px'
+}}>
+  <SceneTransition
+    render={() => <NextScene/>}
+    delayRender={400}
+    dummyScene={
+      <View style={{ alignItems: 'center' }}>
+        <Spinner size='small' color='#809'/>
+      </View>
+    }
+  />
+</div>
 \`\`\`
 
 #### Use with React Router:
