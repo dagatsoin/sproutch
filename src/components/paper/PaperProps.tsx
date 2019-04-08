@@ -1,8 +1,8 @@
-import { StyleProp } from '../../styles/createStyle'
-import { ViewStyle } from '../view'
+import { ViewProps } from '../view'
+import { PaperStyleOverride } from './style'
+
 export type PaperProps = {
   elevation?: number
-  style?: StyleProp<ViewStyle>
-  square?: boolean
-  children?: React.ReactNode
+  style?: PaperStyleOverride
+  onLayout?: ViewProps['onLayout']
 }

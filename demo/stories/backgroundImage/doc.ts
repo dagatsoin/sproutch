@@ -21,13 +21,23 @@ This component displays a background image inside a container. Does not accept c
 </View>
 \`\`\`
 ### Properties
-#### uri
+#### source
 \`type: string\`
 
-The URL of the image.
+The uri of the image to fetch.
 
 #### resizeMode
-\`type: 'stretch' | 'contain' | 'cover' | 'auto' | 'repeat'\`
+\`type: 'stretch' | 'contain' | 'cover' | 'auto'\`
 
 The resize method, similar to the [RN property](https://facebook.github.io/react-native/docs/image#resizemode)
+
+### repeat *optional*
+\`type: boolean\`
+If true, repeat the pattern along X and Y axis.
+
+### position *optional*
+\`type: [string, string]\`
+
+Available in \`auto\` resize mode. A tupple of string which will offset the top/left of the image.
+eg: \`['50px', '50px'] or['50%', '50%']\`
 `

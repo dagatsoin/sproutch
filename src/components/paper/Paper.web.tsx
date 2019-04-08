@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { findDOMNode } from 'react-dom'
 
-import { Styles } from '../../styles/createStyle'
+import { ThemeContext } from '../../styles'
 import { View } from '../view'
 import { PaperProps } from './PaperProps'
-import { shadows } from './style'
+import { createWebPaperStyle, shadows } from './style'
 
 export default class Paper extends React.Component<PaperProps, {}> {
   private containerRef: View
@@ -19,22 +19,21 @@ export default class Paper extends React.Component<PaperProps, {}> {
   }
 
   public render() {
-    const { children, square } = this.props
+    const { style = {}, ...props } = this.props
 
     return (
-      <View
-        ref={(comp: View) => (this.containerRef = comp)}
-        style={[
-          this.props.style,
-          square
-            ? Styles.createViewStyle({
-                borderRadius: 0,
-              })
-            : undefined,
-        ]}
-      >
-        {children}
-      </View>
+      <ThemeContext.Consumer>
+        {theme => {
+          const rootStyle = createWebPaperStyle(theme)
+          return (
+            <View
+              ref={(comp: any) => (this.containerRef = comp)}
+              style={[rootStyle, style.root, style.content]}
+              {...props}
+            />
+          )
+        }}
+      </ThemeContext.Consumer>
     )
   }
 }

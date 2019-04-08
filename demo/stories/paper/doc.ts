@@ -6,9 +6,11 @@ This component is a container which implements the Material Design Paper specifi
 \`\`\`
 <Paper
   elevation={10}
-  style={{
-    width: 232,
-    height: 132,
+  style={
+    root: {
+      width: 232,
+      height: 132,
+    }
   }}
 >
    <Text
@@ -28,14 +30,13 @@ This component is a container which implements the Material Design Paper specifi
 
 From 0 to 24, the Material Design elevation number.
 
-#### square *optional*
-\`type: boolean\`
+### Style
 
-Remove round border
+\`type ButtonStyle = {
+    root: StyleProp<ViewStyle>
+    content: StyleProp<ViewStyle>
+}\`
 
-The event handler of the Ripple. Due to an issue limitation of ReactXP
-
-### Other optional props
-- style: [ViewStyle](https://microsoft.github.io/reactxp/docs/styles.html#view-style-attributes)
-- children?: React.React.ReactNode
+- \`root:\` use only exterior properties here (eg: use margin, borderRadius, etc. But not padding)
+- \`content\`: the internal container. You can use padding, background color, etc.
 `

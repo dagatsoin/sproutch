@@ -1,4 +1,12 @@
-import { Animated, colorManipulator, CustomTabBarCursorAnimation, DefaultTheme, TabBar, Text, View } from '@sproutch/ui'
+import {
+  Animated,
+  colorManipulator,
+  CustomTabBarCursorAnimation,
+  DefaultTheme,
+  TabBar,
+  Text,
+  View,
+} from '@sproutch/ui'
 import { boolean, number, select, text } from '@storybook/addon-knobs'
 import * as React from 'react'
 import { Styles } from 'reactxp'
@@ -23,7 +31,7 @@ function renderCustomCursor(
         backgroundColor: colorManipulator.fade(
           theme.business.warning.main,
           Math.max(x / Math.max(barWidth, 1), 0.1)
-        )
+        ),
       })}
     />
   )
@@ -89,15 +97,19 @@ const notification = (
     style={Styles.createViewStyle({
       backgroundColor: 'red',
       borderRadius: 10,
-      width: 16,
-      height: 16,
+      minWidth: 20,
+      padding: 4,
       position: 'absolute',
       top: 0,
       right: 0,
     })}
   >
     <Text
-      style={Styles.createTextStyle({ color: 'black', textAlign: 'center' })}
+      style={Styles.createTextStyle({
+        color: 'white',
+        textAlign: 'center',
+        fontSize: 10,
+      })}
     >
       1
     </Text>
@@ -111,8 +123,8 @@ export default function({
   isDisable = false,
   hasIconOnTop = false,
   palette,
-  activeTabId = '5',
-  tabNumber = 5,
+  activeTabId = '0',
+  tabNumber = 4,
   customCursor = false,
 }: any) {
   const paletteKnob = select(
@@ -121,7 +133,12 @@ export default function({
     palette
   )
   return (
-    <>
+    <View
+      style={Styles.createViewStyle({
+        flex: 1,
+        justifyContent: 'center',
+      })}
+    >
       <TabBar
         hasIconOnTop={boolean('Has two lines', hasIconOnTop)}
         palette={paletteKnob || undefined}
@@ -136,7 +153,7 @@ export default function({
             ? renderCustomCursor
             : undefined
         }
-        leftScrollButton={(
+        leftScrollButton={theme => (
           <View
             style={{
               flex: 1,
@@ -144,10 +161,18 @@ export default function({
               justifyContent: 'center',
             }}
           >
-            <FontAwesome.default name="chevron-left" size={16} color="#ddd" />
+            <FontAwesome.default
+              name="chevron-left"
+              size={16}
+              color={
+                paletteKnob
+                  ? theme.palette[paletteKnob].main
+                  : theme.palette.primary.contrastText
+              }
+            />
           </View>
         )}
-        rightScrollButton={(
+        rightScrollButton={theme => (
           <View
             style={{
               flex: 1,
@@ -155,41 +180,44 @@ export default function({
               justifyContent: 'center',
             }}
           >
-            <FontAwesome.default name="chevron-right" size={16} color="#ddd" />
+            <FontAwesome.default
+              name="chevron-right"
+              size={16}
+              color={
+                paletteKnob
+                  ? theme.palette[paletteKnob].main
+                  : theme.palette.primary.contrastText
+              }
+            />
           </View>
         )}
-        tabs={
-          [
-            {
-              id: "0",
-              label: text('First tab label', firstTabLabel),
-              isDisable: boolean('Disabled', isDisable),
-              slot: notification,
-              renderIcon: boolean('With icon', hasIcon) && (iconStyle => (
+        tabs={[
+          {
+            id: '0',
+            label: text('First tab label', firstTabLabel),
+            isDisable: boolean('Disabled', isDisable),
+            badgeSlot: notification,
+            iconSlot:
+              boolean('With icon', hasIcon) &&
+              (iconStyle => (
                 <FontAwesome.default
                   style={iconStyle}
                   name="rocket"
                   size={30}
-                  color="#900"
                 />
-              ))
-            },
-            ...Array.from(Array(number('Tab number', tabNumber)))
-                .map((_, i) => ({
-                  id: i + 1 + '',
-                  label: `${otherTabBarLabel} ${i + 1}`,
-                  renderIcon: boolean('With icon', hasIcon) && (iconStyle => (
-                    <FontAwesome.default
-                      style={iconStyle}
-                      name="check"
-                      size={30}
-                      color="#900"
-                    />
-                  ))
-                }))
-            ]
-          }
+              )),
+          },
+          ...Array.from(Array(number('Tab number', tabNumber))).map((_, i) => ({
+            id: i + 1 + '',
+            label: `${otherTabBarLabel} ${i + 1}`,
+            iconSlot:
+              boolean('With icon', hasIcon) &&
+              (iconStyle => (
+                <FontAwesome.default style={iconStyle} name="check" size={30} />
+              )),
+          })),
+        ]}
       />
-    </>
+    </View>
   )
 }

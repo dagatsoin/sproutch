@@ -59,8 +59,7 @@ Accept a style object to override the default style of the TabBar
 {
   root: ViewStyle
   wrapper: ViewStyle
-  leftIndicator: ViewStyle
-  rightIndicator: ViewStyle
+  scrollIndicator: ViewStyle
   cursor: ViewStyle
   scrollView: ScrollViewStyle
 }

@@ -1,4 +1,4 @@
-import { LinearGradient } from '@sproutch/ui'
+import { LinearGradient, Styles, View } from '@sproutch/ui'
 import { number } from '@storybook/addon-knobs'
 import * as React from 'react'
 
@@ -10,25 +10,33 @@ export default function({
   width: number
 }) {
   return (
-    <LinearGradient
-      style={{
-        width: number('Width', width, {
-          range: true,
-          min: 0,
-          max: 500,
-          step: 20
-        }),
-        height: number('Height', height, {
-          range: true,
-          min: 0,
-          max: 500,
-          step: 20
-        }),
-        padding: 15,
+    <View
+      style={Styles.createViewStyle({
+        flex: 1,
+        justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 5
-      }}
-      colors={['#eee', '#B4985F']}
-    />
+      })}
+    >
+      <LinearGradient
+        style={{
+          width: number('Width', width, {
+            range: true,
+            min: 0,
+            max: 500,
+            step: 20,
+          }),
+          height: number('Height', height, {
+            range: true,
+            min: 0,
+            max: 500,
+            step: 20,
+          }),
+          padding: 15,
+          alignItems: 'center',
+          borderRadius: 5,
+        }}
+        colors={['#eee', '#B4985F']}
+      />
+    </View>
   )
 }

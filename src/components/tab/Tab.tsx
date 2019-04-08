@@ -1,25 +1,30 @@
 import * as React from 'react'
+import { Button, Styles, Types } from 'reactxp'
 import {
   LayoutInfo,
   StyleRuleSet,
   StyleRuleSetRecursive,
 } from 'reactxp/dist/common/Types'
 
+import { shouldComponentUpdate } from '../../helpers'
+import { getMaterialOverlayColor } from '../../styles/helpers'
 import { ThemeContext } from '../../styles/theme'
+import { Fade } from '../fade'
 import { Ripple } from '../ripple'
+import Emitter from '../ripple/Emitter'
 import { Text, TextStyle } from '../text'
 import { View, ViewProps } from '../view'
-import { tabStyle, TabStyleOverride } from './styles'
+import { fitParent, tabStyle, TabStyleOverride } from './styles'
 
 export type TabProps = {
   id: string
-  renderIcon?: (
+  iconSlot?: (
     style: StyleRuleSetRecursive<StyleRuleSet<TextStyle>>
-  ) => JSX.Element
+  ) => React.ReactNode
   label?: string
   isDisable?: boolean
   style?: TabStyleOverride
-  slot?: JSX.Element
+  badgeSlot?: React.ReactNode
 }
 
 type CompleteProps = {
@@ -33,8 +38,18 @@ type CompleteProps = {
   onWillMount: (id: string) => void
 } & TabProps
 
-class Tab extends React.Component<CompleteProps & ViewProps> {
+type State = {
+  isHover: boolean
+}
+
+function noop() {}
+
+class Tab extends React.Component<CompleteProps & ViewProps, State> {
+  public state: State = {
+    isHover: false,
+  }
   private layout?: LayoutInfo
+  private ripple: Emitter
 
   public componentWillMount() {
     const { onWillMount = () => {} } = this.props
@@ -50,48 +65,98 @@ class Tab extends React.Component<CompleteProps & ViewProps> {
     onUnmount(this.props.id)
   }
 
-  public render() {
-    const {
-      renderIcon,
-      label,
-      isActive = false,
-      isDisable = false,
-      hasIconOnTop = false,
-      mustGrow = false,
-      palette,
-      slot,
-      style,
-    } = this.props
+  public shouldComponentUpdate(
+    nextProps: CompleteProps,
+    nextState: State
+  ): boolean {
+    return shouldComponentUpdate(nextProps, nextState, this.props, this.state)
+  }
 
+  public render() {
     return (
       <ThemeContext.Consumer>
         {theme => {
+          const {
+            id,
+            iconSlot,
+            label,
+            isActive = false,
+            isDisable = false,
+            hasIconOnTop = false,
+            mustGrow = false,
+            palette,
+            badgeSlot,
+            style,
+            onClick = noop,
+          } = this.props
+
+          const isOnPaper = palette !== undefined
+          const overlayColor = getMaterialOverlayColor({
+            palette: isOnPaper ? palette : undefined,
+            theme,
+          })
+
           const styles = tabStyle({
             theme,
             palette,
             style,
+            overlayColor,
             options: {
               hasIconOnTop,
-              isDisable,
+              isDisabled: isDisable,
               isActive,
               mustGrow,
-              hasIcon: !!renderIcon,
+              hasIcon: !!iconSlot,
               hasLabel: !!label,
             },
           })
-          const { id, onClick } = this.props
 
           return (
             <View onLayout={this.onLayout} style={styles.root}>
-              {renderIcon && renderIcon(styles.icon)}
+              {iconSlot && iconSlot(styles.icon)}
               {label && <Text style={styles.label}>{label}</Text>}
-              {slot}
-              {
+              {badgeSlot}
+              <Fade
+                style={fitParent}
+                isVisible={this.state.isHover}
+                duration={75}
+              >
+                <View style={styles.overlay} />
+              </Fade>
+              {!isDisable && (
                 <Ripple
-                  onPress={() => !!onClick && onClick(id)}
-                  palette={palette}
+                  onRef={(emitter: Emitter) => {
+                    this.ripple = emitter
+                  }}
+                  color={overlayColor}
                 />
-              }
+              )}
+              <View style={fitParent}>
+                <Button
+                  disabled={isDisable}
+                  style={Styles.createViewStyle({
+                    flex: 1,
+                  })}
+                  onPress={() => {
+                    onClick(id)
+                  }}
+                  onPressIn={(e: Types.SyntheticEvent) => {
+                    this.ripple.onPressIn(e)
+                  }}
+                  onPressOut={() => {
+                    this.ripple.onPressOut()
+                  }}
+                  onHoverStart={() => {
+                    this.setState({ isHover: true })
+                  }}
+                  onHoverEnd={() => {
+                    // prevents a bug on Web where onPressOut
+                    // is not called whend the touch is released outside
+                    this.ripple.onPressOut()
+                    this.setState({ isHover: false })
+                  }}
+                />
+              </View>
             </View>
           )
         }}
@@ -107,13 +172,21 @@ class Tab extends React.Component<CompleteProps & ViewProps> {
       this.layout.width === layout.width &&
       this.layout.x === layout.x &&
       this.layout.y === layout.y
-    )
+    ) {
       return
-    this.layout = layout
+    }
+
+    // Round the layout value because hi density screen subpixel value could cause different behavior
+    this.layout = {
+      x: Math.round(layout.x),
+      y: Math.round(layout.y),
+      width: Math.round(layout.width),
+      height: Math.round(layout.height),
+    }
     onTabLayout &&
       onTabLayout({
         id,
-        layout,
+        layout: this.layout,
       })
   }
 }

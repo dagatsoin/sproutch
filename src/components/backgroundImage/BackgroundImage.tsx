@@ -9,20 +9,51 @@ export default class BackgroundImage extends React.PureComponent<
   {}
 > {
   private viewRef: View
+  private element: HTMLElement
+
+  public componentDidMount() {
+    this.element = findDOMNode(this.viewRef) as HTMLElement
+    this.setStyle()
+  }
 
   public render() {
-    return <View ref={view => (this.viewRef = view)} onLayout={this.setStyle} />
+    return (
+      <View
+        ref={(view: any) => (this.viewRef = view)}
+        onLayout={this.setStyle}
+      />
+    )
   }
 
   public componentDidUpdate(prevProps: BackgroundImageProps) {
-    if (prevProps.uri !== this.props.uri) this.setStyle()
+    if (
+      prevProps.uri !== this.props.uri ||
+      (prevProps.position === undefined && this.props.position !== undefined) ||
+      (prevProps.position !== undefined && this.props.position === undefined) ||
+      (prevProps.position !== undefined &&
+        this.props.position !== undefined &&
+        (prevProps.position[0] !== this.props.position[0] ||
+          prevProps.position[1] !== this.props.position[1])) ||
+      prevProps.repeat !== this.props.repeat ||
+      prevProps.resizeMode !== this.props.resizeMode
+    ) {
+      this.setStyle()
+    }
   }
 
   private setStyle = () => {
-    const element = findDOMNode(this.viewRef) as HTMLElement
-    if (element) {
-      const { uri, resizeMode } = this.props
-      element.setAttribute(
+    if (this.element) {
+      const {
+        borderRadius = 0,
+        position: center,
+        uri,
+        resizeMode = 'auto',
+        repeat,
+      } = this.props
+      const position = center ? center.join(' ') : '50% 50%'
+      const size = resizeMode === 'stretch' ? '100% 100%' : resizeMode
+
+      this.element.setAttribute(
         'style',
         `
         position: absolute;
@@ -30,8 +61,11 @@ export default class BackgroundImage extends React.PureComponent<
         right: 0;
         bottom: 0;
         left: 0;
+        border-radius: ${borderRadius}px;
         background-image: url(${uri});
-        background-size: ${resizeMode}
+        background-position: ${position};
+        background-size: ${size};
+        background-repeat: ${repeat ? 'repeat' : 'no-repeat'}
       `
       )
     }

@@ -23,15 +23,10 @@ Note: due to an [issue](https://github.com/Microsoft/reactxp/issues/1012) in Rea
 \`\`\`
 ### Properties
 
-#### isOnPaper *optional*
-\`type: boolean\`
+#### color *optional*
+\`type: string\`
 
-If true, set the color of the ripple according to the paper background of your theme.
-
-#### palette *optional*
-\`type: 'primary' | 'secondary'\`
-
-The theme actually used by your container. The ripple will set its color accordingly to your theme.
+The ripple teint. Take the precedence on \`palette\` attribute.
 
 ### onPress *optional*
 \`type: (e: Types.SyntheticEvent) => void\`

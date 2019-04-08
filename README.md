@@ -10,7 +10,11 @@ React and React Native iOS/Android library to make lovely (or not) UI.
 
 :construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction:
 
-`Actually in aplha 0.0.2 but already usable. Expect breaking changes in the futur.`
+```Actually in aplha 0.0.3 but already usable. Expect breaking changes in the futur. Tested on:
+- Chrome 73
+- Croswwalk 2.3
+- Expo 32
+```
 
 :construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction:
 
@@ -99,7 +103,21 @@ type Theme<B, O> = {
       appBar: string
       default: string
       paper: string
-    }
+    },
+    state: {
+      /* takes object of the shape: OverlayOpacity. Exemple: {
+          light: 0.04,
+          medium: 0.12,
+          dark: 0.16,
+        }
+      */
+      hover: hoverOverlayOpacity,
+      focus: focusOverlayOpacity,
+      selected: selectedOverlayOpacity,
+      activated: activatedOverlayOpacity,
+      pressed: pressedOverlayOpacity,
+      draged: dragedOverlayOpacity,
+    },
   }
   // The 'rythme' of your design system
   spacing: number

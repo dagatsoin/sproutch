@@ -1,4 +1,4 @@
-import {  withKnobs } from '@storybook/addon-knobs'
+import { withKnobs } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react-native'
 
 import markdown from './doc'

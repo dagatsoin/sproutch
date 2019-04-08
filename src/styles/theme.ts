@@ -1,6 +1,7 @@
-import * as deepmerge from 'lodash.merge'
 import * as React from 'react'
 import { Color, colors } from './colors'
+// tslint:disable-next-line: no-var-requires
+const deepmerge = require('lodash.merge')
 
 export type Typography = {
   fontFamily: string
@@ -79,6 +80,14 @@ export type Palette = {
   divider: Divider
   modifier: Modifier
   background: Background
+  state: {
+    hover: OverlayOpacity
+    focus: OverlayOpacity
+    selected: OverlayOpacity
+    activated: OverlayOpacity
+    pressed: OverlayOpacity
+    draged: OverlayOpacity
+  }
 }
 
 type CommonColors = {
@@ -128,34 +137,60 @@ type Status = {
 
 export type DefaultTheme = Theme<Status, {}>
 
-export const lightBackground = {
+export type OverlayOpacity = {
+  light: number
+  medium: number
+  dark: number
+}
+
+const lightBackground = {
   statusBar: colors.grey[300],
   appBar: colors.grey[100],
   default: colors.grey[50],
   paper: colors.white,
 }
 
-export const darkBackground = {
+const darkBackground = {
   statusBar: colors.black,
   appBar: colors.grey[900], // #212121
   default: colors.grey['A400'], // #333
   paper: colors.grey[800], // #424242
 }
 
-export const darkShadow = {
-  hover: 0.04,
-  focus: 0.12,
-  press: 0.16,
-  selected: 0.08,
-  activated: 0.12,
+const hoverOverlayOpacity: OverlayOpacity = {
+  light: 0.04,
+  medium: 0.12,
+  dark: 0.16,
 }
 
-export const lightShadow = {
-  hover: 0.08,
-  focus: 0.24,
-  press: 0.32,
-  selected: 0.16,
-  activated: 0.24,
+const focusOverlayOpacity: OverlayOpacity = {
+  light: 0.12,
+  medium: 0.24,
+  dark: 0.36,
+}
+
+const selectedOverlayOpacity: OverlayOpacity = {
+  light: 0.8,
+  medium: 0.16,
+  dark: 0.24,
+}
+
+const activatedOverlayOpacity: OverlayOpacity = {
+  light: 0.12,
+  medium: 0.24,
+  dark: 0.36,
+}
+
+const pressedOverlayOpacity: OverlayOpacity = {
+  light: 0.16,
+  medium: 0.32,
+  dark: 0.48,
+}
+
+const dragedOverlayOpacity: OverlayOpacity = {
+  light: 0.8,
+  medium: 0.16,
+  dark: 0.32,
 }
 
 const defaultTypography: Typography = {
@@ -201,6 +236,14 @@ const defaultPalette: Palette = {
     disabled: 'rgba(0, 0, 0, 0.26)',
     disabledBackground: 'rgba(0, 0, 0, 0.12)',
   },
+  state: {
+    hover: hoverOverlayOpacity,
+    focus: focusOverlayOpacity,
+    selected: selectedOverlayOpacity,
+    activated: activatedOverlayOpacity,
+    pressed: pressedOverlayOpacity,
+    draged: dragedOverlayOpacity,
+  },
   contrastThreshold: 3,
   tonalOffset: 0.2,
 }
@@ -242,7 +285,7 @@ export function getTheme<B, O>(
   return deepmerge(defaultTheme, config) as Theme<Status & B, O> // fixme: why need to force the output type?
 }
 
-type Overridable = 'progressBar' | 'tab' | 'tabs'
+type Overridable = 'progressBar' | 'tab' | 'tabs' | 'sceneTransition' | 'button' // @todo: decouple from component name
 
 export function override<C extends Overridable, T>(
   overrides: any,

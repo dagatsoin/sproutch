@@ -6,6 +6,6 @@ import { borderImage } from './story.common'
 
 storiesOf('Sproutch', module)
   .addDecorator(withKnobs)
-  .add('Nine patches', borderImage as any, {
+  .add('Border image', borderImage as any, {
     notes: { markdown }
   })

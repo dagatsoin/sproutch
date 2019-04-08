@@ -2,19 +2,24 @@ import { Platform, Types } from 'reactxp'
 
 import { colorManipulator } from '../../styles/colorManipulator'
 import { StyleProp, Styles } from '../../styles/createStyle'
+import { getHoverOverlayOpacity } from '../../styles/helpers'
 import { override, Theme } from '../../styles/theme'
 import { TextStyle } from '../text'
 import { ViewStyle } from '../view'
+
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
 export type TabStyle = {
   root: StyleProp<ViewStyle>
   icon: StyleProp<Types.TextStyle>
   label: StyleProp<Types.TextStyle>
+  overlay: StyleProp<ViewStyle>
 }
 
 export type TabsBarStyle = {
   root: StyleProp<ViewStyle>
-  wrapper: StyleProp<ViewStyle>
+  container: StyleProp<ViewStyle>
+  scrollContent: StyleProp<ViewStyle>
   leftIndicator: StyleProp<ViewStyle>
   rightIndicator: StyleProp<ViewStyle>
   cursorAnimatedContainer: StyleProp<ViewStyle>
@@ -31,24 +36,26 @@ export type TabStyleOverride = Partial<
   }
 >
 
-export type TabBarStyleOverride = Exclude<TabsBarStyle, 'paddingHorizontal'>
+export type TabBarStyleOverride = Omit<TabsBarStyle, 'paddingHorizontal'>
 
 export const tabStyle = function({
   theme,
   palette,
   style = {},
+  overlayColor,
   options,
 }: {
   theme: Theme<any, any>
   palette?: 'primary' | 'secondary' | ''
   style?: Partial<TabStyleOverride>
+  overlayColor: string
   options?: {
     mustGrow: boolean
     hasIconOnTop: boolean
     hasIcon: boolean
     hasLabel: boolean
     isActive: boolean
-    isDisable: boolean
+    isDisabled: boolean
   }
 }): TabStyle {
   const tabHeight = options && options.hasIconOnTop ? 72 : 48
@@ -73,97 +80,125 @@ export const tabStyle = function({
       : theme.palette.text.disabled
 
   const twoLinesPadding = theme.spacing * 1.5
+  const overlayOpacity = getHoverOverlayOpacity(overlayColor, theme)
 
   return {
-    root: Styles.createViewStyle({
-      height: tabHeight,
-      minWidth: tabMinWidth,
-      maxWidth: tabMaxWidth,
+    root: Styles.createViewStyle(
+      {
+        height: tabHeight,
+        minWidth: tabMinWidth,
+        maxWidth: tabMaxWidth,
 
-      ...(!!options &&
-        !options.mustGrow && {
-          flexGrow: 1,
-          flexShrink: 1,
-          flexBasis: '100%',
-        }),
+        ...(!!options &&
+          !options.mustGrow && {
+            flexGrow: 1,
+            flexShrink: 1,
+            flexBasis: '100%',
+          }),
 
-      paddingHorizontal: 16,
-      paddingVertical:
-        !!options && options.hasIconOnTop ? twoLinesPadding : undefined,
+        paddingHorizontal: 16,
+        paddingVertical:
+          !!options && options.hasIconOnTop ? twoLinesPadding : undefined,
 
-      justifyContent:
-        !!options && options.hasIconOnTop ? 'space-between' : 'center',
+        justifyContent:
+          !!options && options.hasIconOnTop ? 'space-between' : 'center',
 
-      alignItems: 'center',
-      flexDirection: !!options && options.hasIconOnTop ? 'column' : 'row',
+        alignItems: 'center',
+        flexDirection: !!options && options.hasIconOnTop ? 'column' : 'row',
 
-      cursor: 'pointer',
+        cursor: 'pointer',
 
-      ...(style.root as object),
+        ...(style.root as object),
 
-      ...override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'root'),
+        ...override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'root'),
 
-      ...(!!options && options.hasIcon
-        ? override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'hasIcon')
-        : (style.hasIcon as object)),
+        ...(!!options && options.hasIcon
+          ? override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'hasIcon')
+          : (style.hasIcon as object)),
 
-      ...(!!options && options.hasLabel
-        ? override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'hasLabel')
-        : (style.hasLabel as object)),
-    }),
-    icon: Styles.createTextStyle({
-      justifyContent: 'center',
+        ...(!!options && options.hasLabel
+          ? override<'tab', TabStyleOverride>(
+              theme.overrides,
+              'tab',
+              'hasLabel'
+            )
+          : (style.hasLabel as object)),
+      },
+      false
+    ),
+    icon: Styles.createTextStyle(
+      {
+        justifyContent: 'center',
 
-      ...(!!options &&
-        options.hasLabel && {
-          margin: 0,
-        }),
+        ...(!!options &&
+          options.hasLabel && {
+            margin: 0,
+          }),
 
-      fontSize: iconSize,
-      textAlign: 'center',
-      color: tabColor,
+        fontSize: iconSize,
+        textAlign: 'center',
+        color: tabColor,
 
-      ...(!!options &&
-        options.isActive && {
-          color: tabActiveColor,
-        }),
+        ...(!!options &&
+          options.isActive && {
+            color: tabActiveColor,
+          }),
 
-      ...(!!options &&
-        options.isDisable && {
-          color: tabDisabledColor,
-        }),
+        ...(!!options &&
+          options.isDisabled && {
+            color: tabDisabledColor,
+          }),
 
-      ...(style.icon as object),
+        ...(style.icon as object),
 
-      ...override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'icon'),
-    }),
-    label: Styles.createTextStyle({
-      margin: 0,
-      paddingLeft:
-        !!options && !options.hasIconOnTop && options.hasIcon
-          ? theme.spacing
-          : 0,
+        ...override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'icon'),
+      },
+      false
+    ),
+    label: Styles.createTextStyle(
+      {
+        margin: 0,
+        paddingLeft:
+          !!options && !options.hasIconOnTop && options.hasIcon
+            ? theme.spacing
+            : 0,
+        overflow: 'visible',
 
-      textAlign: 'center',
-      fontSize: 14,
+        textAlign: 'center',
+        fontSize: 14,
 
-      color: tabColor,
+        color: tabColor,
 
-      ...(!!options &&
-        options.isActive && {
-          color: tabActiveColor,
-          ...(style.isActiveLabel as object),
-        }),
+        ...(!!options &&
+          options.isActive && {
+            color: tabActiveColor,
+            ...(style.isActiveLabel as object),
+          }),
 
-      ...(!!options &&
-        options.isDisable && {
-          color: tabDisabledColor,
-        }),
+        ...(!!options &&
+          options.isDisabled && {
+            color: tabDisabledColor,
+          }),
 
-      ...(style.label as object),
+        ...(style.label as object),
 
-      ...override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'label'),
-    }),
+        ...override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'label'),
+      },
+      false
+    ),
+    overlay: Styles.createViewStyle(
+      {
+        flex: 1,
+
+        backgroundColor: overlayColor,
+        opacity: overlayOpacity,
+
+        ...(style.overlay as object),
+
+        ...override<'tab', TabStyleOverride>(theme.overrides, 'tab', 'overlay'),
+      },
+      false
+    ),
   }
 }
 
@@ -171,11 +206,13 @@ export const tabsBarStyle = function({
   palette,
   theme,
   style = {},
+  overlayColor,
   options,
 }: {
   theme: Theme<any, any>
   palette?: 'primary' | 'secondary' | ''
   style?: Partial<TabBarStyleOverride>
+  overlayColor: string
   options?: {
     hasIconOnTop?: boolean
     isScrollEnabled?: boolean
@@ -195,24 +232,46 @@ export const tabsBarStyle = function({
       ? theme.palette.secondary.main
       : theme.palette[palette].main
 
+  const overlayLuminance = colorManipulator.getLuminance(overlayColor)
+
+  const hoverOverlayOpacity = theme.palette.state.hover
+  const overlayOpacity = !!overlayColor
+    ? overlayLuminance < 0.3
+      ? hoverOverlayOpacity.dark
+      : overlayLuminance < 0.7
+      ? hoverOverlayOpacity.medium
+      : hoverOverlayOpacity.light
+    : 0
+
   return {
     root: Styles.createViewStyle({
       height: tabHeight,
-      flex: 1,
-      backgroundColor: tabBackgroundColor,
-      paddingHorizontal,
+      maxHeight: tabHeight,
+      flexGrow: 1,
+      flexShrink: 1,
+      marginBottom: 4,
       ...(style.root as object),
       ...override<'tabs', TabBarStyleOverride>(theme.overrides, 'tabs', 'root'),
     }),
-    wrapper: Styles.createViewStyle({
-      flexDirection: 'row',
-      overflow: 'visible',
-
-      ...(style.wrapper as object),
+    container: Styles.createViewStyle({
+      backgroundColor: tabBackgroundColor,
+      paddingHorizontal,
+      ...(style.container as object),
       ...override<'tabs', TabBarStyleOverride>(
         theme.overrides,
         'tabs',
-        'wrapper'
+        'container'
+      ),
+    }),
+    scrollContent: Styles.createViewStyle({
+      flexDirection: 'row',
+      overflow: 'visible',
+
+      ...(style.scrollContent as object),
+      ...override<'tabs', TabBarStyleOverride>(
+        theme.overrides,
+        'tabs',
+        'scrollContent'
       ),
     }),
     leftIndicator: Styles.createViewStyle({
@@ -281,3 +340,26 @@ export const tabsBarStyle = function({
     paddingHorizontal,
   }
 }
+
+export function createScrollIndicatorOverlayStyle(
+  color: string,
+  theme: Theme<any, any>
+) {
+  return Styles.createViewStyle(
+    {
+      flex: 1,
+
+      backgroundColor: color,
+      opacity: getHoverOverlayOpacity(color, theme),
+    },
+    false
+  )
+}
+
+export const fitParent = Styles.createViewStyle({
+  position: 'absolute',
+  top: 0,
+  right: 0,
+  bottom: 0,
+  left: 0,
+})

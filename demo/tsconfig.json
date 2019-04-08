@@ -16,7 +16,7 @@
     "noUnusedParameters": false,
     "outDir": "lib",
     "paths": {
-      "@sproutch/ui": ["../src"]
+      "@sproutch/ui": ["./src"]
     },
     "preserveConstEnums": true,
     "skipLibCheck": true,
