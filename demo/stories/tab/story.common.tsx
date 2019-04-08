@@ -188,7 +188,7 @@ export default function({
                   ? theme.palette[paletteKnob].main
                   : theme.palette.primary.contrastText
               }
-            />{' '}
+            />
           </View>
         )}
         tabs={[
