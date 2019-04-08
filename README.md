@@ -103,7 +103,21 @@ type Theme<B, O> = {
       appBar: string
       default: string
       paper: string
-    }
+    },
+    state: {
+      /* takes object of the shape: OverlayOpacity. Exemple: {
+          light: 0.04,
+          medium: 0.12,
+          dark: 0.16,
+        }
+      */
+      hover: hoverOverlayOpacity,
+      focus: focusOverlayOpacity,
+      selected: selectedOverlayOpacity,
+      activated: activatedOverlayOpacity,
+      pressed: pressedOverlayOpacity,
+      draged: dragedOverlayOpacity,
+    },
   }
   // The 'rythme' of your design system
   spacing: number
