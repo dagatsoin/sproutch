@@ -33,6 +33,7 @@ export type TabStyleOverride = Partial<
     hasIcon: StyleProp<ViewStyle>
     hasLabel: StyleProp<ViewStyle>
     isActiveLabel: StyleProp<TextStyle>
+    isActiveIcon: StyleProp<TextStyle>
   }
 >
 
@@ -142,6 +143,7 @@ export const tabStyle = function({
         ...(!!options &&
           options.isActive && {
             color: tabActiveColor,
+            ...(style.isActiveIcon as object),
           }),
 
         ...(!!options &&
