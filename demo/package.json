@@ -45,7 +45,7 @@
     "react-native-debugger-open": "^0.3.17",
     "react-native-storybook-loader": "^1.8.0",
     "react-native-vector-icons": "^6.2.0",
-    "react-native-web": "^0.10.0",
+    "react-native-web": "^0.11.0",
     "react-router-dom": "^4.3.1",
     "react-router-native": "^4.3.0",
     "reactxp": "dagatsoin/reactxp.git#f97b8f7656a92ca20ef2ebfbcc8e1cfc5826de08"

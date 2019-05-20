@@ -49,7 +49,7 @@ export default class Paper extends React.Component<PaperProps, State> {
         {theme => {
           const styles = nativePaperStyle(theme, style, borderRadius)
           return (
-            <View onLayout={this.onLayout} style={styles.root}>
+            <View onLayout={this.onLayout} style={styles.root} {...props}>
               {nativeShadows.map((shadowProps, index) => (
                 <Shadow
                   key={index}

@@ -175,3 +175,30 @@ export default function({
     }),
   }
 }
+
+export function createCircleButtonStyle({
+  style,
+  radius,
+}: {
+  style: ButtonStyleOverride
+  radius: number
+}) {
+  return {
+    root: Styles.createViewStyle(
+      {
+        height: radius * 2,
+        width: radius * 2,
+        borderRadius: radius * 2,
+        ...(style.root as object),
+      },
+      false
+    ),
+    content: Styles.createTextStyle({
+      ...(style.content as object),
+    }),
+    icon: Styles.createTextStyle({
+      paddingRight: 0,
+      ...(style.icon as object),
+    }),
+  }
+}

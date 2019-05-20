@@ -9,7 +9,7 @@ import { Paper } from '../paper'
 import { Ripple } from '../ripple'
 import Emitter from '../ripple/Emitter'
 import { Text, TextStyle } from '../text'
-import { View } from '../view'
+import { LayoutInfo, View } from '../view'
 import createButtonStyle, { ButtonStyleOverride } from './style'
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
@@ -25,6 +25,8 @@ export type ButtonProps = {
   label?: string
   backgroundSlot?: (theme: Theme<any, any>) => React.ReactNode
   badgeSlot?: (theme: Theme<any, any>) => React.ReactNode
+  forwardedRef?: (instance: Button) => void
+  onLayout?: (layout: LayoutInfo) => void
 } & Omit<Types.ButtonProps, 'children'>
 
 function noop() {}
@@ -38,6 +40,12 @@ class Button extends React.PureComponent<ButtonProps, State> {
     isHover: false,
   }
   private ripple: Emitter
+
+  public componentDidMount() {
+    if (this.props.forwardedRef) {
+      this.props.forwardedRef(this)
+    }
+  }
 
   public render() {
     return (
@@ -54,6 +62,8 @@ class Button extends React.PureComponent<ButtonProps, State> {
             backgroundSlot,
             badgeSlot,
             onPress = noop,
+            onLongPress,
+            onLayout,
             style,
           } = this.props
 
@@ -113,24 +123,19 @@ class Button extends React.PureComponent<ButtonProps, State> {
                   color={overlayColor}
                 />
               )}
-              <View style={styles.fitParent}>
+              <View style={styles.fitParent} onLayout={onLayout}>
                 <RXButton
                   disabled={isDisabled}
                   style={Styles.createViewStyle({
                     flex: 1,
                   })}
-                  onPress={onPress}
-                  onPressIn={e => this.ripple.onPressIn(e)}
-                  onPressOut={() => this.ripple.onPressOut()}
-                  onHoverStart={() => {
-                    this.setState({ isHover: true })
-                  }}
-                  onHoverEnd={() => {
-                    // prevents a bug on Web where onPressOut
-                    // is not called whend the touch is released outside
-                    this.ripple.onPressOut()
-                    this.setState({ isHover: false })
-                  }}
+                  delayLongPress={this.props.delayLongPress}
+                  onPress={this.onPress}
+                  onPressIn={this.onPressIn}
+                  onPressOut={this.onPressOut}
+                  onHoverStart={this.onHoverStart}
+                  onHoverEnd={this.onHoverEnd}
+                  onLongPress={this.onLongPress}
                 />
               </View>
             </Paper>
@@ -138,6 +143,42 @@ class Button extends React.PureComponent<ButtonProps, State> {
         }}
       </ThemeContext.Consumer>
     )
+  }
+  private onHoverStart = (e: Types.SyntheticEvent) => {
+    const { onHoverStart } = this.props
+    this.setState({ isHover: true })
+    onHoverStart && onHoverStart(e)
+  }
+  private onHoverEnd = (e: Types.SyntheticEvent) => {
+    const { onHoverEnd } = this.props
+    // When a touch is released outside we need to trigger the onPressOut here.
+    this.ripple.onPressOut()
+    this.setState({ isHover: false })
+    onHoverEnd && onHoverEnd(e)
+  }
+
+  private onLongPress = (e: Types.SyntheticEvent) => {
+    const { onLongPress } = this.props
+    this.ripple.onPressOut()
+    onLongPress && onLongPress(e)
+  }
+
+  private onPress = (e: Types.SyntheticEvent) => {
+    const { onPress } = this.props
+    this.ripple.onPressOut()
+    onPress && onPress(e)
+  }
+
+  private onPressIn = (e: Types.SyntheticEvent) => {
+    const { onPressIn } = this.props
+    this.ripple.onPressIn(e)
+    onPressIn && onPressIn(e)
+  }
+
+  private onPressOut = (e: Types.SyntheticEvent) => {
+    const { onPressOut } = this.props
+    this.ripple.onPressOut()
+    onPressOut && onPressOut(e)
   }
 }
 export default Button

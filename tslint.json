@@ -11,7 +11,7 @@
     "curly": false,
     "eofline": false,
     "forin": true,
-    "interface-name": true,
+    "interface-name": false,
     "interface-over-type-literal": false,
     "jsdoc-format": true,
     "jsx-boolean-value": false,

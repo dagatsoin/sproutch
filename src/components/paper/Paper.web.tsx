@@ -7,15 +7,17 @@ import { PaperProps } from './PaperProps'
 import { createWebPaperStyle, shadows } from './style'
 
 export default class Paper extends React.Component<PaperProps, {}> {
-  private containerRef: View
+  private containerRef: View | null
 
   private get shadow(): string {
     return shadows.web[this.props.elevation || 0]
   }
 
   public componentDidMount() {
-    const element = findDOMNode(this.containerRef) as HTMLElement
-    element.style.boxShadow = this.shadow
+    if (this.containerRef) {
+      const element = findDOMNode(this.containerRef) as HTMLElement
+      element.style.boxShadow = this.shadow
+    }
   }
 
   public render() {
@@ -27,7 +29,10 @@ export default class Paper extends React.Component<PaperProps, {}> {
           const rootStyle = createWebPaperStyle(theme)
           return (
             <View
-              ref={(comp: any) => (this.containerRef = comp)}
+              ref={(comp: View | null) => {
+                this.containerRef = comp
+                this.props.ref && this.props.ref(comp)
+              }}
               style={[rootStyle, style.root, style.content]}
               {...props}
             />
