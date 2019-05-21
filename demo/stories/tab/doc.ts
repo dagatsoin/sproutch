@@ -290,8 +290,13 @@ Example:
 </View>
 \`\`\`
 
-#### onChange *optionsl*
+#### onChange *optional*
 \`type: (tabId: string) => void\`
 
 Callback on tab change. This is triggered before the cursor animation.
+
+#### onPressActiveTab *optional*
+\`type: () => void\`
+
+Callback on the active tab press.
 `

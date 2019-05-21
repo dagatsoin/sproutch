@@ -30,6 +30,7 @@ export type TabBarProps = {
   ) => React.ReactNode
   leftScrollButton?: (theme: Theme<any, any>) => React.ReactNode
   rightScrollButton?: (theme: Theme<any, any>) => React.ReactNode
+  onPressActiveTab?: () => void
   onChange?: (tabId: string) => void
 }
 
@@ -701,11 +702,14 @@ class Tabs extends React.Component<CompleteProps, State> {
   }
 
   private onClickTab = (activeTabId: string) => {
+    const { onChange, onPressActiveTab } = this.props
     // Offset the tab if it overflows
     if (activeTabId !== this.state.activeTabId) {
       this.scrollToTab(activeTabId)
-      this.props.onChange && this.props.onChange(activeTabId)
+      onChange && onChange(activeTabId)
       this.setState({ activeTabId })
+    } else {
+      onPressActiveTab && onPressActiveTab()
     }
   }
 
