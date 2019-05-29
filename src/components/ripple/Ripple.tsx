@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { ThemeContext } from '../../styles'
+import { ThemeContext } from '../../styles/ThemeContext'
 import Emitter from './Emitter'
 import Particle from './MDRippleParticle'
 

@@ -66,7 +66,10 @@ export default class Fade extends React.Component<FadeProps, State> {
     const { isVisible } = this.state
     const { children, style } = this.props
     return (
-      <Animated.View style={[style, this.animatedStyle]}>
+      <Animated.View
+        ignorePointerEvents={true}
+        style={[style, this.animatedStyle]}
+      >
         {isVisible && children}
       </Animated.View>
     )

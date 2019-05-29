@@ -15,7 +15,7 @@ A Material UI button.
 
 ### Props
 
-#### onClick *optional*
+#### onPress *optional*
 \`type: (e: Types.SyntheticEvent) => void\`
 
 The click handler.

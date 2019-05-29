@@ -1,3 +1,5 @@
+import { Types } from 'reactxp'
+
 import { StyleProp } from './styles'
 
 // @credit https://github.com/chodorowicz/ts-debounce/blob/master/src/index.ts
@@ -8,6 +10,12 @@ export type Procedure = (...args: any[]) => void
 
 export type Options = {
   isImmediate: boolean
+}
+
+export const noop = () => null
+
+export function isTouch(e: Types.SyntheticEvent): e is Types.TouchEvent {
+  return 'touches' in e
 }
 
 export function debounce<F extends Procedure>(

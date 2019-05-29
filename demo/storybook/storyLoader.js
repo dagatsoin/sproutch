@@ -8,6 +8,7 @@ function loadStories() {
   require('../stories/backgroundImage/story.native');
   require('../stories/borderImage/story.native');
   require('../stories/button/story.native');
+  require('../stories/fab/story.native');
   require('../stories/fade/story.native');
   require('../stories/linearGradient/story.native');
   require('../stories/paper/story.native');
@@ -24,6 +25,7 @@ const stories = [
   '../stories/backgroundImage/story.native',
   '../stories/borderImage/story.native',
   '../stories/button/story.native',
+  '../stories/fab/story.native',
   '../stories/fade/story.native',
   '../stories/linearGradient/story.native',
   '../stories/paper/story.native',

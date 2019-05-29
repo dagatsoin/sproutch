@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { Text, Types } from 'reactxp'
 
-import { Styles, Theme, ThemeContext } from '../../styles'
+import { Styles, Theme } from '../../styles'
+import { ThemeContext } from '../../styles/ThemeContext'
 
 export type TextProps = Types.TextProps
 

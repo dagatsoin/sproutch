@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { Styles } from 'reactxp'
 
-import { Theme, ThemeContext } from '../../styles'
+import { Theme } from '../../styles'
+import { ThemeContext } from '../../styles/ThemeContext'
 import {
   Animated,
   AnimatedCompositeAnimation,

@@ -297,6 +297,6 @@ export function override<C extends Overridable, T>(
     : undefined
 }
 
-export const ThemeContext = React.createContext<Theme<Status & {}, {}>>(
-  defaultTheme
-)
+export function createThemeContext<T = DefaultTheme>(theme: T) {
+  return React.createContext<T>(theme)
+}

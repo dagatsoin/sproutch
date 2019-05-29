@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { ThemeContext } from './theme'
+import { ThemeContext } from './ThemeContext'
 
 /**
  * Remove properties `K` from `T`.
@@ -51,7 +51,7 @@ export interface ThemedComponentProps extends Partial<InjectedTheme<any>> {
 type WithTheme = PropInjector<InjectedTheme<any>, ThemedComponentProps>
 
 export interface InjectedTheme<T> {
-  theme: T // todo make this injected props non optional
+  theme: T
 }
 
 export const withTheme: WithTheme = Component => (props: any) => {

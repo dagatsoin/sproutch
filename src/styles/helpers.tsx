@@ -1,13 +1,14 @@
 import { colorManipulator } from '.'
 import { Theme } from './theme'
 export function getMaterialOverlayColor({
+  isOnPaper,
   palette,
   theme,
 }: {
+  isOnPaper: boolean
   palette?: 'primary' | 'secondary'
   theme: Theme<any, any>
 }) {
-  const isOnPaper = palette !== undefined
   return isOnPaper
     ? // The container used the paper background
       palette
