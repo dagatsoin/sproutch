@@ -48,6 +48,6 @@
     "react-native-web": "^0.11.0",
     "react-router-dom": "^4.3.1",
     "react-router-native": "^4.3.0",
-    "reactxp": "dagatsoin/reactxp.git#f97b8f7656a92ca20ef2ebfbcc8e1cfc5826de08"
+    "reactxp": "dagatsoin/reactxp.git#8e6ad828b7477a8bf963ebfd7b52646ceba7a5ee"
   }
 }

@@ -38,7 +38,7 @@ function renderCustomCursor(
 }
 
 const customCursorAnimation: CustomTabBarCursorAnimation = (
-  { scaleX, scaleY, translateY, rotateZ },
+  { scaleX, scaleY, translateY, rotate },
   { width },
   theme
 ) => ({
@@ -78,13 +78,13 @@ const customCursorAnimation: CustomTabBarCursorAnimation = (
       easing: Animated.Easing.In(),
     }),
   ]),
-  rotateZ: Animated.sequence([
-    Animated.timing(rotateZ, {
+  rotate: Animated.sequence([
+    Animated.timing(rotate, {
       toValue: 180,
       duration: 50,
       easing: Animated.Easing.Out(),
     }),
-    Animated.timing(rotateZ, {
+    Animated.timing(rotate, {
       toValue: 0,
       duration: 50,
       easing: Animated.Easing.In(),
@@ -120,12 +120,13 @@ export default function({
   firstTabLabel = 'LARGE ROCKET LABEL',
   otherTabBarLabel = 'ROCKET',
   hasIcon = false,
-  isDisable = false,
+  isDisabled = false,
   hasIconOnTop = false,
   palette,
   activeTabId = '0',
   tabNumber = 4,
   customCursor = false,
+  isFrozen = boolean('Freeze the tabs bar', false)
 }: any) {
   const paletteKnob = select(
     'Palette',
@@ -140,6 +141,7 @@ export default function({
       })}
     >
       <TabBar
+        isFrozen={isFrozen}
         hasIconOnTop={boolean('Has two lines', hasIconOnTop)}
         palette={paletteKnob || undefined}
         activeTabId={select('Tab', ['0', '1', '2', '3', '4', '5'], activeTabId)}
@@ -195,7 +197,7 @@ export default function({
           {
             id: '0',
             label: text('First tab label', firstTabLabel),
-            isDisable: boolean('Disabled', isDisable),
+            isDisabled: boolean('Disabled', isDisabled),
             badgeSlot: notification,
             iconSlot:
               boolean('With icon', hasIcon) &&

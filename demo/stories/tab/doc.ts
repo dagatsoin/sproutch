@@ -235,13 +235,13 @@ function renderCustomCursor(
       easing: Animated.Easing.In(),
     }),
   ]),
-  rotateZ: Animated.sequence([
-    Animated.timing(rotateZ, {
+  rotate: Animated.sequence([
+    Animated.timing(rotate, {
       toValue: 180,
       duration: 50,
       easing: Animated.Easing.Out(),
     }),
-    Animated.timing(rotateZ, {
+    Animated.timing(rotate, {
       toValue: 0,
       duration: 50,
       easing: Animated.Easing.In(),
@@ -289,6 +289,11 @@ Example:
   <FontAwesome.default name="chevron-right" size={16} color="#ddd" />
 </View>
 \`\`\`
+
+#### isFrozen *optional*
+\`type: boolean\`
+
+Block scroll and tab action if true.
 
 #### onChange *optional*
 \`type: (tabId: string) => void\`

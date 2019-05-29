@@ -155,6 +155,12 @@ Open or close the root element via parent props
 
 An option array (chould be recursive) to display nested Fabs. The options takes the same arguments as the root Fab
 but with and additional \`id: string\` props.
+
+### onRef *optional*
+\`type: (fab: Fab) => void\`
+
+To retrieve the Fab instance.
+
 ### Other optional props
 - ButtonProps
 - children: [React.ReactNode]

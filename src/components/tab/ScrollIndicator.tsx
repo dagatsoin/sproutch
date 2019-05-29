@@ -36,7 +36,11 @@ export class ScrollIndicator extends React.Component<Props, State> {
 
   public render() {
     const { onPress, palette, slot, style, theme } = this.props
-    const overlayColor = getMaterialOverlayColor({ palette, theme })
+    const overlayColor = getMaterialOverlayColor({
+      palette,
+      theme,
+      isOnPaper: palette !== undefined,
+    })
     const overlayStyle = createScrollIndicatorOverlayStyle(overlayColor, theme)
     return (
       <View style={style} onStartShouldSetResponder={() => true}>
@@ -52,7 +56,10 @@ export class ScrollIndicator extends React.Component<Props, State> {
           <Button
             style={flex}
             onHoverStart={() => this.setState({ isHover: true })}
-            onHoverEnd={() => this.setState({ isHover: false })}
+            onHoverEnd={() => {
+              this.ripple.onPressOut()
+              this.setState({ isHover: false })
+            }}
             onPress={onPress}
             onPressIn={(e: Types.SyntheticEvent) => {
               this.ripple.onPressIn(e)

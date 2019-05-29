@@ -57,7 +57,7 @@
   },
   "peerDependencies": {
     "expo": "^32.0.0",
-    "reactxp": "dagatsoin/reactxp.git#f97b8f7656a92ca20ef2ebfbcc8e1cfc5826de08"
+    "reactxp": "dagatsoin/reactxp.git#8e6ad828b7477a8bf963ebfd7b52646ceba7a5ee"
   },
   "devDependencies": {
     "@types/expo": "^32.0.0",
@@ -74,7 +74,7 @@
     "pretty-quick": "^1.10.0",
     "react": "16.5.1",
     "react-art": "^16.7.0",
-    "reactxp": "dagatsoin/reactxp.git#f97b8f7656a92ca20ef2ebfbcc8e1cfc5826de08",
+    "reactxp": "dagatsoin/reactxp.git#8e6ad828b7477a8bf963ebfd7b52646ceba7a5ee",
     "rimraf": "^2.6.2",
     "tslint": "^5.12.0",
     "tslint-config-prettier": "^1.17.0",

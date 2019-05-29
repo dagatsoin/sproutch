@@ -21,15 +21,14 @@ export type ButtonProps = {
   isDense?: boolean
   palette?: 'primary' | 'secondary'
   variant?: 'contained' | 'outlined' | 'text'
-  iconSlot?: (style: StyleProp<TextStyle>) => React.ReactNode
   label?: string
-  backgroundSlot?: (theme: Theme<any, any>) => React.ReactNode
-  badgeSlot?: (theme: Theme<any, any>) => React.ReactNode
-  forwardedRef?: (instance: Button) => void
-  onLayout?: (layout: LayoutInfo) => void
+  iconSlot?(style: StyleProp<TextStyle>): React.ReactNode
+  backgroundSlot?(theme: Theme<any, any>): React.ReactNode
+  badgeSlot?(theme: Theme<any, any>): React.ReactNode
+  onRef?(instance: Button): void
+  nativeRef?(instance: RXButton): void
+  onLayout?(layout: LayoutInfo): void
 } & Omit<Types.ButtonProps, 'children'>
-
-function noop() {}
 
 type State = {
   isHover: boolean
@@ -39,11 +38,11 @@ class Button extends React.PureComponent<ButtonProps, State> {
   public state: State = {
     isHover: false,
   }
-  private ripple: Emitter
+  private ripple?: Emitter
 
   public componentDidMount() {
-    if (this.props.forwardedRef) {
-      this.props.forwardedRef(this)
+    if (this.props.onRef) {
+      this.props.onRef(this)
     }
   }
 
@@ -55,14 +54,13 @@ class Button extends React.PureComponent<ButtonProps, State> {
             label,
             elevation = 0,
             isDisabled = false,
-            palette = 'primary',
+            palette,
             variant = 'contained',
             isDense = false,
             iconSlot,
             backgroundSlot,
             badgeSlot,
-            onPress = noop,
-            onLongPress,
+            nativeRef,
             onLayout,
             style,
           } = this.props
@@ -71,7 +69,8 @@ class Button extends React.PureComponent<ButtonProps, State> {
             (style && style.root && style.root['borderRadius']) || 0
           const isOnPaper = variant !== 'contained'
           const overlayColor = getMaterialOverlayColor({
-            palette: isOnPaper ? palette : undefined,
+            isOnPaper,
+            palette,
             theme,
           })
 
@@ -125,10 +124,9 @@ class Button extends React.PureComponent<ButtonProps, State> {
               )}
               <View style={styles.fitParent} onLayout={onLayout}>
                 <RXButton
+                  ref={nativeRef}
                   disabled={isDisabled}
-                  style={Styles.createViewStyle({
-                    flex: 1,
-                  })}
+                  style={styles.button}
                   delayLongPress={this.props.delayLongPress}
                   onPress={this.onPress}
                   onPressIn={this.onPressIn}
@@ -152,32 +150,32 @@ class Button extends React.PureComponent<ButtonProps, State> {
   private onHoverEnd = (e: Types.SyntheticEvent) => {
     const { onHoverEnd } = this.props
     // When a touch is released outside we need to trigger the onPressOut here.
-    this.ripple.onPressOut()
+    this.ripple && this.ripple.onPressOut()
     this.setState({ isHover: false })
     onHoverEnd && onHoverEnd(e)
   }
 
   private onLongPress = (e: Types.SyntheticEvent) => {
     const { onLongPress } = this.props
-    this.ripple.onPressOut()
+    this.ripple && this.ripple.onPressOut()
     onLongPress && onLongPress(e)
   }
 
   private onPress = (e: Types.SyntheticEvent) => {
     const { onPress } = this.props
-    this.ripple.onPressOut()
+    this.ripple && this.ripple.onPressOut()
     onPress && onPress(e)
   }
 
   private onPressIn = (e: Types.SyntheticEvent) => {
     const { onPressIn } = this.props
-    this.ripple.onPressIn(e)
+    this.ripple && this.ripple.onPressIn(e)
     onPressIn && onPressIn(e)
   }
 
   private onPressOut = (e: Types.SyntheticEvent) => {
     const { onPressOut } = this.props
-    this.ripple.onPressOut()
+    this.ripple && this.ripple.onPressOut()
     onPressOut && onPressOut(e)
   }
 }

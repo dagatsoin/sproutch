@@ -22,7 +22,7 @@ export type TabProps = {
     style: StyleRuleSetRecursive<StyleRuleSet<TextStyle>>
   ) => React.ReactNode
   label?: string
-  isDisable?: boolean
+  isDisabled?: boolean
   style?: TabStyleOverride
   badgeSlot?: React.ReactNode
 }
@@ -32,7 +32,8 @@ type CompleteProps = {
   palette?: 'primary' | 'secondary'
   hasIconOnTop?: boolean
   isActive: boolean
-  onClick: (index: string) => void
+  isFrozen?: boolean
+  onPress: (index: string) => void
   onUnmount: (id: string) => void
   onTabLayout: (tab: { id: string; layout: LayoutInfo }) => void
   onWillMount: (id: string) => void
@@ -42,14 +43,20 @@ type State = {
   isHover: boolean
 }
 
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+
 function noop() {}
 
-class Tab extends React.Component<CompleteProps & ViewProps, State> {
+class Tab extends React.Component<
+  CompleteProps & Omit<ViewProps, 'onPress'>,
+  State
+> {
   public state: State = {
     isHover: false,
   }
   private layout?: LayoutInfo
-  private ripple: Emitter
+  private ripple?: Emitter
+  private isActionAllowed = true
 
   public componentWillMount() {
     const { onWillMount = () => {} } = this.props
@@ -81,18 +88,20 @@ class Tab extends React.Component<CompleteProps & ViewProps, State> {
             iconSlot,
             label,
             isActive = false,
-            isDisable = false,
+            isDisabled = false,
+            isFrozen = false,
             hasIconOnTop = false,
             mustGrow = false,
             palette,
             badgeSlot,
             style,
-            onClick = noop,
+            onPress = noop,
           } = this.props
-
+          const { isHover } = this.state
           const isOnPaper = palette !== undefined
           const overlayColor = getMaterialOverlayColor({
-            palette: isOnPaper ? palette : undefined,
+            isOnPaper,
+            palette,
             theme,
           })
 
@@ -103,7 +112,7 @@ class Tab extends React.Component<CompleteProps & ViewProps, State> {
             overlayColor,
             options: {
               hasIconOnTop,
-              isDisabled: isDisable,
+              isDisabled,
               isActive,
               mustGrow,
               hasIcon: !!iconSlot,
@@ -112,18 +121,19 @@ class Tab extends React.Component<CompleteProps & ViewProps, State> {
           })
 
           return (
-            <View onLayout={this.onLayout} style={styles.root}>
+            <View
+              onResponderMove={this.blockActionDuringScroll}
+              onResponderRelease={this.allowActionDuringScroll}
+              onLayout={this.onLayout}
+              style={styles.root}
+            >
               {iconSlot && iconSlot(styles.icon)}
               {label && <Text style={styles.label}>{label}</Text>}
               {badgeSlot}
-              <Fade
-                style={fitParent}
-                isVisible={this.state.isHover}
-                duration={75}
-              >
+              <Fade style={fitParent} isVisible={isHover} duration={75}>
                 <View style={styles.overlay} />
               </Fade>
-              {!isDisable && (
+              {!isDisabled && !isFrozen && (
                 <Ripple
                   onRef={(emitter: Emitter) => {
                     this.ripple = emitter
@@ -133,18 +143,18 @@ class Tab extends React.Component<CompleteProps & ViewProps, State> {
               )}
               <View style={fitParent}>
                 <Button
-                  disabled={isDisable}
+                  disabled={isDisabled}
                   style={Styles.createViewStyle({
                     flex: 1,
                   })}
                   onPress={() => {
-                    onClick(id)
+                    !isFrozen && this.isActionAllowed && onPress(id)
                   }}
                   onPressIn={(e: Types.SyntheticEvent) => {
-                    this.ripple.onPressIn(e)
+                    this.ripple && this.ripple.onPressIn(e)
                   }}
                   onPressOut={() => {
-                    this.ripple.onPressOut()
+                    this.ripple && this.ripple.onPressOut()
                   }}
                   onHoverStart={() => {
                     this.setState({ isHover: true })
@@ -152,7 +162,7 @@ class Tab extends React.Component<CompleteProps & ViewProps, State> {
                   onHoverEnd={() => {
                     // prevents a bug on Web where onPressOut
                     // is not called whend the touch is released outside
-                    this.ripple.onPressOut()
+                    this.ripple && this.ripple.onPressOut()
                     this.setState({ isHover: false })
                   }}
                 />
@@ -162,6 +172,15 @@ class Tab extends React.Component<CompleteProps & ViewProps, State> {
         }}
       </ThemeContext.Consumer>
     )
+  }
+
+  private blockActionDuringScroll = () => {
+    this.isActionAllowed = false
+    this.ripple && this.ripple.onPressOut()
+  }
+
+  private allowActionDuringScroll = () => {
+    this.isActionAllowed = true
   }
 
   private onLayout = (layout: LayoutInfo) => {

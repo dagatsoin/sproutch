@@ -17,7 +17,7 @@ export default React.forwardRef(
       radius,
     })
     return (
-      <Button style={circleButtonStyle} {...props as any} forwardedRef={ref} />
+      <Button style={circleButtonStyle} {...props as any} nativeRef={ref} />
     )
   }
 )

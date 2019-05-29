@@ -208,13 +208,11 @@ export const tabsBarStyle = function({
   palette,
   theme,
   style = {},
-  overlayColor,
   options,
 }: {
   theme: Theme<any, any>
   palette?: 'primary' | 'secondary' | ''
   style?: Partial<TabBarStyleOverride>
-  overlayColor: string
   options?: {
     hasIconOnTop?: boolean
     isScrollEnabled?: boolean
@@ -234,110 +232,131 @@ export const tabsBarStyle = function({
       ? theme.palette.secondary.main
       : theme.palette[palette].main
 
-  const overlayLuminance = colorManipulator.getLuminance(overlayColor)
-
-  const hoverOverlayOpacity = theme.palette.state.hover
-  const overlayOpacity = !!overlayColor
-    ? overlayLuminance < 0.3
-      ? hoverOverlayOpacity.dark
-      : overlayLuminance < 0.7
-      ? hoverOverlayOpacity.medium
-      : hoverOverlayOpacity.light
-    : 0
-
   return {
-    root: Styles.createViewStyle({
-      height: tabHeight,
-      maxHeight: tabHeight,
-      flexGrow: 1,
-      flexShrink: 1,
-      marginBottom: 4,
-      ...(style.root as object),
-      ...override<'tabs', TabBarStyleOverride>(theme.overrides, 'tabs', 'root'),
-    }),
-    container: Styles.createViewStyle({
-      backgroundColor: tabBackgroundColor,
-      paddingHorizontal,
-      ...(style.container as object),
-      ...override<'tabs', TabBarStyleOverride>(
-        theme.overrides,
-        'tabs',
-        'container'
-      ),
-    }),
-    scrollContent: Styles.createViewStyle({
-      flexDirection: 'row',
-      overflow: 'visible',
+    root: Styles.createViewStyle(
+      {
+        height: tabHeight,
+        maxHeight: tabHeight,
+        flexGrow: 1,
+        flexShrink: 1,
+        marginBottom: 4,
+        ...(style.root as object),
+        ...override<'tabs', TabBarStyleOverride>(
+          theme.overrides,
+          'tabs',
+          'root'
+        ),
+      },
+      false
+    ),
+    container: Styles.createViewStyle(
+      {
+        backgroundColor: tabBackgroundColor,
+        paddingHorizontal,
+        ...(style.container as object),
+        ...override<'tabs', TabBarStyleOverride>(
+          theme.overrides,
+          'tabs',
+          'container'
+        ),
+      },
+      false
+    ),
+    scrollContent: Styles.createViewStyle(
+      {
+        flexDirection: 'row',
+        overflow: 'visible',
 
-      ...(style.scrollContent as object),
-      ...override<'tabs', TabBarStyleOverride>(
-        theme.overrides,
-        'tabs',
-        'scrollContent'
-      ),
-    }),
-    leftIndicator: Styles.createViewStyle({
-      position: 'absolute',
-      left: 0,
-      top: 0,
-      bottom: 0,
-      width: paddingHorizontal,
+        ...(style.scrollContent as object),
+        ...override<'tabs', TabBarStyleOverride>(
+          theme.overrides,
+          'tabs',
+          'scrollContent'
+        ),
+      },
+      false
+    ),
+    leftIndicator: Styles.createViewStyle(
+      {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        bottom: 0,
+        width: paddingHorizontal,
 
-      cursor: 'pointer',
+        cursor: 'pointer',
 
-      ...(style.leftIndicator as object),
-      ...override<'tabs', TabBarStyleOverride>(
-        theme.overrides,
-        'tabs',
-        'leftIndicator'
-      ),
-    }),
-    rightIndicator: Styles.createViewStyle({
-      position: 'absolute',
-      right: 0,
-      top: 0,
-      bottom: 0,
-      width: paddingHorizontal,
+        backgroundColor: tabBackgroundColor,
 
-      cursor: 'pointer',
+        ...(style.leftIndicator as object),
+        ...override<'tabs', TabBarStyleOverride>(
+          theme.overrides,
+          'tabs',
+          'leftIndicator'
+        ),
+      },
+      false
+    ),
+    rightIndicator: Styles.createViewStyle(
+      {
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        bottom: 0,
+        width: paddingHorizontal,
 
-      ...(style.rightIndicator as object),
-      ...override<'tabs', TabBarStyleOverride>(
-        theme.overrides,
-        'tabs',
-        'rightIndicator'
-      ),
-    }),
-    cursorAnimatedContainer: Styles.createViewStyle({
-      position: 'absolute',
-      width: 1,
-      top: 0,
-      bottom: 0,
-    }),
-    cursor: Styles.createViewStyle({
-      height: 4,
-      top: tabHeight - 4,
+        cursor: 'pointer',
 
-      backgroundColor: cursorColor,
+        backgroundColor: tabBackgroundColor,
 
-      ...(style.cursor as object),
-      ...override<'tabs', TabBarStyleOverride>(
-        theme.overrides,
-        'tabs',
-        'cursor'
-      ),
-    }),
-    scrollView: Styles.createScrollViewStyle({
-      marginBottom: -20,
-      ...(Platform.getType() === 'web' && { display: 'inline-flex' }), // To get the tab width fit their content
+        ...(style.rightIndicator as object),
+        ...override<'tabs', TabBarStyleOverride>(
+          theme.overrides,
+          'tabs',
+          'rightIndicator'
+        ),
+      },
+      false
+    ),
+    cursorAnimatedContainer: Styles.createViewStyle(
+      {
+        position: 'absolute',
+        width: 1,
+        top: 0,
+        bottom: 0,
+      },
+      false
+    ),
+    cursor: Styles.createViewStyle(
+      {
+        height: 4,
+        top: tabHeight - 4,
 
-      ...(style.scrollView as object),
-      ...override<'tabs', TabBarStyleOverride>(
-        theme.overrides,
-        'tabs',
-        'scrollView'
-      ),
-    }),
+        backgroundColor: cursorColor,
+
+        ...(style.cursor as object),
+        ...override<'tabs', TabBarStyleOverride>(
+          theme.overrides,
+          'tabs',
+          'cursor'
+        ),
+      },
+      false
+    ),
+    scrollView: Styles.createScrollViewStyle(
+      {
+        marginBottom: -20,
+        ...(Platform.getType() === 'web' && { display: 'inline-flex' }), // To get the tab width fit their content
+
+        ...(style.scrollView as object),
+        ...override<'tabs', TabBarStyleOverride>(
+          theme.overrides,
+          'tabs',
+          'scrollView'
+        ),
+      },
+      false
+    ),
     // Custom values
     paddingHorizontal,
   }

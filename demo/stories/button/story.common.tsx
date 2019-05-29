@@ -25,7 +25,11 @@ export default function() {
             alignItems: 'center',
           })}
         >
-          <Button style={style} variant="contained" label="PRIMARY" />
+          <Button
+            style={style}
+            variant="contained"
+            label="PRIMARY"
+          />
           <Button
             style={style}
             variant="contained"
@@ -73,7 +77,12 @@ export default function() {
             alignItems: 'center',
           })}
         >
-          <Button style={style} variant="outlined" label="PRIMARY" />
+          <Button
+            style={style}
+            variant="outlined"
+            palette="primary"
+            label="PRIMARY"
+            />
           <Button
             style={style}
             variant="outlined"
@@ -83,6 +92,7 @@ export default function() {
           <Button
             style={style}
             variant="outlined"
+            palette="primary"
             iconSlot={iconStyle => (
               <FontAwesome.default style={iconStyle} name="search" />
             )}

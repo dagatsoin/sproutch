@@ -30,14 +30,15 @@ export type FabProps = {
   spreadRadius?: number
   style?: FabStyleOverride
   isOpen?: boolean
-  buildButtonProps?: (nodeInstance: NodeInstance) => Partial<CircleButtonProps>
-  onCancel?: () => void
-  onHover?: (index: string | null) => void
-  onPostClose?: (index: string) => void
-  onPostOpen?: (index: string) => void
-  onPreClose?: (index: string) => void
-  onPreOpen?: (index: string) => void
-  onSelect?: (index: string, path?: string[]) => void
+  onRef?(fab: Fab): void
+  buildButtonProps?(nodeInstance: NodeInstance): Partial<CircleButtonProps>
+  onCancel?(): void
+  onHover?(index: string | null): void
+  onPostClose?(index: string): void
+  onPostOpen?(index: string): void
+  onPreClose?(index: string): void
+  onPreOpen?(index: string): void
+  onSelect?(index: string, path?: string[]): void
 }
 
 const DEFAULT_SPREAD_RADIUS = 120
@@ -60,6 +61,12 @@ class Fab extends React.Component<FabProps, State> {
   public state: State = {
     positionRelativeToPageX: 0,
     positionRelativeToPageY: 0,
+  }
+
+  public componentDidMount() {
+    if (this.props.onRef) {
+      this.props.onRef(this)
+    }
   }
 
   public componentDidUpdate() {

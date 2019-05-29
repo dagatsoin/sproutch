@@ -16,6 +16,7 @@ type State = {
   nextKey: number
   particlesInfos: ParticleInfos[]
   rect: LayoutInfo
+  isUnmounted: boolean
 }
 
 type ParticleInfos = ParticleProps<any> & { id: number }
@@ -23,12 +24,13 @@ type ParticleInfos = ParticleProps<any> & { id: number }
 class Emitter extends React.PureComponent<Props, State> implements IEmitter {
   private static isWeb = Platform.getType() === 'web'
   public state: State = {
+    isUnmounted: false,
     nextKey: 0,
     rect: { width: 0, height: 0, x: 0, y: 0 },
     particlesInfos: [],
   }
 
-  private containerRef: View
+  private containerRef?: View
   private processingOnPressInHandler = false
   private removeQueue: Array<() => void> = []
 
@@ -64,12 +66,17 @@ class Emitter extends React.PureComponent<Props, State> implements IEmitter {
     this.killNextParticle()
   }
 
+  public componentWillUnmount() {
+    this.setState({ isUnmounted: true })
+  }
+
   private onRef = (view: View) => {
     this.containerRef = view
     this.props.onRef && this.props.onRef(this)
   }
 
-  private async addParticle(event: Types.MouseEvent) {
+  private async addParticle(event: Types.SyntheticEvent) {
+    if (!this.containerRef) return
     this.processingOnPressInHandler = true
     const rect = await UserInterface.measureLayoutRelativeToWindow(
       this.containerRef
@@ -77,12 +84,28 @@ class Emitter extends React.PureComponent<Props, State> implements IEmitter {
     const { width, height, x, y } = rect
 
     // Get the particle layout
+    const clientX =
+      'touches' in event
+        ? (event as Types.TouchEvent).touches[0].clientX
+        : (event as Types.MouseEvent).clientX
+    const clientY =
+      'touches' in event
+        ? (event as Types.TouchEvent).touches[0].clientY
+        : (event as Types.MouseEvent).clientY
+    const pageX =
+      'touches' in event
+        ? (event as Types.TouchEvent).touches[0].pageX
+        : (event as Types.MouseEvent).pageX
+    const pageY =
+      'touches' in event
+        ? (event as Types.TouchEvent).touches[0].pageY
+        : (event as Types.MouseEvent).pageY
     const cursorX = Emitter.isWeb
-      ? Math.round(event.clientX - x)
-      : Math.round(event.pageX! - x)
+      ? Math.round(clientX - x)
+      : Math.round(pageX! - x)
     const cursorY = Emitter.isWeb
-      ? Math.round(event.clientY - y)
-      : Math.round(event.pageY! - y)
+      ? Math.round(clientY - y)
+      : Math.round(pageY! - y)
 
     const radiusFrom = Math.min(width, height) / 2
     const posX = cursorX - radiusFrom
@@ -143,12 +166,14 @@ class Emitter extends React.PureComponent<Props, State> implements IEmitter {
   }
 
   private onParticleDeath() {
-    this.setState({
-      particlesInfos: this.state.particlesInfos.slice(
-        0,
-        this.state.particlesInfos.length - 1
-      ),
-    })
+    if (!this.state.isUnmounted) {
+      this.setState({
+        particlesInfos: this.state.particlesInfos.slice(
+          0,
+          this.state.particlesInfos.length - 1
+        ),
+      })
+    }
   }
 }
 
