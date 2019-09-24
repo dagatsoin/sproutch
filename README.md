@@ -11,8 +11,9 @@ React and React Native iOS/Android library to make lovely (or not) UI.
 :construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction:
 
 ```
-Actually in aplha 0.0.3 but already usable. Expect breaking changes in the futur. Tested on:
+Actually in 0.0.4-beta.2 but already usable. Expect breaking changes in the futur. Tested on:
 - Chrome 73
+- Safari 12.1.2
 - Croswwalk 2.3
 - Expo 32
 ```
