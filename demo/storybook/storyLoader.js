@@ -11,6 +11,7 @@ function loadStories() {
   require('../stories/fab/story.native');
   require('../stories/fade/story.native');
   require('../stories/linearGradient/story.native');
+  require('../stories/list/story.native');
   require('../stories/paper/story.native');
   require('../stories/progressBar/story.native');
   require('../stories/radialGradient/story.native');
@@ -28,6 +29,7 @@ const stories = [
   '../stories/fab/story.native',
   '../stories/fade/story.native',
   '../stories/linearGradient/story.native',
+  '../stories/list/story.native',
   '../stories/paper/story.native',
   '../stories/progressBar/story.native',
   '../stories/radialGradient/story.native',
