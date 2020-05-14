@@ -1,7 +1,8 @@
 import { array, boolean, number, select } from '@storybook/addon-knobs'
 import * as React from 'react'
 
-import { RadialGradient, RadialGradientProps, Styles, View } from '@sproutch/ui'
+import { RadialGradient, Styles, View } from '@sproutch/ui'
+import { ArrayTypeKnobValue } from '@storybook/addon-knobs/dist/components/types'
 
 export default function({
   isEllipse = true,
@@ -11,17 +12,17 @@ export default function({
   percentRadius = [50, 50],
   center = [50, 50],
 }: {
-  isEllipse: boolean
-  height: number
-  width: number
+  isEllipse?: boolean
+  height?: number
+  width?: number
   radius?: string
   percentRadius?: [number, number]
-  center: [number, number]
+  center?: [number, number]
 }) {
-  const predefinedRadiusKnob = select(
+  const predefinedRadiusKnob: any = select(
     'Radius type',
     [
-      undefined as RadialGradientProps['radius'],
+      undefined as any as string,
       'closest-side',
       'closest-corner',
       'farthest-side',
@@ -32,7 +33,7 @@ export default function({
 
   const percentRadiusKnob = array(
     'Radius in percent (to enable, select NULL in Radius Type)',
-    percentRadius,
+    percentRadius as any as ArrayTypeKnobValue,
     ', '
   )
 
@@ -67,7 +68,7 @@ export default function({
           'Gradient origin position (in percent)',
           [center[0] + '%', center[1] + '%'],
           ', '
-        )}
+        ) as [string, string]}
       />
     </View>
   )

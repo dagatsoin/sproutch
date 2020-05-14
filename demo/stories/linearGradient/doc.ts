@@ -1,6 +1,11 @@
 export default `
 ### Import name
 \`LinearGradient\`
+
+### Installation
+
+For use with RN, install \`expo install expo-linear-gradient\`
+
 ### Usage
 This component displays a linear gradient. Does not accept children.
 \`\`\`

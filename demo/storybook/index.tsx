@@ -3,9 +3,8 @@ import {
   addDecorator,
   configure,
   getStorybookUI,
-  RenderFunction,
 } from '@storybook/react-native'
-import { Font } from 'expo'
+import * as Font from 'expo-font'
 import * as React from 'react'
 import { Platform, ScrollView, View } from 'reactxp'
 
@@ -52,7 +51,7 @@ class ScrollViewAutoMinHeight extends React.Component<ScrollViewAutoMinHeightPro
 }
 
 // Center the story in the screen
-const Center = (storyFn: RenderFunction) => (
+const Center = (storyFn) => (
   <ScrollViewAutoMinHeight>
     {storyFn()}      
   </ScrollViewAutoMinHeight>
@@ -60,7 +59,7 @@ const Center = (storyFn: RenderFunction) => (
 
 // Add the Theme provider
 
-const ThemeInjector = (storyFn: RenderFunction) => (
+const ThemeInjector = (storyFn) => (
   <ThemeContext.Provider value={getTheme({})}>
     {storyFn()}
   </ThemeContext.Provider>

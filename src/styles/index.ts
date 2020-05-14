@@ -1,5 +1,6 @@
-export * from './theme'
 export * from './colorManipulator'
 export * from './colors'
 export * from './createStyle'
+export * from './theme'
 export * from './withTheme'
+export * from './ThemeContext'

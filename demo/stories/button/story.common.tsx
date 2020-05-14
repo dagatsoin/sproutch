@@ -1,4 +1,4 @@
-import { BorderImage, Button, Styles, Text, View } from '@sproutch/ui'
+import { BorderImage, Button, CircleButton, Styles, Text, View } from '@sproutch/ui'
 import * as React from 'react'
 import { ScrollView } from 'reactxp'
 
@@ -25,7 +25,11 @@ export default function() {
             alignItems: 'center',
           })}
         >
-          <Button style={style} variant="contained" label="PRIMARY" />
+          <Button
+            style={style}
+            variant="contained"
+            label="PRIMARY"
+          />
           <Button
             style={style}
             variant="contained"
@@ -73,7 +77,12 @@ export default function() {
             alignItems: 'center',
           })}
         >
-          <Button style={style} variant="outlined" label="PRIMARY" />
+          <Button
+            style={style}
+            variant="outlined"
+            palette="primary"
+            label="PRIMARY"
+            />
           <Button
             style={style}
             variant="outlined"
@@ -83,6 +92,7 @@ export default function() {
           <Button
             style={style}
             variant="outlined"
+            palette="primary"
             iconSlot={iconStyle => (
               <FontAwesome.default style={iconStyle} name="search" />
             )}
@@ -94,6 +104,24 @@ export default function() {
             isDisabled
             label="DISABLED"
           />
+        </View>
+        <Text style={Styles.createTextStyle({ marginTop: 50 })}>
+          Circle button
+        </Text>
+        <View
+          style={Styles.createViewStyle({
+            flexDirection: 'row',
+            overflow: 'visible',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          })}
+        >
+          <CircleButton iconSlot={_style => <FontAwesome.default name='check' style={_style}/>} radius={20}/>
+          <CircleButton iconSlot={_style => <FontAwesome.default name='check' style={_style}/>}/>
+          <CircleButton iconSlot={_style => <FontAwesome.default name='check' style={_style}/>} isDisabled/>
+          <CircleButton iconSlot={_style => <FontAwesome.default name='check' style={_style}/>} elevation={12} palette="primary"/>
+          <CircleButton iconSlot={_style => <FontAwesome.default name='check' style={_style}/>} palette="secondary"/>
         </View>
         <Text style={Styles.createTextStyle({ marginTop: 50 })}>
           Variant: Text

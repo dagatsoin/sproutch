@@ -11,10 +11,11 @@ React and React Native iOS/Android library to make lovely (or not) UI.
 :construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction:
 
 ```
-Actually in aplha 0.0.3 but already usable. Expect breaking changes in the futur. Tested on:
+Actually in 0.0.4-beta.7 but already usable. Expect breaking changes in the futur. Tested on:
 - Chrome 73
+- Safari 12.1.2
 - Croswwalk 2.3
-- Expo 32
+- Expo 35
 ```
 
 :construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction::construction:
@@ -33,13 +34,24 @@ Sproutch depends on two peer dependencies:
 ### Installation
 
 To install Sproutch and its dependencies:
-- If you target a web project or an expo/crna project:
+- If you target a web project:
 
   `$ npm i @sproutch/ui reactxp`
+
+- If you target an expo project:
+
+  ```
+  $ npm i @sproutch/ui reactxp
+  $ expo install react-native-svg
+  $ expo install expo-linear-gradient
+  ```
 
 - If you target raw (without expo) React Native **(I did not test yet, please, fill an issue if it crashes)**
 
   `$ npm i @sproutch/ui reactxp expo`
+
+  Add [react-native-svg](https://github.com/react-native-community/react-native-svg)
+  Add [expo-linear-gradient](https://github.com/expo/expo/tree/master/packages/expo-linear-gradient)
 
 ### Usage
 

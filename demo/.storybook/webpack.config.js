@@ -1,11 +1,11 @@
 const path = require('path')
 
 const root = filePath => path.resolve(__dirname, `../${filePath}`)
-module.exports = (_baseConfig, _env, config) => {
+module.exports = async ({ config }) => {
   config.module.rules.push(
     {
       test: /\.(ts|tsx)$/,
-      loader: 'awesome-typescript-loader',
+      loader: require.resolve('awesome-typescript-loader'),
       options: {
         configFileName: path.resolve(__dirname, '../tsconfig.json')
       }

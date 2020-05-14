@@ -1,5 +1,5 @@
-import { Svg } from 'expo'
 import * as React from 'react'
+import Svg, { Defs, Ellipse, RadialGradient, Stop } from 'react-native-svg'
 
 import { colorManipulator, Styles } from '../../styles'
 import { LayoutInfo, View } from '../view'
@@ -75,7 +75,6 @@ class RadialGradientComponent extends React.Component<
 
   public render() {
     const { center, style, stops, colors, isEllipse, radius } = this.props
-    const { Defs, RadialGradient, Stop, Ellipse } = Svg
     const isCenterInPercent = !center || typeof center[0] === 'string'
     const { width, height } = this.state.layout
     const posX = center

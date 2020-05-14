@@ -19,6 +19,7 @@ export const containerStyle: RootStyle = {
     left: 0,
   }),
   button: Styles.createViewStyle({
+    margin: 0,
     flex: 1,
   }),
 }

@@ -1,8 +1,7 @@
 import * as React from 'react'
 import { Types } from 'reactxp'
 
-import { ThemeContext } from '../../styles'
-import { Shadow } from '../shadow/index.native'
+import { ThemeContext } from '../../styles/ThemeContext'
 import { View } from '../view'
 import { PaperProps } from './PaperProps'
 import { nativePaperStyle, shadows } from './style'
@@ -37,26 +36,24 @@ export default class Paper extends React.Component<PaperProps, State> {
     const { width, height } = this.state
     const borderRadius =
       (style && style.root && style.root['borderRadius']) || 0
-    const nativeShadows =
+    const shadow =
       !!elevation &&
       elevation > 0 &&
       width !== undefined &&
       height !== undefined
-        ? shadows.native[elevation - 1](width, height, borderRadius)
+        ? shadows.native[elevation - 1]
         : []
+
     return (
       <ThemeContext.Consumer>
         {theme => {
           const styles = nativePaperStyle(theme, style, borderRadius)
           return (
-            <View onLayout={this.onLayout} style={styles.root}>
-              {nativeShadows.map((shadowProps, index) => (
-                <Shadow
-                  key={index}
-                  style={styles.nativeShadowContainer}
-                  {...shadowProps}
-                />
-              ))}
+            <View
+              onLayout={this.onLayout}
+              style={[styles.root, shadow]}
+              {...props}
+            >
               <View style={styles.content} {...props} />
             </View>
           )

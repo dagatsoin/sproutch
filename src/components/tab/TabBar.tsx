@@ -3,7 +3,6 @@ import { Animated, Platform, ScrollView } from 'reactxp'
 
 import { recall, shouldComponentUpdate } from '../../helpers'
 import { Styles } from '../../styles'
-import { getMaterialOverlayColor } from '../../styles/helpers'
 import { Theme } from '../../styles/theme'
 import { InjectedTheme, withTheme } from '../../styles/withTheme'
 import {
@@ -23,6 +22,7 @@ export type TabBarProps = {
   style?: Partial<TabBarStyleOverride>
   tabs: TabProps[]
   customCursorAnimation?: CustomTabBarCursorAnimation
+  isFrozen?: boolean
   renderCustomCursor?: (
     tabLayout: LayoutInfo,
     barLayout: LayoutInfo,
@@ -44,9 +44,7 @@ export type CustomTabBarCursorAnimation = (
   opacity?: AnimatedCompositeAnimation
   translateX?: AnimatedCompositeAnimation
   translateY?: AnimatedCompositeAnimation
-  rotateX?: AnimatedCompositeAnimation
-  rotateY?: AnimatedCompositeAnimation
-  rotateZ?: AnimatedCompositeAnimation
+  rotate?: AnimatedCompositeAnimation
   scaleX?: AnimatedCompositeAnimation
   scaleY?: AnimatedCompositeAnimation
 }
@@ -55,9 +53,7 @@ type AnimatableKey =
   | 'opacity'
   | 'translateX'
   | 'translateY'
-  | 'rotateX'
-  | 'rotateY'
-  | 'rotateZ'
+  | 'rotate'
   | 'scaleX'
   | 'scaleY'
 
@@ -159,9 +155,7 @@ class Tabs extends React.Component<CompleteProps, State> {
     opacity: Animated.createValue(0),
     translateX: Animated.createValue(0),
     translateY: Animated.createValue(0),
-    rotateX: Animated.createValue(0),
-    rotateY: Animated.createValue(0),
-    rotateZ: Animated.createValue(0),
+    rotate: Animated.createValue(0),
     scaleX: Animated.createValue(0),
     scaleY: Animated.createValue(1),
   }
@@ -255,15 +249,7 @@ class Tabs extends React.Component<CompleteProps, State> {
 
   constructor(props: CompleteProps) {
     super(props)
-    const rotateX = this.cursorAnimatedValues.rotateX.interpolate({
-      inputRange: [0, 1],
-      outputRange: Platform.getType() === 'web' ? [0, 360] : ['0deg', '360deg'],
-    })
-    const rotateY = this.cursorAnimatedValues.rotateY.interpolate({
-      inputRange: [0, 1],
-      outputRange: Platform.getType() === 'web' ? [0, 360] : ['0deg', '360deg'],
-    })
-    const rotateZ = this.cursorAnimatedValues.rotateZ.interpolate({
+    const rotate = this.cursorAnimatedValues.rotate.interpolate({
       inputRange: [0, 1],
       outputRange: Platform.getType() === 'web' ? [0, 360] : ['0deg', '360deg'],
     })
@@ -272,11 +258,9 @@ class Tabs extends React.Component<CompleteProps, State> {
       transform: [
         { translateX: this.cursorAnimatedValues.translateX },
         { translateY: this.cursorAnimatedValues.translateY },
-        { rotateX },
-        { rotateY },
-        { rotateZ },
         { scaleX: this.cursorAnimatedValues.scaleX },
         { scaleY: this.cursorAnimatedValues.scaleY },
+        { rotate },
       ],
     })
   }
@@ -293,6 +277,7 @@ class Tabs extends React.Component<CompleteProps, State> {
   }
 
   public render() {
+    const { isFrozen } = this.props
     const {
       hasLeftScrollIndicator,
       hasRightScrollIndicator,
@@ -301,9 +286,16 @@ class Tabs extends React.Component<CompleteProps, State> {
 
     const styles = this.getStyles(isScrollEnabled)
 
+    // In case of explicite scroll disabling, an offset is added on the content to mimic
+    // the last known scroll
+    const left = isFrozen ? { left: -this.layout.currentScroll } : {}
     const tabs = (
       <View
-        style={[styles.scrollContent, { minWidth: this.state.wrapperWidth }]}
+        style={[
+          styles.scrollContent,
+          { minWidth: this.state.wrapperWidth },
+          left,
+        ]}
       >
         {this.renderCursor(styles)}
         {this.tabs}
@@ -345,14 +337,15 @@ class Tabs extends React.Component<CompleteProps, State> {
    * This function inject some additional props into the child.
    */
   private bindTab = (id: string) => {
-    const { hasIconOnTop, palette } = this.props
+    const { hasIconOnTop, palette, isFrozen } = this.props
     const { activeTabId, isScrollEnabled } = this.state
 
     return {
       onWillMount: this.registerTab,
       onTabLayout: this.setTabLayout,
       onUnmount: this.removeTab,
-      onClick: this.onClickTab,
+      onPress: this.onPressTab,
+      isFrozen, // remove ripple, disable click but keep the look
       isActive: id === activeTabId,
       mustGrow: isScrollEnabled,
       hasIconOnTop,
@@ -372,9 +365,7 @@ class Tabs extends React.Component<CompleteProps, State> {
       translateX:
         this.activeTab!.layout!.x + this.activeTab!.layout!.width * 0.5,
       translateY: 0,
-      rotateX: 0,
-      rotateY: 0,
-      rotateZ: 0,
+      rotate: 0,
       scaleX: this.activeTab!.layout!.width,
       scaleY: 1,
     })
@@ -418,10 +409,27 @@ class Tabs extends React.Component<CompleteProps, State> {
     hasLeftScrollIndicator: boolean,
     hasRightScrollIndicator: boolean
   ) {
-    const { palette, theme, leftScrollButton, rightScrollButton } = this.props
+    const {
+      palette,
+      theme,
+      leftScrollButton,
+      rightScrollButton,
+      isFrozen,
+    } = this.props
 
     return (
       <>
+        <ScrollView
+          ref={(comp: any) => (this.scrollViewRef = comp)}
+          scrollEnabled={isScrollEnabled && !isFrozen}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          onScroll={this.onScroll}
+          style={styles.scrollView}
+        >
+          {tabs}
+        </ScrollView>
         {hasLeftScrollIndicator && leftScrollButton && (
           <ScrollIndicator
             palette={palette}
@@ -440,31 +448,17 @@ class Tabs extends React.Component<CompleteProps, State> {
             onPress={() => this.rollRight()}
           />
         )}
-        <ScrollView
-          ref={(comp: any) => (this.scrollViewRef = comp)}
-          scrollEnabled={isScrollEnabled}
-          horizontal={true}
-          vertical={false}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-          onScroll={this.onScroll}
-          style={styles.scrollView}
-        >
-          {tabs}
-        </ScrollView>
       </>
     )
   }
 
   private getStyles(isScrollEnabled: boolean) {
     const { hasIconOnTop, palette, theme, style } = this.props
-    const overlayColor = getMaterialOverlayColor({ palette, theme })
 
     return tabsBarStyle({
       theme,
       palette,
       style,
-      overlayColor,
       options: {
         hasIconOnTop,
         isScrollEnabled,
@@ -643,7 +637,9 @@ class Tabs extends React.Component<CompleteProps, State> {
     this.setState(
       { isScrollEnabled, hasRightScrollIndicator, wrapperWidth },
       () => {
-        this.scrollToTab(this.state.activeTabId, false)
+        if (!this.props.isFrozen) {
+          this.scrollToTab(this.state.activeTabId, false)
+        }
       }
     )
   }
@@ -701,7 +697,7 @@ class Tabs extends React.Component<CompleteProps, State> {
     return Math.min(this.layout.maxScroll, Math.max(0, value))
   }
 
-  private onClickTab = (activeTabId: string) => {
+  private onPressTab = (activeTabId: string) => {
     const { onChange, onPressActiveTab } = this.props
     // Offset the tab if it overflows
     if (activeTabId !== this.state.activeTabId) {
@@ -717,9 +713,7 @@ class Tabs extends React.Component<CompleteProps, State> {
     opacity,
     translateX,
     translateY,
-    rotateX,
-    rotateY,
-    rotateZ,
+    rotate,
     scaleX,
     scaleY,
   }: { [key in AnimatableKey]: number }) {
@@ -753,24 +747,10 @@ class Tabs extends React.Component<CompleteProps, State> {
           duration: Tabs.cursorTransitionDuration,
           easing: Animated.Easing.InOut(),
         }),
-      rotateX:
-        customAnimation.rotateX ||
-        Animated.timing(this.cursorAnimatedValues.rotateX, {
-          toValue: rotateX,
-          duration: Tabs.cursorTransitionDuration,
-          easing: Animated.Easing.InOut(),
-        }),
-      rotateY:
-        customAnimation.rotateY ||
-        Animated.timing(this.cursorAnimatedValues.rotateY, {
-          toValue: rotateY,
-          duration: Tabs.cursorTransitionDuration,
-          easing: Animated.Easing.InOut(),
-        }),
-      rotateZ:
-        customAnimation.rotateZ ||
-        Animated.timing(this.cursorAnimatedValues.rotateZ, {
-          toValue: rotateZ,
+      rotate:
+        customAnimation.rotate ||
+        Animated.timing(this.cursorAnimatedValues.rotate, {
+          toValue: rotate,
           duration: Tabs.cursorTransitionDuration,
           easing: Animated.Easing.InOut(),
         }),

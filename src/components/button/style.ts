@@ -11,12 +11,13 @@ export type ButtonStyle = {
   label: StyleProp<Types.TextStyle>
   overlay: StyleProp<ViewStyle>
   fitParent: StyleProp<ViewStyle>
+  button: StyleProp<ViewStyle>
 }
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
 export type ButtonStyleOverride = Partial<
-  Omit<ButtonStyle, 'fitParent'> & {
+  Omit<ButtonStyle, 'fitParent' | 'button'> & {
     hasIcon: StyleProp<ViewStyle>
     hasLabel: StyleProp<ViewStyle>
   }
@@ -76,7 +77,6 @@ export default function({
     root: Styles.createViewStyle(
       {
         height,
-        alignSelf: 'center',
         borderRadius: theme.shape.borderRadius,
 
         ...(style.root as object),
@@ -172,6 +172,40 @@ export default function({
       right: 0,
       bottom: 0,
       left: 0,
+    }),
+    button: Styles.createViewStyle({
+      flex: 1,
+    }),
+  }
+}
+
+export function createCircleButtonStyle({
+  style,
+  radius,
+}: {
+  style: ButtonStyleOverride
+  radius: number
+}) {
+  return {
+    root: Styles.createViewStyle(
+      {
+        height: radius * 2,
+        width: radius * 2,
+        borderRadius: radius * 2,
+        ...(style.root as object),
+      },
+      false
+    ),
+    content: Styles.createTextStyle({
+      ...(style.content as object),
+    }),
+    icon: Styles.createTextStyle({
+      paddingRight: 0,
+      ...(style.icon as object),
+    }),
+    overlay: Styles.createViewStyle({
+      borderRadius: radius * 2,
+      ...(style.overlay as object),
     }),
   }
 }

@@ -6,8 +6,8 @@ export default function({
   animationDuration = 300,
   progress = 50,
 }: {
-  animationDuration: number
-  progress: number
+  animationDuration?: number
+  progress?: number
 }) {
   return (
     <View

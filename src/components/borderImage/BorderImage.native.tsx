@@ -41,7 +41,6 @@ function renderBorders(props: BorderImageProps, state: State) {
       style={{
         position: 'absolute',
         overflow: 'hidden',
-        display: 'flex',
         alignItems: 'center',
         top: 0,
         right: 0,
@@ -91,7 +90,6 @@ function renderBorders(props: BorderImageProps, state: State) {
       style={{
         position: 'absolute',
         overflow: 'hidden',
-        display: 'flex',
         justifyContent: 'center',
         top: 0,
         right: 0,
@@ -145,7 +143,6 @@ function renderBorders(props: BorderImageProps, state: State) {
       style={{
         position: 'absolute',
         overflow: 'hidden',
-        display: 'flex',
         alignItems: 'center',
         right: 0,
         bottom: 0,
@@ -198,7 +195,6 @@ function renderBorders(props: BorderImageProps, state: State) {
       style={{
         position: 'absolute',
         overflow: 'hidden',
-        display: 'flex',
         justifyContent: 'center',
         top: 0,
         bottom: 0,

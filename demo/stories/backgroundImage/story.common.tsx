@@ -48,7 +48,7 @@ export const backgroundImage = function({
           uri="https://i.ibb.co/Yhs3Ff5/btn-bg.png"
           resizeMode={select('Resize mode', ['stretch', 'cover', 'contain', 'auto'], resizeMode)}
           repeat={boolean('Repeat image', repeat)}
-          position={array('Position in % or px', [position[0] + '%', position[1] + '%'], ', ')}
+          position={array('Position in % or px', [position[0] + '%', position[1] + '%'], ', ') as [string, string]}
         />
       </View>
     </View>

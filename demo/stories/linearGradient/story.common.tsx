@@ -6,8 +6,8 @@ export default function({
   height = 200,
   width = 200
 }: {
-  height: number
-  width: number
+  height?: number
+  width?: number
 }) {
   return (
     <View
