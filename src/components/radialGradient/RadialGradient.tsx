@@ -27,7 +27,7 @@ class RadialGradient extends React.Component<RadialGradientProps, {}> {
 
   private updateGradientStyle() {
     ;[findDOMNode(this.backgroundImageRef) as HTMLElement].map(e =>
-      e.setAttribute('style', this.style)
+      Object.keys(this.style).forEach(key => (e.style[key] = this.style[key]))
     )
   }
 
@@ -58,14 +58,14 @@ class RadialGradient extends React.Component<RadialGradientProps, {}> {
         : radius
       : radius
 
-    return `
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      background-image: radial-gradient(${shape} ${_radius} at ${posX} ${posY}, ${colorStrings})
-    `
+    return {
+      position: 'absolute',
+      top: '0',
+      right: '0',
+      bottom: '0',
+      left: '0',
+      backgroundImage: `radial-gradient(${shape} ${_radius} at ${posX} ${posY}, ${colorStrings})`,
+    }
   }
 }
 

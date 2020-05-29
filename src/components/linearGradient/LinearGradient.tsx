@@ -52,7 +52,7 @@ class LinearGradient extends React.PureComponent<LinearGradientProps, {}> {
   private updateLayout(dimensions: { width: number; height: number }) {
     ;[findDOMNode(this.backgroundImageRef) as HTMLDivElement].map(e => {
       const style = this.getStyle(dimensions)
-      e.setAttribute('style', style)
+      Object.keys(style).forEach(key => (e.style[key] = style[key]))
     })
   }
 
@@ -102,16 +102,16 @@ class LinearGradient extends React.PureComponent<LinearGradientProps, {}> {
   }
 
   private getStyle(dimensions: { width: number; height: number }) {
-    return `
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      background-image: linear-gradient(${this.getAngle(dimensions)}, ${
-      this.colors
-    });
-    `
+    return {
+      position: 'absolute',
+      top: '0',
+      right: '0',
+      bottom: '0',
+      left: '0',
+      backgroundImage: `linear-gradient(${this.getAngle(dimensions)}, ${
+        this.colors
+      })`,
+    }
   }
 }
 
