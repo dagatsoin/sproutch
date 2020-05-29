@@ -53,21 +53,16 @@ export default class BackgroundImage extends React.PureComponent<
       const position = center ? center.join(' ') : '50% 50%'
       const size = resizeMode === 'stretch' ? '100% 100%' : resizeMode
 
-      this.element.setAttribute(
-        'style',
-        `
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        border-radius: ${borderRadius}px;
-        background-image: url(${uri});
-        background-position: ${position};
-        background-size: ${size};
-        background-repeat: ${repeat ? 'repeat' : 'no-repeat'}
-      `
-      )
+      this.element.style.position = 'absolute'
+      this.element.style.top = '0'
+      this.element.style.right = '0'
+      this.element.style.bottom = '0'
+      this.element.style.left = '0'
+      this.element.style.borderRadius = `${borderRadius}px`
+      this.element.style.backgroundImage = `url(${uri})`
+      this.element.style.backgroundPosition = `${position}`
+      this.element.style.backgroundSize = `${size}`
+      this.element.style.backgroundRepeat = repeat ? 'repeat' : 'no-repeat'
     }
   }
 }
