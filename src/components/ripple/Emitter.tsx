@@ -52,13 +52,15 @@ class Emitter extends React.PureComponent<Props, State> implements IEmitter {
           onContextMenu={this.onPressOut}
           style={containerStyle.button}
         >
-          {this.state.particlesInfos.map(props => (
-            <Particle
-              emitterLayout={this.state.rect}
-              key={props.id}
-              {...props}
-            />
-          ))}
+          {this.state.particlesInfos.map(props => {
+            return (
+              <Particle
+                emitterLayout={this.state.rect}
+                key={props.id}
+                {...props}
+              />
+            )
+          })}
         </Button>
       </View>
     )
@@ -91,24 +93,27 @@ class Emitter extends React.PureComponent<Props, State> implements IEmitter {
         this.containerRef
       )
       const { width, height, x, y } = rect
+      const touch: Types.Touch | undefined = event.nativeEvent.touches?.[0]
 
       // Get the particle layout
-      const clientX =
-        'touches' in event
-          ? (event as Types.TouchEvent).touches[0].clientX
-          : (event as Types.MouseEvent).clientX
-      const clientY =
-        'touches' in event
-          ? (event as Types.TouchEvent).touches[0].clientY
-          : (event as Types.MouseEvent).clientY
-      const pageX =
-        'touches' in event
-          ? (event as Types.TouchEvent).touches[0].pageX
-          : (event as Types.MouseEvent).pageX
-      const pageY =
-        'touches' in event
-          ? (event as Types.TouchEvent).touches[0].pageY
-          : (event as Types.MouseEvent).pageY
+      const clientX = touch
+        ? // Webview
+          touch.clientX ||
+          // RN
+          touch.locationX
+        : (event as Types.MouseEvent).clientX
+
+      const clientY = touch
+        ? // Webview
+          touch.clientY ||
+          // RN
+          touch.locationY
+        : (event as Types.MouseEvent).clientY
+
+      const pageX = touch ? touch.pageX : (event as Types.MouseEvent).pageX
+
+      const pageY = touch ? touch.pageY : (event as Types.MouseEvent).pageY
+
       if (clientX && clientY && pageX && pageY) {
         const cursorX = Emitter.isWeb
           ? Math.round(clientX - x)
@@ -121,7 +126,6 @@ class Emitter extends React.PureComponent<Props, State> implements IEmitter {
         const posX = cursorX - radiusFrom
         const posY = cursorY - radiusFrom
         const { options } = this.props
-
         this.setState(
           state => {
             return {
