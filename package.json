@@ -1,6 +1,6 @@
 {
   "name": "@sproutch/ui",
-  "version": "0.0.4-beta.10",
+  "version": "0.0.4-beta.11",
   "description": "A cross platform UI kit for web and react native Android/iOS.",
   "author": "Daniel Neveux",
   "homepage": "https://dagatsoin.github.io/sproutch/",
@@ -37,7 +37,7 @@
     }
   },
   "scripts": {
-    "build": "npm run clean && npm run tslint-check && npm run lint && npm run tsc",
+    "build": "npm run clean && npm run tslint-check && npm run lint && npm run tsc -- --project prod.tsconfig.json",
     "publish-local": "yalc publish",
     "clean": "rimraf lib",
     "lint": "tslint --config tslint.prod.json --project .",
