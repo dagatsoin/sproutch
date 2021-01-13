@@ -49,7 +49,7 @@ const Animation = React.forwardRef(function(
     isInit: boolean
     behavior?: (isInit: boolean) => Behavior
   },
-  ref
+  ref: (view: Animated.View) => void
 ) {
   const [animatedStyle] = useCustomAnim({
     duration: timeout,
