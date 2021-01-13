@@ -3,7 +3,7 @@ import { Transition, TransitionGroup } from 'react-transition-group'
 import { TransitionStatus } from 'react-transition-group/Transition'
 import { Styles } from '../../styles'
 import { Animated } from '../animated'
-import { View } from '../view'
+import { View, ViewStyle } from '../view'
 import defaultBehaviorFactory from './defaultBehavior'
 import {
   AnimationValues,
@@ -15,6 +15,7 @@ type Props = {
   timeout?: number
   children: React.ReactNode
   in?: boolean
+  wrapperStyle?: ViewStyle
   id: string | number | undefined
   animation?: BehaviorFactory
   clean: boolean
@@ -39,12 +40,14 @@ const Animation = React.forwardRef(function(
   {
     state,
     timeout,
+    style,
     children,
     isInit,
     behavior = defaultBehaviorFactory,
   }: {
     timeout: number
     state: TransitionStatus
+    style?: ViewStyle
     children: React.ReactNode
     isInit: boolean
     behavior?: (isInit: boolean) => Behavior
@@ -59,7 +62,10 @@ const Animation = React.forwardRef(function(
   })
 
   return (
-    <Animated.View ref={ref as any} style={[animatedStyle.current, fill]}>
+    <Animated.View
+      ref={ref as any}
+      style={[animatedStyle.current, fill, style]}
+    >
       {children}
     </Animated.View>
   )
