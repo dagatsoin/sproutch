@@ -15,7 +15,8 @@ var config = {
       "react": path.resolve(__dirname, "node_modules/react"),
       "reactxp": path.resolve(__dirname, "node_modules/reactxp"),
       "react-native": path.resolve(__dirname, "node_modules/react-native"),
-      "react-native-svg": path.resolve(__dirname, "node_modules/react-native-svg")
+      "react-native-svg": path.resolve(__dirname, "node_modules/react-native-svg"),
+      "react-transition-group": path.resolve(__dirname, "node_modules/react-transition-group")
     }
   }
 }

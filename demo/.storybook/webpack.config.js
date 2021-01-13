@@ -42,7 +42,7 @@ module.exports = async ({ config }) => {
    'react-native': 'react-native-web',
    '@sproutch/ui': root('../src')
   }
-  config.resolve.modules = [root('node_modules')]
+  config.resolve.modules = [root('node_modules'), 'node_modules']
   config.devtool = 'inline-source-map'
   return config
 }

@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { Types, UserInterface } from 'reactxp'
-
 import { isTouch, noop } from '../../helpers'
 import { Styles } from '../../styles'
 import { Position } from '../../types/shared'
@@ -11,7 +10,6 @@ import {
   ContextProps,
   FoldableTree,
   INode,
-  NodeLayout,
   ROOT_ID,
   SubTreeProps,
 } from '../foldableTree'
@@ -118,7 +116,7 @@ export class NodeView extends React.Component<Props, State>
     return getSpreadOrientation({
       localPosition: openedPositionRelativeToPage,
       radius: spreadRadius,
-      nodeLayout: { x: 0, y: 0, ...this.buttonLayoutRelativeToContainer }, // FIX ME, pass the container layout
+      nodeLayout: { ...this.buttonLayoutRelativeToContainer }, // FIX ME, pass the container layout
       parentDimension: UserInterface.measureWindow(),
     })
   }

@@ -1,6 +1,6 @@
 {
   "name": "@sproutch/ui",
-  "version": "0.0.4-beta.7",
+  "version": "0.0.4-beta.11",
   "description": "A cross platform UI kit for web and react native Android/iOS.",
   "author": "Daniel Neveux",
   "homepage": "https://dagatsoin.github.io/sproutch/",
@@ -37,7 +37,7 @@
     }
   },
   "scripts": {
-    "build": "npm run clean && npm run tslint-check && npm run lint && npm run tsc",
+    "build": "npm run clean && npm run tslint-check && npm run lint && npm run tsc -- --project prod.tsconfig.json",
     "publish-local": "yalc publish",
     "clean": "rimraf lib",
     "lint": "tslint --config tslint.prod.json --project .",
@@ -58,6 +58,7 @@
   "peerDependencies": {
     "expo": "^35.0.0",
     "react-native-svg": "^9.13.2",
+    "react-transition-group": "^4.4.1",
     "reactxp": "^2.0.0"
   },
   "devDependencies": {
@@ -67,6 +68,7 @@
     "@types/react": "^16.9.14",
     "@types/react-dom": "^16.9.4",
     "@types/react-native": "^0.57.23",
+    "@types/react-transition-group": "^4.4.0",
     "awesome-typescript-loader": "^5.2.1",
     "babel-preset-expo": "^5.0.0",
     "expo": "^35.0.0",
@@ -77,6 +79,7 @@
     "react": "^16.12.0",
     "react-art": "^16.12.0",
     "react-native-svg": "^9.13.2",
+    "react-transition-group": "^4.4.1",
     "reactxp": "^2.0.0",
     "rimraf": "^2.6.2",
     "tslint": "^5.20.1",

@@ -2,14 +2,15 @@ import { getTheme, Styles, ThemeContext } from '@sproutch/ui'
 import {
   addDecorator,
   configure,
-  getStorybookUI,
+  getStorybookUI
 } from '@storybook/react-native'
 import * as Font from 'expo-font'
 import * as React from 'react'
+import ReactNative from 'react-native'
 import { Platform, ScrollView, View } from 'reactxp'
-
 import './rn-addons'
 import { loadStories } from './storyLoader'
+
 
 const styles = {
   scrollView: Styles.createViewStyle({
@@ -24,6 +25,12 @@ const styles = {
     alignItems: 'center',
   }),
 }
+
+Object.defineProperty(ReactNative, 'AsyncStorage', {
+  get(): any {
+    return require('@react-native-community/async-storage').default;
+  },
+});
 
 type ScrollViewAutoMinHeightProps = {
   children: React.ReactNode

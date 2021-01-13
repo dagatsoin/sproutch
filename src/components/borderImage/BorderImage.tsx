@@ -32,20 +32,15 @@ export default class BorderImage extends React.PureComponent<
   private setStyle = () => {
     if (this.element) {
       const { borderWidth, uri, sliceWidth } = this.props
-      this.element.setAttribute(
-        'style',
-        `
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        border-width: ${borderWidth}px;
-        border-style: solid;
-        border-image-source: url(${uri});
-        border-image-slice: ${sliceWidth}
-      `
-      )
+      this.element.style.position = 'absolute'
+      this.element.style.top = '0'
+      this.element.style.right = '0'
+      this.element.style.bottom = '0'
+      this.element.style.left = '0'
+      this.element.style.borderWidth = `${borderWidth}px`
+      this.element.style.borderStyle = 'solid'
+      this.element.style.borderImageSource = `url(${uri})`
+      this.element.style.borderImageSlice = `${sliceWidth}`
     }
   }
 }

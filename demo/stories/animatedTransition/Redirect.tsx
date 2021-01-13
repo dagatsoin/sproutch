@@ -1,9 +1,5 @@
-import * as React from 'react'
-import {
-  Redirect,
-  RedirectProps,
-  Route,
-} from 'react-router'
+import * as React from 'react';
+import { Redirect, RedirectProps, Route } from './router';
 
 type Props = RedirectProps
 

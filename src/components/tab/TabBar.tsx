@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { Animated, Platform, ScrollView } from 'reactxp'
-
 import { recall, shouldComponentUpdate } from '../../helpers'
 import { Styles } from '../../styles'
 import { Theme } from '../../styles/theme'
@@ -729,6 +728,7 @@ class Tabs extends React.Component<CompleteProps, State> {
       opacity:
         customAnimation.opacity ||
         Animated.timing(this.cursorAnimatedValues.opacity, {
+          useNativeDriver: true,
           toValue: opacity,
           duration: Tabs.cursorTransitionDuration,
           easing: Animated.Easing.InOut(),
@@ -736,6 +736,7 @@ class Tabs extends React.Component<CompleteProps, State> {
       translateX:
         customAnimation.translateX ||
         Animated.timing(this.cursorAnimatedValues.translateX, {
+          useNativeDriver: true,
           toValue: translateX,
           duration: Tabs.cursorTransitionDuration,
           easing: Animated.Easing.InOut(),
@@ -743,6 +744,7 @@ class Tabs extends React.Component<CompleteProps, State> {
       translateY:
         customAnimation.translateY ||
         Animated.timing(this.cursorAnimatedValues.translateY, {
+          useNativeDriver: true,
           toValue: translateY,
           duration: Tabs.cursorTransitionDuration,
           easing: Animated.Easing.InOut(),
@@ -750,6 +752,7 @@ class Tabs extends React.Component<CompleteProps, State> {
       rotate:
         customAnimation.rotate ||
         Animated.timing(this.cursorAnimatedValues.rotate, {
+          useNativeDriver: true,
           toValue: rotate,
           duration: Tabs.cursorTransitionDuration,
           easing: Animated.Easing.InOut(),
@@ -757,6 +760,7 @@ class Tabs extends React.Component<CompleteProps, State> {
       scaleX:
         customAnimation.scaleX ||
         Animated.timing(this.cursorAnimatedValues.scaleX, {
+          useNativeDriver: true,
           toValue: scaleX,
           duration: Tabs.cursorTransitionDuration,
           easing: Animated.Easing.InOut(),
@@ -764,6 +768,7 @@ class Tabs extends React.Component<CompleteProps, State> {
       scaleY:
         customAnimation.scaleY ||
         Animated.timing(this.cursorAnimatedValues.scaleY, {
+          useNativeDriver: true,
           toValue: scaleY,
           duration: Tabs.cursorTransitionDuration,
           easing: Animated.Easing.InOut(),
