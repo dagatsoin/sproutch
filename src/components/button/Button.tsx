@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Button as RXButton, Types } from 'reactxp'
-import { StyleProp } from '../../styles'
+import { StyleProp, toArray } from '../../styles'
 import { getMaterialOverlayColor } from '../../styles/helpers'
 import { Theme } from '../../styles/theme'
 import { ThemeContext } from '../../styles/ThemeContext'
@@ -91,8 +91,8 @@ class Button extends React.PureComponent<ButtonProps, State> {
             <Paper
               elevation={elevation}
               style={{
-                root: [styles.root, { borderRadius }],
-                content: [styles.content, { borderRadius }],
+                root: [...toArray(styles.root), { borderRadius }],
+                content: [...toArray(styles.content), { borderRadius }],
               }}
             >
               {backgroundSlot && backgroundSlot(theme)}

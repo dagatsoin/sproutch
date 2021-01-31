@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { findDOMNode } from 'react-dom'
-
+import { toArray } from '../../styles'
 import { ThemeContext } from '../../styles/ThemeContext'
 import { View } from '../view'
 import { PaperProps } from './PaperProps'
@@ -33,7 +33,11 @@ export default class Paper extends React.Component<PaperProps, {}> {
                 this.containerRef = comp
                 this.props.ref && this.props.ref(comp)
               }}
-              style={[rootStyle, style.root, style.content]}
+              style={[
+                ...toArray(rootStyle),
+                ...toArray(style.root),
+                ...toArray(style.content),
+              ]}
               {...props}
             />
           )

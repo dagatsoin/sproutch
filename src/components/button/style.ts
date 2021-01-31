@@ -1,6 +1,11 @@
 import { Styles, Types } from 'reactxp'
-
-import { colorManipulator, override, StyleProp, Theme } from '../../styles'
+import {
+  colorManipulator,
+  override,
+  StyleProp,
+  Theme,
+  toArray as toArrayStyle,
+} from '../../styles'
 import { getHoverOverlayOpacity } from '../../styles/helpers'
 import { ViewStyle } from '../view'
 
@@ -74,31 +79,27 @@ export default function({
   const overlayOpacity = getHoverOverlayOpacity(overlayColor, theme)
 
   return {
-    root: Styles.createViewStyle(
+    root: [
       {
         height,
         borderRadius: theme.shape.borderRadius,
-
-        ...(style.root as object),
-
-        ...override<'button', ButtonStyleOverride>(
+      },
+      ...toArrayStyle(style.root),
+      override<'button', ButtonStyleOverride>(
+        theme.overrides,
+        'button',
+        'root'
+      ),
+      options?.hasIcon &&
+        override<'button', ButtonStyleOverride>(
           theme.overrides,
           'button',
-          'root'
+          'hasIcon'
         ),
-
-        ...(!!options && options.hasIcon
-          ? override<'button', ButtonStyleOverride>(
-              theme.overrides,
-              'button',
-              'hasIcon'
-            )
-          : (style.hasIcon as object)),
-      },
-      false
-    ),
-    content: Styles.createTextStyle(
-      {
+      ...toArrayStyle(style.hasIcon),
+    ],
+    content: [
+      Styles.createTextStyle({
         borderRadius: theme.shape.borderRadius,
         borderWidth,
         backgroundColor,
@@ -107,13 +108,11 @@ export default function({
         paddingVertical,
         flexDirection: 'row',
         justifyContent: 'center',
-
-        ...(style.content as object),
-      },
-      false
-    ),
-    icon: Styles.createTextStyle(
-      {
+      }),
+      ...toArrayStyle(style.content),
+    ],
+    icon: [
+      Styles.createTextStyle({
         position: 'relative',
         justifyContent: 'center',
         fontSize: iconSize,
@@ -121,51 +120,42 @@ export default function({
         paddingRight: 8,
         color: tabColor,
         alignSelf: 'center',
-
-        ...(style.icon as object),
-
-        ...override<'button', ButtonStyleOverride>(
-          theme.overrides,
-          'button',
-          'icon'
-        ),
-      },
-      false
-    ),
-    label: Styles.createTextStyle(
-      {
+      }),
+      override<'button', ButtonStyleOverride>(
+        theme.overrides,
+        'button',
+        'icon'
+      ),
+      ...toArrayStyle(style.icon),
+    ],
+    label: [
+      Styles.createTextStyle({
         color: tabColor,
         fontSize,
         lineHeight,
         alignSelf: 'center',
-
-        ...(style.label as object),
-
-        ...override<'button', ButtonStyleOverride>(
-          theme.overrides,
-          'button',
-          'label'
-        ),
-      },
-      false
-    ),
-    overlay: Styles.createViewStyle(
-      {
+      }),
+      override<'button', ButtonStyleOverride>(
+        theme.overrides,
+        'button',
+        'label'
+      ),
+      ...toArrayStyle(style.label),
+    ],
+    overlay: [
+      Styles.createViewStyle({
         flex: 1,
 
         backgroundColor: overlayColor,
         opacity: overlayOpacity,
-
-        ...(style.overlay as object),
-
-        ...override<'button', ButtonStyleOverride>(
-          theme.overrides,
-          'button',
-          'overlay'
-        ),
-      },
-      false
-    ),
+      }),
+      ...toArrayStyle(style.overlay),
+      override<'button', ButtonStyleOverride>(
+        theme.overrides,
+        'button',
+        'overlay'
+      ),
+    ],
     fitParent: Styles.createViewStyle({
       position: 'absolute',
       top: 0,
@@ -187,25 +177,22 @@ export function createCircleButtonStyle({
   radius: number
 }) {
   return {
-    root: Styles.createViewStyle(
-      {
+    root: [
+      Styles.createViewStyle({
         height: radius * 2,
         width: radius * 2,
         borderRadius: radius * 2,
-        ...(style.root as object),
-      },
-      false
-    ),
-    content: Styles.createTextStyle({
-      ...(style.content as object),
-    }),
-    icon: Styles.createTextStyle({
-      paddingRight: 0,
-      ...(style.icon as object),
-    }),
-    overlay: Styles.createViewStyle({
-      borderRadius: radius * 2,
-      ...(style.overlay as object),
-    }),
+      }),
+      ...toArrayStyle(style.root),
+    ],
+    content: style.content,
+    icon: [
+      Styles.createTextStyle({ paddingRight: 0 }),
+      ...toArrayStyle(style.icon),
+    ],
+    overlay: [
+      Styles.createViewStyle({ borderRadius: radius * 2 }),
+      ...toArrayStyle(style.overlay),
+    ],
   }
 }

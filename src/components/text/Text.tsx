@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { Text, Types } from 'reactxp'
-
-import { Styles, Theme } from '../../styles'
+import { Styles, Theme, toArray } from '../../styles'
 import { ThemeContext } from '../../styles/ThemeContext'
 
 export type TextProps = Types.TextProps & {
@@ -26,7 +25,7 @@ export const TextComp = ({
                 color: theme.palette.text.primary,
               })
             : {},
-          style,
+          ...toArray(style),
         ]}
         {...(props as any)}
       >
