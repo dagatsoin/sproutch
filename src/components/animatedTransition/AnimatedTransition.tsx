@@ -18,7 +18,7 @@ type Props = {
   wrapperStyle?: ViewStyle
   id: string | number | undefined
   animation?: BehaviorFactory
-  clean: boolean
+  clean?: boolean
 }
 
 type Behavior = {
@@ -40,14 +40,14 @@ const Animation = React.forwardRef(function(
   {
     state,
     timeout,
-    style,
+    wrapperStyle,
     children,
     isInit,
     behavior = defaultBehaviorFactory,
   }: {
     timeout: number
     state: TransitionStatus
-    style?: ViewStyle
+    wrapperStyle?: ViewStyle
     children: React.ReactNode
     isInit: boolean
     behavior?: (isInit: boolean) => Behavior
@@ -64,7 +64,7 @@ const Animation = React.forwardRef(function(
   return (
     <Animated.View
       ref={ref as any}
-      style={[animatedStyle.current, fill, style]}
+      style={[animatedStyle.current, fill, wrapperStyle]}
     >
       {children}
     </Animated.View>
@@ -75,6 +75,7 @@ function AnimatedTransition({
   in: inProp,
   animation: behavior,
   children,
+  wrapperStyle,
   clean,
   timeout = 300,
 }: Props) {
@@ -99,6 +100,7 @@ function AnimatedTransition({
               behavior={behavior}
               state={state}
               isInit={isInit}
+              wrapperStyle={wrapperStyle}
               timeout={timeout}
             >
               {children}
