@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Button, Platform, Types, UserInterface } from 'reactxp'
-import { LayoutInfo, View } from '../view'
+import { View } from '../view'
 import { IEmitter } from './IEmitter'
 import { ParticleProps } from './ParticleProps'
 import { containerStyle } from './style'
@@ -14,7 +14,6 @@ type Props = {
 type State = {
   nextKey: number
   particlesInfos: ParticleInfos[]
-  rect: LayoutInfo
   isUnmounted: boolean
 }
 
@@ -25,7 +24,6 @@ class Emitter extends React.PureComponent<Props, State> implements IEmitter {
   public state: State = {
     isUnmounted: false,
     nextKey: 0,
-    rect: { width: 0, height: 0, x: 0, y: 0 },
     particlesInfos: [],
   }
 
@@ -52,13 +50,7 @@ class Emitter extends React.PureComponent<Props, State> implements IEmitter {
           style={containerStyle.button}
         >
           {this.state.particlesInfos.map(props => {
-            return (
-              <Particle
-                {...props}
-                emitterLayout={this.state.rect}
-                key={props.id}
-              />
-            )
+            return <Particle {...props} key={props.id} />
           })}
         </Button>
       </View>
