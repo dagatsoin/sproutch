@@ -186,7 +186,7 @@ export function createCircleButtonStyle({
       }),
       ...toArray(style.root),
     ],
-    content: style.content,
+    content: [{ borderRadius: radius * 2 }, style.content],
     icon: [Styles.createTextStyle({ paddingRight: 0 }), ...toArray(style.icon)],
     overlay: [
       Styles.createViewStyle({ borderRadius: radius * 2 }),

@@ -158,21 +158,21 @@ const darkBackground = {
 }
 
 const hoverOverlayOpacity: OverlayOpacity = {
-  light: 0.04,
-  medium: 0.12,
-  dark: 0.16,
+  light: 0.08,
+  medium: 0.06,
+  dark: 0.04,
 }
 
 const focusOverlayOpacity: OverlayOpacity = {
-  light: 0.12,
+  light: 0.32,
   medium: 0.24,
-  dark: 0.36,
+  dark: 0.12,
 }
 
 const selectedOverlayOpacity: OverlayOpacity = {
-  light: 0.8,
-  medium: 0.16,
-  dark: 0.24,
+  light: 0.16,
+  medium: 0.12,
+  dark: 0.08,
 }
 
 const activatedOverlayOpacity: OverlayOpacity = {
