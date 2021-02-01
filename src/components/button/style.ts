@@ -4,7 +4,7 @@ import {
   override,
   StyleProp,
   Theme,
-  toArray as toArrayStyle,
+  toArray,
 } from '../../styles'
 import { getHoverOverlayOpacity } from '../../styles/helpers'
 import { ViewStyle } from '../view'
@@ -84,7 +84,7 @@ export default function({
         height,
         borderRadius: theme.shape.borderRadius,
       },
-      ...toArrayStyle(style.root),
+
       override<'button', ButtonStyleOverride>(
         theme.overrides,
         'button',
@@ -96,7 +96,8 @@ export default function({
           'button',
           'hasIcon'
         ),
-      ...toArrayStyle(style.hasIcon),
+      ...toArray(style.hasIcon),
+      ...toArray(style.root),
     ],
     content: [
       Styles.createTextStyle({
@@ -109,7 +110,7 @@ export default function({
         flexDirection: 'row',
         justifyContent: 'center',
       }),
-      ...toArrayStyle(style.content),
+      ...toArray(style.content),
     ],
     icon: [
       Styles.createTextStyle({
@@ -126,7 +127,7 @@ export default function({
         'button',
         'icon'
       ),
-      ...toArrayStyle(style.icon),
+      ...toArray(style.icon),
     ],
     label: [
       Styles.createTextStyle({
@@ -140,7 +141,7 @@ export default function({
         'button',
         'label'
       ),
-      ...toArrayStyle(style.label),
+      ...toArray(style.label),
     ],
     overlay: [
       Styles.createViewStyle({
@@ -149,7 +150,7 @@ export default function({
         backgroundColor: overlayColor,
         opacity: overlayOpacity,
       }),
-      ...toArrayStyle(style.overlay),
+      ...toArray(style.overlay),
       override<'button', ButtonStyleOverride>(
         theme.overrides,
         'button',
@@ -183,16 +184,13 @@ export function createCircleButtonStyle({
         width: radius * 2,
         borderRadius: radius * 2,
       }),
-      ...toArrayStyle(style.root),
+      ...toArray(style.root),
     ],
     content: style.content,
-    icon: [
-      Styles.createTextStyle({ paddingRight: 0 }),
-      ...toArrayStyle(style.icon),
-    ],
+    icon: [Styles.createTextStyle({ paddingRight: 0 }), ...toArray(style.icon)],
     overlay: [
       Styles.createViewStyle({ borderRadius: radius * 2 }),
-      ...toArrayStyle(style.overlay),
+      ...toArray(style.overlay),
     ],
   }
 }

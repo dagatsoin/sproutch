@@ -91,8 +91,8 @@ class Button extends React.PureComponent<ButtonProps, State> {
             <Paper
               elevation={elevation}
               style={{
-                root: [...toArray(styles.root), { borderRadius }],
-                content: [...toArray(styles.content), { borderRadius }],
+                root: [{ borderRadius }, ...toArray(styles.root)],
+                content: [{ borderRadius }, ...toArray(styles.content)],
               }}
             >
               {backgroundSlot && backgroundSlot(theme)}

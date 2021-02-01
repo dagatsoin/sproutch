@@ -165,10 +165,16 @@ export default function() {
         >
           <Button
             style={{
-              root: {
-                height: 64,
-                width: 200,
-                ...(style.root as object),
+              root: [
+                {
+                  height: 64,
+                  width: 200,
+                  borderRadius: 32,
+                },
+                style.root,
+              ],
+              content: 
+              {
                 borderRadius: 32,
               },
               label: {
