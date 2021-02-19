@@ -25,13 +25,23 @@ export type ButtonProps = {
   iconSlot?(style: StyleProp<TextStyle>): React.ReactNode
   backgroundSlot?(theme: Theme<any, any>): React.ReactNode
   badgeSlot?(theme: Theme<any, any>): React.ReactNode
-  nativeRef?(instance: RXButton): void
   onLayout?(layout: LayoutInfo): void
 } & Omit<Types.ButtonProps, 'children' | 'style'>
 
-export function Button(props: ButtonProps) {
+export const Button = React.forwardRef(function(props: ButtonProps, ref) {
   const ripple = React.useRef<Emitter>()
   const [isHover, setIsHover] = React.useState(false)
+
+  // Workaround for https://github.com/microsoft/reactxp/issues/1259
+  // The MutableRefObject are not yet handle by ReactXP
+  const setRef =
+    typeof ref === 'object'
+      ? React.useCallback(function(nativeRef: RXButton) {
+          if (ref) {
+            ref.current = nativeRef
+          }
+        }, [])
+      : ref
 
   const onHoverStart = React.useCallback(function(e: Types.SyntheticEvent) {
     setIsHover(true)
@@ -93,7 +103,6 @@ export function Button(props: ButtonProps) {
           iconSlot,
           backgroundSlot,
           badgeSlot,
-          nativeRef,
           onLayout,
           style,
         } = props
@@ -147,7 +156,7 @@ export function Button(props: ButtonProps) {
             )}
             <View style={styles.fitParent} onLayout={onLayout}>
               <RXButton
-                ref={nativeRef}
+                ref={setRef}
                 disabled={isDisabled}
                 style={styles.button}
                 delayLongPress={props.delayLongPress}
@@ -164,4 +173,4 @@ export function Button(props: ButtonProps) {
       }}
     </ThemeContext.Consumer>
   )
-}
+})
