@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { ButtonProps, default as Button } from './Button'
+import { ButtonProps, Button } from './Button'
 import { ButtonStyleOverride, createCircleButtonStyle } from './style'
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
