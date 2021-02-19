@@ -28,7 +28,10 @@ export type ButtonProps = {
   onLayout?(layout: LayoutInfo): void
 } & Omit<Types.ButtonProps, 'children' | 'style'>
 
-export const Button = React.forwardRef(function(props: ButtonProps, ref) {
+export const Button = React.forwardRef(function(
+  props: ButtonProps,
+  ref: ((instance: unknown) => void) | React.MutableRefObject<unknown> | null
+) {
   const ripple = React.useRef<Emitter>()
   const [isHover, setIsHover] = React.useState(false)
 
