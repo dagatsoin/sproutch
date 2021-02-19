@@ -5,7 +5,7 @@ import { ScrollView } from 'reactxp'
 // tslint:disable-next-line: no-var-requires
 const FontAwesome = require('react-native-vector-icons/FontAwesome')
 
-const style = { root: Styles.createViewStyle({ margin: 8 }) }
+const style = { root: [Styles.createViewStyle({ margin: 8 })] }
 
 export default function() {
   return (
@@ -174,15 +174,15 @@ export default function() {
                 style.root,
               ],
               content: 
-              {
+              [{
                 borderRadius: 32,
-              },
-              label: {
+              }],
+              label: [{
                 color: '#FFE082',
-              },
-              icon: {
+              }],
+              icon: [{
                 color: '#FFE082',
-              },
+              }],
             }}
             elevation={10}
             label="CONTACT"

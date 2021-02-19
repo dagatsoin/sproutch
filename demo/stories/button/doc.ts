@@ -81,21 +81,21 @@ Render slot for a deeper customization. Exemple: set a borderImage to the button
 \`\`\`
 <Button
   style={{
-    root: {
-      ...(style.root as object),
-      ...(Styles.createViewStyle({
+    root: [
+      style.root,
+      {
         borderRadius: 16,
-      }) as object),
+      },
     },
-    content: {
+    content: [{
       borderRadius: 16,
-    },
-    label: {
+    }],
+    label: [{
       color: '#FFE082',
-    },
-    icon: {
+    }],
+    icon: [{
       color: '#FFE082',
-    },
+    }],
   }}
   variant="text"
   label="CONTACT"
