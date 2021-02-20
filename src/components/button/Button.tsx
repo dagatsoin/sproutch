@@ -46,52 +46,37 @@ export const Button = React.forwardRef(function(
         }, [])
       : ref
 
-  const onHoverStart = React.useCallback(function(e: Types.SyntheticEvent) {
+  function onHoverStart(e: Types.SyntheticEvent) {
     setIsHover(true)
     props.onHoverStart?.(e)
-  }, [])
+  }
 
-  const onHoverEnd = React.useCallback(
-    function(e: Types.SyntheticEvent) {
-      // When a touch is released outside we need to trigger the onPressOut here.
-      ripple.current?.onPressOut()
-      setIsHover(false)
-      props.onHoverEnd?.(e)
-    },
-    [ripple.current]
-  )
+  function onHoverEnd(e: Types.SyntheticEvent) {
+    // When a touch is released outside we need to trigger the onPressOut here.
+    ripple.current?.onPressOut()
+    setIsHover(false)
+    props.onHoverEnd?.(e)
+  }
 
-  const onLongPress = React.useCallback(
-    function(e: Types.SyntheticEvent) {
-      ripple.current?.onPressOut()
-      props.onLongPress?.(e)
-    },
-    [ripple.current]
-  )
+  function onLongPress(e: Types.SyntheticEvent) {
+    ripple.current?.onPressOut()
+    props.onLongPress?.(e)
+  }
 
-  const onPress = React.useCallback(
-    function(e: Types.SyntheticEvent) {
-      ripple.current?.onPressOut()
-      props.onPress?.(e)
-    },
-    [ripple.current]
-  )
+  function onPress(e: Types.SyntheticEvent) {
+    ripple.current?.onPressOut()
+    props.onPress?.(e)
+  }
 
-  const onPressIn = React.useCallback(
-    function(e: Types.SyntheticEvent) {
-      ripple.current?.onPressIn(e)
-      props.onPressIn?.(e)
-    },
-    [ripple.current]
-  )
+  function onPressIn(e: Types.SyntheticEvent) {
+    ripple.current?.onPressIn(e)
+    props.onPressIn?.(e)
+  }
 
-  const onPressOut = React.useCallback(
-    function(e: Types.SyntheticEvent) {
-      ripple.current?.onPressOut()
-      props.onPressOut?.(e)
-    },
-    [ripple.current]
-  )
+  function onPressOut(e: Types.SyntheticEvent) {
+    ripple.current?.onPressOut()
+    props.onPressOut?.(e)
+  }
 
   return (
     <ThemeContext.Consumer>
