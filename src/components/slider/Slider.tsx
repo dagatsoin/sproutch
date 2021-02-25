@@ -51,7 +51,10 @@ export function Slider({
   // Compute the new value when the user moves the cursor
   const valueFromState = getValue({ range, position, width: layout?.width })
   // Dispatch this new value to the listener
-  React.useEffect(() => onChange?.(valueFromState), [valueFromState])
+  React.useEffect(() => {
+    // Prevent return NaN
+    onChange?.(isNaN(valueFromState) ? 0 : valueFromState)
+  }, [valueFromState])
 
   return (
     <View
