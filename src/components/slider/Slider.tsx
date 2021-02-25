@@ -116,9 +116,12 @@ function getClampedPosition({
   const stepWidth = steps && steps > 0 ? width / steps : NaN
 
   const clampedPosition = Math.min(Math.max(0, xPos), width)
-  return steps && steps > 0
-    ? Math.round(clampedPosition / stepWidth) * stepWidth
-    : clampedPosition
+  const position =
+    steps && steps > 0
+      ? Math.round(clampedPosition / stepWidth) * stepWidth
+      : clampedPosition
+
+  return isNaN(position) ? 0 : position
 }
 
 function useDrag({
