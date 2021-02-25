@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import * as React from 'react'
 import { Types, UserInterface } from 'reactxp'
 import { ThemeContext } from '../../styles'
 import { Paper } from '../paper'
@@ -24,16 +24,16 @@ export function Slider({
   style: styleOverride,
   onChange,
 }: Props) {
-  const theme = useContext(ThemeContext)
+  const theme = React.useContext(ThemeContext)
   const { root, unusedSegment, usedSegment, cursor } = createStyle({
     theme,
     palette,
     styleOverride,
   })
-  const [xPos, setPos] = useState(0)
-  const [layout, setLayout] = useState<LayoutInfo>()
+  const [xPos, setPos] = React.useState(0)
+  const [layout, setLayout] = React.useState<LayoutInfo>()
   // Once the component is mounted, we retrieve its width.
-  const setRootRef = useCallback(function(rootView: View) {
+  const setRootRef = React.useCallback(function(rootView: View) {
     UserInterface.measureLayoutRelativeToWindow(rootView)
       .then(l => {
         // The width is now known.
@@ -51,7 +51,7 @@ export function Slider({
   // Compute the new value when the user moves the cursor
   const valueFromState = getValue({ range, position, width: layout?.width })
   // Dispatch this new value to the listener
-  useEffect(() => onChange?.(valueFromState), [valueFromState])
+  React.useEffect(() => onChange?.(valueFromState), [valueFromState])
 
   return (
     <View
