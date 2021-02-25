@@ -12,6 +12,7 @@
     "moduleResolution": "node",
     "noImplicitReturns": true,
     "noImplicitThis": true,
+    "esModuleInterop": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "outDir": "lib",
