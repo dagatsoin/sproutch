@@ -4,6 +4,7 @@ import { ThemeContext } from '../../styles'
 import { Paper } from '../paper'
 import { LayoutInfo, View } from '../view'
 import { createStyle, SliderStyleOverride } from './style'
+import { useWindowDimensions } from './useWindowDimensions'
 
 type Props = {
   range: [number, number]
@@ -32,6 +33,7 @@ export function Slider({
   })
   const [xPos, setPos] = React.useState(0)
   const [layout, setLayout] = React.useState<LayoutInfo>()
+  const rootViewRef = React.useRef<View>()
   // Once the component is mounted, we retrieve its width.
   const setRootRef = React.useCallback(function(rootView: View) {
     UserInterface.measureLayoutRelativeToWindow(rootView)
@@ -39,6 +41,7 @@ export function Slider({
         // The width is now known.
         // We set the initial cursor position regarding the
         // given value from props
+        rootViewRef.current = rootView
         setLayout(l)
         setPos(getInitialPos({ range, value, layout: l }))
       })
@@ -55,6 +58,16 @@ export function Slider({
     // Prevent return NaN
     onChange?.(isNaN(valueFromState) ? 0 : valueFromState)
   }, [valueFromState])
+
+  // Refresh on window resize
+  const windowWidth = useWindowDimensions()
+  React.useEffect(() => {
+    if (rootViewRef.current) {
+      UserInterface.measureLayoutRelativeToWindow(rootViewRef.current).then(
+        setLayout
+      )
+    }
+  }, [windowWidth])
 
   return (
     <View
