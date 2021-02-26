@@ -49,6 +49,7 @@ export function Slider({
   }, [])
   // Create an event listener which will update the X position
   const dragX = useDrag({ setPos, layout })
+  const pressX = usePress({ setPos, layout })
   // Prevent the cursor to exit the component.
   const position = getClampedPosition({ steps, xPos, width: layout?.width })
   // Compute the new value when the user moves the cursor
@@ -73,6 +74,7 @@ export function Slider({
     <View
       style={root}
       ref={setRootRef}
+      onPress={pressX}
       onResponderMove={dragX}
       onMouseMove={dragX}
     >
@@ -155,6 +157,27 @@ function useDrag({
           if (e.nativeEvent.buttons > 0) {
             setPos(Math.max(0, e.clientX - layout.x))
           }
+        }
+      }
+    : undefined
+}
+
+function usePress({
+  setPos,
+  layout,
+}: {
+  setPos: React.Dispatch<React.SetStateAction<number>>
+  layout?: LayoutInfo
+}) {
+  return layout
+    ? function(e: Types.TouchEvent | Types.MouseEvent) {
+        if ('targetTouches' in e) {
+          setPos(
+            Math.min(Math.max(0, e.touches[0].clientX - layout.x), layout.width)
+          )
+        } else {
+          // If it is a drag
+          setPos(Math.max(0, e.clientX - layout.x))
         }
       }
     : undefined
