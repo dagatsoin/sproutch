@@ -31,29 +31,40 @@ export function Slider({
     palette,
     styleOverride,
   })
-  const [xPos, setPos] = React.useState(0)
-  const [layout, setLayout] = React.useState<LayoutInfo>()
+  const [posX, setPos] = React.useState(0)
+  const [width, setWidth] = React.useState<number>(0)
+  const layoutRef = React.useRef<LayoutInfo>()
   const rootViewRef = React.useRef<View>()
-  // Once the component is mounted, we retrieve its width.
+  // Once the component is mounted, we retrieve its width to
+  // position the cursor.
+  // At this point, the x property is not reliable because the parent
+  // can still move. (eg. a first render off screen for a slide transition)
   const setRootRef = React.useCallback(function(rootView: View) {
-    UserInterface.measureLayoutRelativeToWindow(rootView)
-      .then(l => {
-        // The width is now known.
-        // We set the initial cursor position regarding the
-        // given value from props
-        rootViewRef.current = rootView
-        setLayout(l)
-        setPos(getInitialPos({ range, value, layout: l }))
-      })
-      .catch(console.warn)
+    rootViewRef.current = rootView
+    UserInterface.measureLayoutRelativeToWindow(rootViewRef.current).then(
+      layout => {
+        setPos(getInitialPos({ value, range, width: layout.width }))
+        setWidth(layout.width)
+      }
+    )
   }, [])
+
   // Create an event listener which will update the X position
-  const dragX = useDrag({ setPos, layout })
-  const pressX = usePress({ setPos, layout })
+  const dragX = createHandler({
+    setPos,
+    layoutRef,
+    view: rootViewRef.current,
+  })
+  const pressX = createHandler({
+    setPos,
+    layoutRef,
+    view: rootViewRef.current,
+    isMouseClick: true,
+  })
   // Prevent the cursor to exit the component.
-  const position = getClampedPosition({ steps, xPos, width: layout?.width })
+  const position = getClampedPosition({ steps, posX, width })
   // Compute the new value when the user moves the cursor
-  const valueFromState = getValue({ range, position, width: layout?.width })
+  const valueFromState = getValue({ range, position, width })
   // Dispatch this new value to the listener
   React.useEffect(() => {
     // Prevent return NaN
@@ -65,7 +76,11 @@ export function Slider({
   React.useEffect(() => {
     if (rootViewRef.current) {
       UserInterface.measureLayoutRelativeToWindow(rootViewRef.current).then(
-        setLayout
+        l => {
+          // Reset layout
+          layoutRef.current = undefined
+          setWidth(l.width)
+        }
       )
     }
   }, [windowWidth])
@@ -74,7 +89,7 @@ export function Slider({
     <View
       style={root}
       ref={setRootRef}
-      onPress={pressX}
+      onPress={pressX as any}
       onResponderMove={dragX}
       onMouseMove={dragX}
     >
@@ -84,7 +99,7 @@ export function Slider({
           usedSegment,
           isAmount
             ? {
-                right: (layout?.width ?? 0) - position,
+                right: width - position,
               }
             : undefined,
         ]}
@@ -121,16 +136,16 @@ function getValue({
 
 function getClampedPosition({
   steps,
-  xPos,
+  posX,
   width = 0,
 }: {
   steps?: number
-  xPos: number
+  posX: number
   width?: number
 }) {
   const stepWidth = steps && steps > 0 ? width / steps : NaN
 
-  const clampedPosition = Math.min(Math.max(0, xPos), width)
+  const clampedPosition = Math.min(Math.max(0, posX), width)
   const position =
     steps && steps > 0
       ? Math.round(clampedPosition / stepWidth) * stepWidth
@@ -139,59 +154,54 @@ function getClampedPosition({
   return isNaN(position) ? 0 : position
 }
 
-function useDrag({
+function createHandler({
   setPos,
-  layout,
+  view,
+  layoutRef,
+  isMouseClick,
 }: {
   setPos: React.Dispatch<React.SetStateAction<number>>
-  layout?: LayoutInfo
+  view?: View
+  layoutRef: React.MutableRefObject<LayoutInfo | undefined>
+  isMouseClick?: boolean
 }) {
-  return layout
-    ? function(e: Types.TouchEvent | Types.MouseEvent) {
+  if (view) {
+    return function(e: Types.TouchEvent | Types.MouseEvent) {
+      // On first click/drag, set layout
+      if (layoutRef.current === undefined && view) {
+        UserInterface.measureLayoutRelativeToWindow(view)
+          .then(layout => (layoutRef.current = layout))
+          .catch(console.warn)
+      }
+      if (layoutRef.current !== undefined) {
         if ('targetTouches' in e) {
           setPos(
-            Math.min(Math.max(0, e.touches[0].clientX - layout.x), layout.width)
+            Math.min(
+              Math.max(0, e.touches[0].clientX - layoutRef.current.x),
+              layoutRef.current.width
+            )
           )
         } else {
           // If it is a drag
-          if (e.nativeEvent.buttons > 0) {
-            setPos(Math.max(0, e.clientX - layout.x))
+          if (e.nativeEvent.buttons > 0 || isMouseClick) {
+            setPos(Math.max(0, e.clientX - layoutRef.current.x))
           }
         }
       }
-    : undefined
-}
-
-function usePress({
-  setPos,
-  layout,
-}: {
-  setPos: React.Dispatch<React.SetStateAction<number>>
-  layout?: LayoutInfo
-}) {
-  return layout
-    ? function(e: Types.TouchEvent | Types.MouseEvent) {
-        if ('targetTouches' in e) {
-          setPos(
-            Math.min(Math.max(0, e.touches[0].clientX - layout.x), layout.width)
-          )
-        } else {
-          // If it is a drag
-          setPos(Math.max(0, e.clientX - layout.x))
-        }
-      }
-    : undefined
+    }
+  }
+  return undefined
 }
 
 function getInitialPos({
   value = 0,
   range,
-  layout,
+  width,
 }: {
   value?: number
-  layout: LayoutInfo
+  width: number
   range: [number, number]
 }) {
   const delta = range[1] - range[0]
-  return (value * layout.width) / delta
+  return (value * width) / delta
 }
