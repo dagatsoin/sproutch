@@ -34,33 +34,41 @@ export function Slider({
   const [posX, setPos] = React.useState(0)
   const [width, setWidth] = React.useState<number>(0)
   const layoutRef = React.useRef<LayoutInfo>()
-  const rootViewRef = React.useRef<View>()
+  const rootViewRef = React.useRef<View | null>()
   // Once the component is mounted, we retrieve its width to
   // position the cursor.
   // At this point, the x property is not reliable because the parent
   // can still move. (eg. a first render off screen for a slide transition)
   const setRootRef = React.useCallback(function(rootView: View) {
     rootViewRef.current = rootView
-    UserInterface.measureLayoutRelativeToWindow(rootViewRef.current).then(
-      layout => {
-        setPos(getInitialPos({ value, range, width: layout.width }))
-        setWidth(layout.width)
-      }
-    )
+    if (rootView) {
+      UserInterface.measureLayoutRelativeToWindow(rootViewRef.current).then(
+        layout => {
+          setPos(getInitialPos({ value, range, width: layout.width }))
+          setWidth(layout.width)
+        }
+      )
+    }
   }, [])
 
   // Create an event listener which will update the X position
-  const dragX = createHandler({
-    setPos,
-    layoutRef,
-    view: rootViewRef.current,
-  })
-  const pressX = createHandler({
-    setPos,
-    layoutRef,
-    view: rootViewRef.current,
-    isMouseClick: true,
-  })
+  const dragX = rootViewRef.current
+    ? createHandler({
+        setPos,
+        layoutRef,
+        view: rootViewRef.current,
+      })
+    : undefined
+
+  const pressX = rootViewRef.current
+    ? createHandler({
+        setPos,
+        layoutRef,
+        view: rootViewRef.current,
+        isMouseClick: true,
+      })
+    : undefined
+
   // Prevent the cursor to exit the component.
   const position = getClampedPosition({ steps, posX, width })
   // Compute the new value when the user moves the cursor
