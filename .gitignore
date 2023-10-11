@@ -1,4 +1,4 @@
-node_modules/**/*
+node_modules
 .expo/*
 lib/
 npm-debug.*
@@ -7,3 +7,4 @@ npm-debug.*
 *.p12
 *.key
 *.mobileprovision
+.DS_Store

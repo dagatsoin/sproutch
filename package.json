@@ -1,90 +1,19 @@
 {
-  "name": "@sproutch/ui",
-  "version": "0.0.4-beta.25",
-  "description": "A cross platform UI kit for web and react native Android/iOS.",
-  "author": "Daniel Neveux",
-  "homepage": "https://dagatsoin.github.io/sproutch/",
-  "repository": "https://github.com/dagatsoin/sproutch",
-  "bugs": {
-    "url": "https://github.com/dagatsoin/sproutch/issues"
-  },
-  "files": [
-    "index.js",
-    "index.d.ts",
-    "index.native.js",
-    "index.native.d.ts",
-    "lib",
-    "LICENSE"
+  "name": "sproutch",
+  "workspaces": [
+    "packages/components",
+    "packages/storybook",
+    "packages/StickerSmash"
   ],
-  "license": "MIT",
-  "keywords": [
-    "reactnative",
-    "reactxp",
-    "uikit",
-    "material-ui",
-    "material-design"
-  ],
-  "watch": {
-    "publish-local": {
-      "patterns": [
-        "src"
-      ],
-      "extensions": "js,jsx,ts,tsx,json,md,css",
-      "ignore": "src/node_modules",
-      "legacyWatch": true,
-      "delay": 2500,
-      "runOnChangeOnly": false
-    }
-  },
+  "private": true,
   "scripts": {
-    "build": "npm run clean && npm run tslint-check && npm run lint && npm run tsc -- --project prod.tsconfig.json",
-    "publish-local": "yalc publish",
-    "clean": "rimraf lib",
-    "lint": "tslint --config tslint.prod.json --project .",
-    "prepare": "npm run build",
-    "pretty-quick": "pretty-quick --staged --pattern \"src/**/*.*(js|jsx|ts|tsx|json|md|css)\"",
-    "tsc": "tsc",
-    "tslint-check": "tslint-config-prettier-check ./tslint.prod.json",
-    "watch": "npm-watch"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run pretty-quick"
-    }
-  },
-  "dependencies": {
-    "lodash.merge": "^4.6.1"
-  },
-  "peerDependencies": {
-    "expo": "^35.0.0",
-    "react-native-svg": "^9.13.2",
-    "react-transition-group": "^4.4.1",
-    "reactxp": "^2.0.0"
+    "dev": "npm -w @sproutch/ui run dev & npm -w @sproutch/storybook run dev",
+    "lint": "npm run -ws lint",
+    "lint:fix": "npm run -ws lint:fix"
   },
   "devDependencies": {
-    "@babel/runtime": "^7.6.3",
-    "@types/expo": "^32.0.0",
-    "@types/node": "^11.9.5",
-    "@types/react": "^16.9.14",
-    "@types/react-dom": "^16.9.4",
-    "@types/react-native": "^0.63.50",
-    "@types/react-transition-group": "^4.4.0",
-    "awesome-typescript-loader": "^5.2.1",
-    "babel-preset-expo": "^5.0.0",
-    "expo": "^35.0.0",
-    "husky": "^3.1.0",
-    "npm-watch": "^0.6.0",
-    "prettier": "^1.19.1",
-    "pretty-quick": "^2.0.1",
-    "react": "^16.12.0",
-    "react-art": "^16.12.0",
-    "react-native-svg": "^9.13.2",
-    "react-transition-group": "^4.4.1",
-    "reactxp": "^2.0.0",
-    "rimraf": "^2.6.2",
-    "tslint": "^5.20.1",
-    "tslint-config-prettier": "^1.18.0",
-    "tslint-react": "^3.6.0",
-    "typescript": "^3.7.5"
+    "@typescript-eslint/eslint-plugin": "^6.7.5",
+    "@typescript-eslint/parser": "^6.7.4",
+    "eslint": "^8.51.0"
   }
 }

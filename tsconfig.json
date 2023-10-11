@@ -1,36 +1,10 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "forceConsistentCasingInFileNames": true,
-    "jsx": "react",
-    "lib": ["es2017", "dom"],
-    "module": "commonjs",
-    "declaration": true,
-    "moduleResolution": "node",
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedParameters": true,
-    "outDir": "lib",
-    "preserveConstEnums": true,
+		"target": "ES2020",
+		"lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "strict": true,
+    "removeComments": true,
     "skipLibCheck": true,
-    "sourceMap": true,
-    "strictNullChecks": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "target": "es5",
-    "types": ["node", "react", "react-dom", "react-native"]
-  },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "build",
-    "node_modules",
-    "jest.config.js",
-    "App.js",
-    "babel.config.js",
-    "metro.config.js"
-  ],
-  "compileOnSave": false
+    "incremental": true
+  }
 }
