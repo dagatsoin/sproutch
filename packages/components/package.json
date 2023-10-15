@@ -54,12 +54,13 @@
     }
   },
   "dependencies": {
-    "lodash.merge": "^4.6.1"
+    "lodash.merge": "^4.6.2"
   },
   "peerDependencies": {
     "expo": "^49.0.13"
   },
   "devDependencies": {
+    "@types/lodash.merge": "^4.6.7",
     "@types/react-dom": "^18.2.11",
     "@types/react-native": "^0.72.3",
     "expo": "^49.0.13",

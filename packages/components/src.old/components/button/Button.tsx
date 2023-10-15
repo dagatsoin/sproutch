@@ -12,8 +12,6 @@ import { Text, TextStyle } from '../text'
 import { LayoutInfo, View } from '../view'
 import createButtonStyle, { ButtonStyleOverride } from './style'
 
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
-
 export type ButtonProps = {
   isDisabled?: boolean
   elevation?: number

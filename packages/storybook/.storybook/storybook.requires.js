@@ -48,6 +48,7 @@ try {
 const getStories = () => {
   return {
     "./stories/backgroundImage/BackgroundImage.stories.tsx": require("../stories/backgroundImage/BackgroundImage.stories.tsx"),
+    "./stories/ripple/Ripple.stories.tsx": require("../stories/ripple/Ripple.stories.tsx"),
   };
 };
 
