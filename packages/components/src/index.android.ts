@@ -1,3 +1,3 @@
-export * from './components/index.android'
+export * from './components'
 export * from './styles'
 export * from './utils'

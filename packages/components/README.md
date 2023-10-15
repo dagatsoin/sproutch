@@ -74,7 +74,7 @@ Sproutch is themable by providing a theme.
 
 ThemeProvider accept a theme object which explained below. The theme shape is heavily inspired by Material UI Theme and stick to the material design specification.
 
-ex: `<ThemeProvider theme={myTheme]>`
+ex: `<ThemeProvider theme={myTheme}>`
 
 ```tsx
 type Theme<B, O> = {

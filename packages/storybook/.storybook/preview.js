@@ -1,3 +1,5 @@
+import { ThemeProvider, defaultTheme } from '@sproutch/ui'
+
 export const parameters = {
   controls: {
     matchers: {
@@ -5,4 +7,10 @@ export const parameters = {
       date: /Date$/,
     },
   },
+  decorators: [
+    (story) => ({
+      components: { story, View, ThemeProvider },
+      template: '<ThemeProvider theme={defaultTheme}"><story /></ThemeProvider>',
+    }),
+  ],
 };
