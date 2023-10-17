@@ -7,24 +7,15 @@ import {
 } from '../../styles'
 import { getHoverOverlayOpacity } from '../../styles/helpers'
 
-export type ButtonStyle = {
+export type ButtonStyleOverride = Partial<{
   root: ViewStyle
   content: ViewStyle
   icon: TextStyle
   label: TextStyle
   overlay: ViewStyle
-  fitParent: ViewStyle
-  button: ViewStyle
-}
-
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
-
-export type ButtonStyleOverride = Partial<
-  Omit<ButtonStyle, 'fitParent' | 'button'> & {
-    hasIcon: ViewStyle
-    hasLabel: ViewStyle
-  }
->
+  hasIcon: ViewStyle
+  hasLabel: ViewStyle
+}>
 
 export default function({
   theme,
@@ -44,7 +35,7 @@ export default function({
     hasIcon: boolean
     isDisabled: boolean
   }
-}): ButtonStyle {
+}) {
   const height = options && options.isDense ? 32 : 36
 
   const paddingVertical = options && options.isDense ? 9 : 8.5
@@ -76,83 +67,95 @@ export default function({
 
   const overlayOpacity = getHoverOverlayOpacity(overlayColor, theme)
 
-  return StyleSheet.create({
-    root: {
-      height,
-      borderRadius: theme.shape.borderRadius,
-      ...override(
-        theme.overrides,
-        'button',
-        'root'
-      ),
-      ...override(
-        theme.overrides,
-        'button',
-        'hasIcon'
-      ),
-      ...style.root,
-      ...style.hasIcon,
-    },
-    content: {
-      borderRadius: theme.shape.borderRadius,
-      borderWidth,
-      backgroundColor,
-      borderColor,
-      paddingHorizontal: 16,
-      paddingVertical,
-      flexDirection: 'row',
-      justifyContent: 'center',
-      ...style.content,
-    },
-    icon: {
-      position: 'relative',
-      justifyContent: 'center',
-      fontSize: iconSize,
-      textAlign: 'center',
-      paddingRight: 8,
-      color: tabColor,
-      alignSelf: 'center',
-      ...override(
-        theme.overrides,
-        'button',
-        'icon'
-      ),
-      ...style.icon,
-    },
-    label: {
-      color: tabColor,
-      fontSize,
-      lineHeight,
-      alignSelf: 'center',
-      ...override(
-        theme.overrides,
-        'button',
-        'label'
-      ),
-      ...style.label,
-    },
-    overlay: {
-      flex: 1,
-      backgroundColor: overlayColor,
-      opacity: overlayOpacity,
-      ...style.overlay,
-      ...override(
-        theme.overrides,
-        'button',
-        'overlay'
-      ),
-    },
-    fitParent: {
-      position: 'absolute',
-      top: 0,
-      right: 0,
-      bottom: 0,
-      left: 0,
-    },
-    button: {
-      flex: 1,
-    }
-  })
+  return {
+    paper: StyleSheet.create({
+      root: {
+        height,
+        borderRadius: style?.root?.['borderRadius'] ?? theme.shape.borderRadius,
+        ...override(
+          theme.overrides,
+          'button',
+          'root'
+        ),
+        ...override(
+          theme.overrides,
+          'button',
+          'hasIcon'
+        ),
+        ...style.root,
+        ...style.hasIcon,
+      },
+      content: {
+        borderRadius: style?.root?.['borderRadius'] ?? theme.shape.borderRadius,
+        borderWidth,
+        backgroundColor,
+        borderColor,
+        paddingHorizontal: 16,
+        paddingVertical,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        ...style.content,
+      },
+    }),
+    icon: StyleSheet.create({
+      root: {
+        position: 'relative',
+        justifyContent: 'center',
+        fontSize: iconSize,
+        textAlign: 'center',
+        paddingRight: 8,
+        color: tabColor,
+        alignSelf: 'center',
+        ...override(
+          theme.overrides,
+          'button',
+          'icon'
+        ),
+        ...style.icon,
+      }
+    }),
+    label: StyleSheet.create({
+      root: {
+        color: tabColor,
+        fontSize,
+        lineHeight,
+        alignSelf: 'center',
+        ...override(
+          theme.overrides,
+          'button',
+          'label'
+        ),
+        ...style.label,
+      }
+    }),
+    overlay: StyleSheet.create({
+      root: {
+        flex: 1,
+        backgroundColor: overlayColor,
+        opacity: overlayOpacity,
+        ...style.overlay,
+        ...override(
+          theme.overrides,
+          'button',
+          'overlay'
+        ),
+      }
+    }),
+    fitParent: StyleSheet.create({
+      root: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+      }
+    }),
+    button: StyleSheet.create({
+      root: {
+        flex: 1,
+      }
+    })
+  }
 }
 
 export function createCircleButtonStyle({

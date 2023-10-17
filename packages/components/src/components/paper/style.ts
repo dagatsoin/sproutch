@@ -59,6 +59,7 @@ export function nativePaperStyle(
 export function createWebPaperStyle(theme: Theme<unknown>) {
   return StyleSheet.create({
     root: {
+      overflow: 'hidden',
       backgroundColor: theme.palette.background.paper,
     }
   })
