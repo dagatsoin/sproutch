@@ -2,12 +2,11 @@
   "name": "sproutch",
   "workspaces": [
     "packages/components",
-    "packages/storybook",
-    "packages/StickerSmash"
+    "packages/doc"
   ],
   "private": true,
   "scripts": {
-    "dev": "npm -w @sproutch/ui run dev & npm -w @sproutch/storybook run dev",
+    "dev": "npm -w @sproutch/ui run dev & npm -w @sproutch/doc run dev",
     "lint": "npm run -ws lint",
     "lint:fix": "npm run -ws lint:fix"
   },

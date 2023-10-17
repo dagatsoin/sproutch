@@ -1,6 +1,6 @@
 {
-  "name": "@sproutch/storybook",
-  "version": "1.0.0",
+  "name": "@sproutch/doc",
+  "version": "0.0.1",
   "main": "index.js",
   "scripts": {
     "dev": "npm run start & npm run storybook-web:start & npm run storybook-native:generate && npm run storybook-native:watch",
