@@ -47,10 +47,10 @@ try {
 
 const getStories = () => {
   return {
-    "./stories/backgroundImage/BackgroundImage.stories.tsx": require("../stories/backgroundImage/BackgroundImage.stories"),
-    "./stories/button/Button.stories.tsx": require("../stories/button/Button.stories"),
-    "./stories/paper/Paper.stories.tsx": require("../stories/paper/Paper.stories"),
-    "./stories/ripple/Ripple.stories.tsx": require("../stories/ripple/Ripple.stories"),
+    "./stories/backgroundImage/BackgroundImage.stories.tsx": require("../stories/backgroundImage/BackgroundImage.stories.tsx"),
+    "./stories/button/Button.stories.tsx": require("../stories/button/Button.stories.tsx"),
+    "./stories/paper/Paper.stories.tsx": require("../stories/paper/Paper.stories.tsx"),
+    "./stories/ripple/Ripple.stories.tsx": require("../stories/ripple/Ripple.stories.tsx"),
   };
 };
 
