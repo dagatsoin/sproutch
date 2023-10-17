@@ -14,6 +14,7 @@
     "storybook-watch": "sb-rn-watcher"
   },
   "dependencies": {
+    "@expo/vector-icons": "^13.0.0",
     "expo": "~49.0.13",
     "expo-status-bar": "~1.6.0",
     "react": "18.2.0",

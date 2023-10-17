@@ -19,6 +19,7 @@ const styles = {
   })
 }
 
+
 export default {
   title: 'Paper',
   component: () => (

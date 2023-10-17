@@ -10,7 +10,7 @@ const scaleDuration = 225
 const easing = Easing.bezier(0.4, 0, 0.2, 1)
 
 export type MDRippleParticleOptions = {
-  theme: Theme<unknown, unknown>
+  theme: Theme<unknown>
   color: string
 }
 

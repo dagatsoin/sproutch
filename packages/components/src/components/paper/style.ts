@@ -56,7 +56,7 @@ export function nativePaperStyle(
   })
 }
 
-export function createWebPaperStyle(theme: Theme<unknown, unknown>) {
+export function createWebPaperStyle(theme: Theme<unknown>) {
   return StyleSheet.create({
     root: {
       backgroundColor: theme.palette.background.paper,

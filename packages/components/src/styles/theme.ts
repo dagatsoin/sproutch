@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { Color, colors } from './colors'
-// tslint:disable-next-line: no-var-requires
 import deepmerge from 'lodash.merge'
+import { Overridables } from '../components/Overridables'
+import { ViewStyle, TextStyle, ImageStyle } from 'react-native'
 
 export type Typography = {
   fontFamily: string
@@ -44,7 +45,7 @@ export type Typography = {
     | '900'
 }
 
-export type ThemeConfig<B, O> = Partial<{
+export type ThemeConfig<B, O extends Partial<Overridables> = never> = Partial<{
   shape: Shape
   palette: Partial<Palette>
   spacing: number
@@ -53,7 +54,7 @@ export type ThemeConfig<B, O> = Partial<{
   typography: Partial<Typography>
 }>
 
-export type Theme<B, O> = {
+export type Theme<B, O extends Partial<Overridables> = Partial<Overridables>> = {
   shape: Shape
   palette: Palette
   spacing: number
@@ -135,7 +136,7 @@ type Status = {
   warning: PaletteColor
 }
 
-export type DefaultTheme = Theme<Status, Record<string, unknown>>
+export type DefaultTheme = Theme<Status>
 
 export type OverlayOpacity = {
   light: number
@@ -150,12 +151,12 @@ const lightBackground = {
   paper: colors.white,
 }
 
-const darkBackground = {
+/* const darkBackground = {
   statusBar: colors.black,
   appBar: colors.grey[900], // #212121
   default: colors.grey['A400'], // #333
   paper: colors.grey[800], // #424242
-}
+} */
 
 const hoverOverlayOpacity: OverlayOpacity = {
   light: 0.08,
@@ -279,23 +280,20 @@ export const defaultTheme: DefaultTheme = {
 }
 
 // As the theme is global, we can prevent a computation for each component
-export function getTheme<B, O>(
+export function getTheme<B, O extends Overridables = never>(
   config: ThemeConfig<B, O>
 ): Theme<Status & B, O> {
   return deepmerge(defaultTheme, config) as Theme<Status & B, O> // fixme: why need to force the output type?
 }
 
-type Overridable = 'progressBar' | 'tab' | 'tabs' | 'sceneTransition' | 'button' // @todo: decouple from component name
+export type NamedStyles<T extends string | number | symbol> = Record<T, ViewStyle | TextStyle | ImageStyle>;
 
-export function override<C extends Overridable, T>(
-  overrides: Record<C, Record<keyof T, string>>,
-  compName: C,
-  rule: keyof T
-) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return (overrides && overrides[compName] && overrides[compName][rule]
-    ? overrides[compName][rule]
-    : undefined)
+export function override<C extends Partial<Overridables>, K extends keyof Overridables, S extends keyof Overridables[K]>(
+  overrides: C,
+  compName: K,
+  slot: S
+): NamedStyles<S> | undefined {
+  return (overrides[compName])?.[slot] as NamedStyles<S>
 }
 
 export function createThemeContext<T = DefaultTheme>(theme: T) {

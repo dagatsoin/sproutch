@@ -1,12 +1,9 @@
-/* eslint-disable */
-declare var process: { env: { NODE_ENV: string } }
-
 // @credit https://github.com/mui-org/material-ui
 
 /**
  * Returns a number whose value is limited to the given range.
  */
-function clamp(value: any, min: number = 0, max: number = 1) {
+function clamp(value: number, min: number = 0, max: number = 1) {
   if (value < min) {
     return min
   }
@@ -20,18 +17,18 @@ function clamp(value: any, min: number = 0, max: number = 1) {
  * Converts a color from CSS hex format to CSS rgb format.
  *
  */
-function convertHexToRGB(color: any) {
-  color = color.substr(1)
+function convertHexToRGB(color: string) {
+  color = color.substring(1)
 
   const re = new RegExp(`.{1,${color.length / 3}}`, 'g')
-  let colors = color.match(re)
+  const match = color.match(re)
 
-  if (colors && colors[0].length === 1) {
-    colors = colors.map((n: any) => n + n)
-  }
+  const colors = match && match[0].length === 1
+    ? match.map((n) => n + n)
+    : match
 
   return colors
-    ? `rgb(${colors.map((n: any) => parseInt(n, 16)).join(', ')})`
+    ? `rgb(${colors.map(n => n + n).map((n) => parseInt(n, 16)).join(', ')})`
     : ''
 }
 
@@ -43,15 +40,19 @@ function rgbToHex(color: string) {
   if (color.indexOf('#') === 0) {
     return color
   }
-  function intToHex(c: any) {
+  function intToHex(c: number) {
     const hex = c.toString(16)
     return hex.length === 1 ? `0${hex}` : hex
   }
 
-  let { values } = decomposeColor(color)
-  values = values.map((n: any) => intToHex(n))
+  const { values } = decomposeColor(color)
 
-  return `#${values.join('')}`
+  return `#${values.map(n => intToHex(n)).join('')}`
+}
+
+export interface ColorComposition{
+  type: string
+  values: number[]
 }
 
 /**
@@ -61,7 +62,7 @@ function rgbToHex(color: string) {
  *
  * Note: Does not support rgb % values.
  */
-function decomposeColor(color: string): { type: string; values: number[] } {
+function decomposeColor(color: string): ColorComposition {
   if (color.charAt(0) === '#') {
     return decomposeColor(convertHexToRGB(color))
   }
@@ -90,21 +91,19 @@ function decomposeColor(color: string): { type: string; values: number[] } {
 /**
  * Converts a color object with type and values to a string.
  */
-function recomposeColor(color: any) {
-  const { type } = color
-  let { values } = color
+function recomposeColor(composition: ColorComposition) {
+  const { type } = composition
+  const { values } = composition
 
-  if (type.indexOf('rgb') !== -1) {
+  const formattedValue = type.indexOf('rgb') !== -1
     // Only convert the first 3 values to int (i.e. not alpha)
-    values = values.map((n: any, i: number) => (i < 3 ? parseInt(n, 10) : n))
-  }
+    ? values.map((n, i) => (i < 3 ? parseInt(n.toString(), 10) : n))
+    : type.indexOf('hsl') !== -1
+      ? [values[0], `${values[1]}%`, `${values[2]}%`]
+      : values
+    
 
-  if (type.indexOf('hsl') !== -1) {
-    values[1] = `${values[1]}%`
-    values[2] = `${values[2]}%`
-  }
-
-  return `${color.type}(${values.join(', ')})`
+  return `${composition.type}(${formattedValue.join(', ')})`
 }
 
 /**
@@ -112,7 +111,7 @@ function recomposeColor(color: any) {
  *
  * Formula: https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
  */
-function getContrastRatio(foreground: any, background: any) {
+function getContrastRatio(foreground: string, background: string) {
   const lumA = getLuminance(foreground)
   const lumB = getLuminance(background)
   return (Math.max(lumA, lumB) + 0.05) / (Math.min(lumA, lumB) + 0.05)
@@ -124,11 +123,11 @@ function getContrastRatio(foreground: any, background: any) {
  *
  * Formula: https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
  */
-function getLuminance(color: any) {
+function getLuminance(color: string) {
   const decomposedColor = decomposeColor(color)
 
   if (decomposedColor.type.indexOf('rgb') !== -1) {
-    const rgb = decomposedColor.values.map((val: any) => {
+    const rgb = decomposedColor.values.map(val => {
       val /= 255 // normalized
       return val <= 0.03928 ? val / 12.92 : ((val + 0.055) / 1.055) ** 2.4
     })
@@ -146,7 +145,7 @@ function getLuminance(color: any) {
  * Darken or lighten a colour, depending on its luminance.
  * Light colors are darkened, dark colors are lightened.
  */
-function emphasize(color: any, coefficient: number = 0.15) {
+function emphasize(color: string, coefficient: number = 0.15) {
   return getLuminance(color) > 0.5
     ? darken(color, coefficient)
     : lighten(color, coefficient)
@@ -156,57 +155,51 @@ function emphasize(color: any, coefficient: number = 0.15) {
  * Set the absolute transparency of a color.
  * Any existing alpha values are overwritten.
  */
-function fade(color: any, value: number) {
-  if (!color) return color
-
-  color = decomposeColor(color)
+function fade(color: string, value: number) {
+  const composition = decomposeColor(color)
   value = clamp(value)
 
-  if (color.type === 'rgb' || color.type === 'hsl') {
-    color.type += 'a'
+  if (composition.type === 'rgb' || composition.type === 'hsl') {
+    composition.type += 'a'
   }
-  color.values[3] = value
+  composition.values[3] = value
 
-  return recomposeColor(color)
+  return recomposeColor(composition)
 }
 
 /**
  * Darkens a color.
  */
-function darken(color: any, coefficient: number) {
-  if (!color) return color
-
-  color = decomposeColor(color)
+function darken(color: string, coefficient: number) {
+  const composition = decomposeColor(color)
   coefficient = clamp(coefficient)
 
-  if (color.type.indexOf('hsl') !== -1) {
-    color.values[2] *= 1 - coefficient
-  } else if (color.type.indexOf('rgb') !== -1) {
+  if (composition.type.indexOf('hsl') !== -1) {
+    composition.values[2] *= 1 - coefficient
+  } else if (composition.type.indexOf('rgb') !== -1) {
     for (let i = 0; i < 3; i += 1) {
-      color.values[i] *= 1 - coefficient
+      composition.values[i] *= 1 - coefficient
     }
   }
-  return recomposeColor(color)
+  return recomposeColor(composition)
 }
 
 /**
  * Lightens a color.
  */
-function lighten(color: any, coefficient: number) {
-  if (!color) return color
-
-  color = decomposeColor(color)
+function lighten(color: string, coefficient: number) {
+  const composition = decomposeColor(color)
   coefficient = clamp(coefficient)
 
-  if (color.type.indexOf('hsl') !== -1) {
-    color.values[2] += (100 - color.values[2]) * coefficient
-  } else if (color.type.indexOf('rgb') !== -1) {
+  if (composition.type.indexOf('hsl') !== -1) {
+    composition.values[2] += (100 - composition.values[2]) * coefficient
+  } else if (composition.type.indexOf('rgb') !== -1) {
     for (let i = 0; i < 3; i += 1) {
-      color.values[i] += (255 - color.values[i]) * coefficient
+      composition.values[i] += (255 - composition.values[i]) * coefficient
     }
   }
 
-  return recomposeColor(color)
+  return recomposeColor(composition)
 }
 
 export const colorManipulator = {
