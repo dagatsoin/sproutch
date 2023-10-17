@@ -151,12 +151,12 @@ const lightBackground = {
   paper: colors.white,
 }
 
-/* const darkBackground = {
+const darkBackground = {
   statusBar: colors.black,
   appBar: colors.grey[900], // #212121
   default: colors.grey['A400'], // #333
   paper: colors.grey[800], // #424242
-} */
+}
 
 const hoverOverlayOpacity: OverlayOpacity = {
   light: 0.08,
@@ -202,7 +202,54 @@ const defaultTypography: Typography = {
   fontWeightMedium: '500',
 }
 
-const defaultPalette: Palette = {
+const defaultDarkPalette: Palette = {
+  common: {
+    black: '#000',
+    white: '#fff'
+  },
+  type: 'dark',
+  primary: {
+    light: '#ffc233',
+    main: '#ffb300',
+    dark: '#b27d00',
+    contrastText: '#fff'
+  },
+  secondary: {
+    light: '#CE4DBF',
+    main: '#b900a4',
+    dark: '#AA0092',
+    contrastText: '#fff'
+  },
+  grey: colors.grey,
+  text: {
+    primary: 'rgba(159, 155, 143, 1)',
+    secondary: 'rgba(159, 155, 143, 0.7)',
+    disabled: 'rgba(159, 155, 143, 0.5)',
+    hint: 'rgba(159, 155, 143, 0.5)'
+  },
+  background: darkBackground,
+  divider: 'rgba(255, 255, 255, 0.12)',
+  modifier: {
+    active: 'rgba(0, 0, 0, 0.54)',
+    hover: 'rgba(0, 0, 0, 0.08)',
+    hoverOpacity: 0.08,
+    selected: 'rgba(0, 0, 0, 0.14)',
+    disabled: 'rgba(0, 0, 0, 0.26)',
+    disabledBackground: 'rgba(0, 0, 0, 0.12)'
+  },
+  state: {
+    hover: hoverOverlayOpacity,
+    focus: focusOverlayOpacity,
+    selected: selectedOverlayOpacity,
+    activated: activatedOverlayOpacity,
+    pressed: pressedOverlayOpacity,
+    draged: dragedOverlayOpacity,
+  },
+  contrastThreshold: 3,
+  tonalOffset: 0.2
+}
+
+const defaultLightPalette: Palette = {
   common: {
     black: colors.black,
     white: colors.white,
@@ -253,7 +300,7 @@ export const defaultTheme: DefaultTheme = {
   shape: {
     borderRadius: 4,
   },
-  palette: defaultPalette,
+  palette: defaultDarkPalette,
   spacing: 8,
   typography: defaultTypography,
   overrides: {},
