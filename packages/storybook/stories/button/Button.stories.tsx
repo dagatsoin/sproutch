@@ -3,9 +3,6 @@ import * as React from 'react'
 import { View } from 'react-native'
 import { ScrollView, Text } from 'react-native'
 import FontAwesome from '@expo/vector-icons/FontAwesome5';
-import { FontProvider } from 'FontDecorator';
-import { Story } from '@storybook/react-native';
-
 
 const style = {
   button: StyleSheet.create({ 
