@@ -51,6 +51,7 @@ const getStories = () => {
     "./stories/button/Button.stories.tsx": require("../stories/button/Button.stories.tsx"),
     "./stories/paper/Paper.stories.tsx": require("../stories/paper/Paper.stories.tsx"),
     "./stories/ripple/Ripple.stories.tsx": require("../stories/ripple/Ripple.stories.tsx"),
+    "./stories/tabs/Tabs.stories.tsx": require("../stories/tabs/Tabs.stories.tsx"),
   };
 };
 

@@ -300,7 +300,7 @@ export const defaultTheme: DefaultTheme = {
   shape: {
     borderRadius: 4,
   },
-  palette: defaultDarkPalette,
+  palette: defaultLightPalette,
   spacing: 8,
   typography: defaultTypography,
   overrides: {},
