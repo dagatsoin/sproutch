@@ -1,5 +1,6 @@
 export * from './button'
 export * from './borderImage'
+export * from './fade'
 export * from './paper'
 export * from './ripple'
 export * from './tab'
