@@ -1,5 +1,5 @@
 import { Button, Fade, StyleSheet } from '@sproutch/ui'
-import { PureComponent, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { Text, View } from 'react-native'
 
 const styles = StyleSheet.create({
@@ -20,49 +20,32 @@ type SpoilerProps = {
   isVisible: boolean
 }
 
-type SpoilerState = {
-  isIdle: boolean
+function Spoiler({ isVisible }: SpoilerProps) {
+  const [isIdle, setIsIdle] = useState(isVisible)
+  const prevIsVisible = useRef(isVisible)
+
+  useMemo(function() {
+    if (prevIsVisible.current !== isVisible && isVisible) {
+      setIsIdle(false)
+    }
+  }, [isVisible])
+
+  return !isIdle && (
+    <Fade
+      isVisible={isVisible}
+      isAnimatedOnMount={isVisible}
+      onAnimationEnd={() => {
+        if (!isVisible) {
+          setIsIdle(true)
+        }
+      }}
+    >
+      <View>
+        <Text>Han shot first. Period.</Text>
+      </View>
+    </Fade>
+  )
 }
-
-class Spoiler extends PureComponent<SpoilerProps, SpoilerState> {
-  constructor(props: SpoilerProps) {
-    super(props)
-    this.state = {
-      isIdle: !props.isVisible,
-    }
-  }
-
-  public UNSAFE_componentWillReceiveProps(nextProps: SpoilerProps) {
-    if (this.props.isVisible !== nextProps.isVisible && nextProps.isVisible) {
-      this.setState({ isIdle: false })
-    }
-  }
-
-  public render() {
-    const { isVisible } = this.props
-    const { isIdle } = this.state
-    
-    return !isIdle && (
-      <Fade
-        isVisible={isVisible}
-        isAnimatedOnMount={isVisible}
-        onAnimationEnd={this.setIdle}
-      >
-        <View>
-          <Text>Han shot first. Period.</Text>
-        </View>
-      </Fade>
-    )
-  }
-
-  private setIdle = () => {
-    const { isVisible } = this.props
-    if (!isVisible) {
-      this.setState({ isIdle: true })
-    }
-  }
-}
-
 
 const FadeMeta = {
   title: 'Fade',
