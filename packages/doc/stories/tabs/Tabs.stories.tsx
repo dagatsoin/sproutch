@@ -7,10 +7,9 @@ import {
   DefaultTheme,
   easing,
   TabBar,
-  StyleSheet,
   TabProps,
 } from '@sproutch/ui'
-import { Animated, LayoutRectangle, Text, View } from 'react-native';
+import { Animated, LayoutRectangle, StyleSheet, Text, View } from 'react-native';
 import { Meta, StoryObj } from '@storybook/react-native';
 
 
