@@ -1,5 +1,8 @@
-import { colorManipulator } from '.'
+import { colorManipulator } from './colorManipulator'
 import { Theme } from './theme'
+
+import { StyleSheet } from 'react-native'
+
 export function getMaterialOverlayColor({
   isOnPaper,
   palette,
@@ -32,3 +35,14 @@ export function getHoverOverlayOpacity(color: string, theme: Theme<any, any>) {
     ? hoverOverlayOpacity.medium
     : hoverOverlayOpacity.light
 }
+
+export const fitParent = StyleSheet.create({
+  root: {
+    display: 'flex',
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+  }
+})

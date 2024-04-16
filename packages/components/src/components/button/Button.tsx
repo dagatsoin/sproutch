@@ -1,15 +1,25 @@
 import * as React from 'react'
-import { LayoutChangeEvent, Text, TextStyle, GestureResponderEvent, Pressable, View, PressableProps, MouseEvent } from 'react-native'
+import {
+  LayoutChangeEvent,
+  Text,
+  TextStyle,
+  GestureResponderEvent,
+  Pressable,
+  View,
+  PressableProps,
+  MouseEvent,
+  StyleProp,
+} from 'react-native'
 
-import { StyleProp } from '../../styles'
-import { getMaterialOverlayColor } from '../../styles/helpers'
+import { fitParent, getMaterialOverlayColor } from '../../styles'
 import { Theme } from '../../styles/theme'
 import { ThemeContext } from '../../styles/ThemeContext'
-import { Fade } from '../fade'
 import { Paper } from '../paper'
 import { Ripple } from '../ripple'
 import Emitter from '../ripple/Emitter'
 import createButtonStyle, { ButtonStyleOverride } from './style'
+import { AnimatedView } from '../animated'
+import { useSpring } from '@react-spring/web'
 
 export type ButtonProps = {
   isDisabled?: boolean
@@ -67,17 +77,19 @@ export const Button = React.forwardRef(function(
   })
 
   const ripple = React.useRef<Emitter>()
-  const [isHover, setIsHover] = React.useState(false)
+  const [spring, api] = useSpring(() => ({ from: { opacity: 0 }, duration: 75 }))
+
+  const overlayFadeStyle = React.useMemo(() => ({...fitParent.root, ...spring}), [])
 
   function onHoverIn(e: MouseEvent) {
-    setIsHover(true)
+    api.start({ to: { opacity: 1 } })
     props.onHoverIn?.(e)
   }
 
   function onHoverOut(e: MouseEvent) {
     // When a touch is released outside we need to trigger the onPressOut here.
     ripple.current?.onPressOut()
-    setIsHover(false)
+    api.start({ to: { opacity: 0 } })
     props.onHoverOut?.(e)
   }
 
@@ -114,9 +126,9 @@ export const Button = React.forwardRef(function(
       }
       {badgeSlot?.(theme)}
       {!isDisabled && (
-        <Fade style={styles.fitParent.root} isVisible={isHover} duration={75}>
+        <AnimatedView style={overlayFadeStyle}>
           <View style={styles.overlay.root} />
-        </Fade>
+        </AnimatedView>
       )}
       {!isDisabled && (
         <Ripple
@@ -126,7 +138,7 @@ export const Button = React.forwardRef(function(
           color={overlayColor}
         />
       )}
-      <View style={styles.fitParent.root} onLayout={onLayout}>
+      <View style={fitParent.root} onLayout={onLayout}>
         <Pressable
           ref={ref}
           disabled={props.isDisabled}

@@ -1,5 +1,5 @@
 import { ViewStyle } from 'react-native'
-import { StyleProp, StyleSheet } from '../../styles/createStyle'
+import { StyleProp, StyleSheet } from 'react-native'
 
 type RootStyle = {
   root: StyleProp<ViewStyle>

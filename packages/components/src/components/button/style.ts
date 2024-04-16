@@ -1,8 +1,7 @@
-import { TextStyle, ViewStyle } from 'react-native'
+import { StyleSheet, TextStyle, ViewStyle } from 'react-native'
 import {
   colorManipulator,
   override,
-  StyleSheet,
   Theme,
 } from '../../styles'
 import { getHoverOverlayOpacity } from '../../styles/helpers'
@@ -139,15 +138,6 @@ export default function({
           'button',
           'overlay'
         ),
-      }
-    }),
-    fitParent: StyleSheet.create({
-      root: {
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0,
       }
     }),
     button: StyleSheet.create({

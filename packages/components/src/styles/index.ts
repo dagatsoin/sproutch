@@ -1,6 +1,6 @@
 export * from './colorManipulator'
 export * from './colors'
-export * from './createStyle'
+export * from './helpers'
 export * from './theme'
 export { default as easing } from './easing'
 export * from './withTheme'

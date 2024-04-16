@@ -1,7 +1,5 @@
 import { Theme } from '../../styles'
-import { StyleProp } from '../../styles/createStyle'
-import { StyleSheet } from '../../styles'
-import { ViewStyle } from 'react-native'
+import { StyleProp, StyleSheet, ViewStyle } from 'react-native'
 
 export type PaperStyle = {
   root: ViewStyle

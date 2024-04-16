@@ -1,7 +1,7 @@
 import * as React from 'react'
 
-import { IEmitter, Ripple, StyleSheet } from '@sproutch/ui'
-import { GestureResponderEvent, Pressable, Text, View } from 'react-native'
+import { IEmitter, Ripple } from '@sproutch/ui'
+import { GestureResponderEvent, Pressable, StyleSheet, Text, View } from 'react-native'
 import { Story } from '@storybook/react-native';
 
 function Playground() {

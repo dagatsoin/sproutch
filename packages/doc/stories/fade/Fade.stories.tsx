@@ -1,6 +1,6 @@
-import { Button, Fade, StyleSheet } from '@sproutch/ui'
-import { useMemo, useRef, useState } from 'react'
-import { Text, View } from 'react-native'
+import { Button, Fade } from '@sproutch/ui'
+import { useEffect, useState } from 'react'
+import { StyleSheet, Text, View } from 'react-native'
 
 const styles = StyleSheet.create({
   root: {
@@ -21,23 +21,21 @@ type SpoilerProps = {
 }
 
 function Spoiler({ isVisible }: SpoilerProps) {
-  const [isIdle, setIsIdle] = useState(isVisible)
-  const prevIsVisible = useRef(isVisible)
+  const isAnimatedOnMount = true
+  const [isRunning, setIsRunning] = useState(isAnimatedOnMount)
 
-  useMemo(function() {
-    if (prevIsVisible.current !== isVisible && isVisible) {
-      setIsIdle(false)
+  useEffect(function() {
+    if (isVisible) {
+      setIsRunning(true)
     }
   }, [isVisible])
 
-  return !isIdle && (
+  return (isVisible || (!isVisible && isRunning)) && (
     <Fade
       isVisible={isVisible}
       isAnimatedOnMount={isVisible}
       onAnimationEnd={() => {
-        if (!isVisible) {
-          setIsIdle(true)
-        }
+        setIsRunning(false)
       }}
     >
       <View>
@@ -50,13 +48,15 @@ function Spoiler({ isVisible }: SpoilerProps) {
 const FadeMeta = {
   title: 'Fade',
   component: () => {
-    const [isVisible, setIsVisible ] = useState(false)
+    const [isVisible, setIsVisible ] = useState(true)
     return (
       <View style={styles.root}>
         <Button
           style={{root: styles.button}}
           label="Spoiler alert"
-          onPress={() => setIsVisible(!isVisible)}
+          onPress={() => {
+            setIsVisible(!isVisible)
+          }}
         />
         <View style={styles.fadeContainer}>
           <Spoiler isVisible={isVisible} />

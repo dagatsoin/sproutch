@@ -1,9 +1,9 @@
 import * as React from 'react'
 
-import { colorManipulator, Theme, StyleSheet } from '../../styles'
+import { colorManipulator, Theme } from '../../styles'
 import { ParticleProps } from './ParticleProps'
 import { rippleStyle } from './style'
-import { Animated, Easing, RegisteredStyle, ViewStyle } from 'react-native'
+import { Animated, Easing, RegisteredStyle, StyleSheet, ViewStyle } from 'react-native'
 
 const fadeOutDuration = 150
 const scaleDuration = 225

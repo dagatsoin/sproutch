@@ -1,6 +1,6 @@
-import { BorderImage, Button, CircleButton, StyleSheet} from '@sproutch/ui'
+import { BorderImage, Button, CircleButton } from '@sproutch/ui'
 import * as React from 'react'
-import { View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { ScrollView, Text } from 'react-native'
 import FontAwesome from '@expo/vector-icons/FontAwesome5';
 

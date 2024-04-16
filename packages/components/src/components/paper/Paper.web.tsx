@@ -5,7 +5,7 @@ import { findDOMNode } from 'react-dom'
 import { ThemeContext } from '../../styles/ThemeContext'
 import { PaperProps } from './PaperProps'
 import { createWebPaperStyle, shadows } from './style'
-import { componentDidMount } from '../../utils'
+import { componentDidMount } from '../../utils/utils.common'
 
 export default function Paper(props: PropsWithChildren<PaperProps>) {
   const containerRef = useRef<View|null>(null)

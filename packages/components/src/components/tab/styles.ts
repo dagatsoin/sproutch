@@ -1,7 +1,6 @@
-import { Platform, TextStyle, ViewStyle } from 'react-native'
+import { Platform, StyleSheet, TextStyle, ViewStyle } from 'react-native'
 
 import { colorManipulator } from '../../styles/colorManipulator'
-import { StyleSheet } from '../../styles'
 import { getHoverOverlayOpacity } from '../../styles/helpers'
 import { override, Theme } from '../../styles/theme'
 

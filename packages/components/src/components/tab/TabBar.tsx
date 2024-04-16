@@ -1,6 +1,7 @@
 import * as React from 'react'
-import { recall, shouldComponentUpdate } from '../../helpers'
-import { StyleSheet } from '../../styles'
+import { StyleSheet } from 'react-native'
+
+import { recall, shouldComponentUpdate } from '../../utils/utils.common'
 import { Theme } from '../../styles/theme'
 import { InjectedTheme, withTheme } from '../../styles/withTheme'
 import { Paper } from '../paper'

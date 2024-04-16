@@ -1,9 +1,8 @@
 import { useContext, useState, useRef } from 'react'
-import { LayoutRectangle, Pressable, Text, TextStyle, Touchable, View } from 'react-native'
+import { LayoutRectangle, Pressable, StyleSheet, Text, TextStyle, Touchable, View } from 'react-native'
 
-import { componentDidMount, componentWillMount, componentWillUnmount } from '../../helpers'
+import { componentDidMount, componentWillMount, componentWillUnmount } from '../../utils/utils.common'
 import { getMaterialOverlayColor } from '../../styles/helpers'
-import { StyleSheet } from '../../styles'
 import { ThemeContext } from '../../styles/ThemeContext'
 import { Fade } from '../fade'
 import { Ripple } from '../ripple'

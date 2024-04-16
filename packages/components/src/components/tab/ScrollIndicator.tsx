@@ -1,7 +1,7 @@
-import { GestureResponderEvent, Pressable, View } from 'react-native'
+import { GestureResponderEvent, Pressable, StyleSheet, View } from 'react-native'
 import * as React from 'react'
 
-import { StyleSheet, Theme } from '../../styles'
+import { Theme } from '../../styles'
 import { getMaterialOverlayColor } from '../../styles/helpers'
 import { Fade } from '../fade'
 import { Emitter, Ripple } from '../ripple'

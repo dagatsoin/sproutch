@@ -1,6 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { GestureResponderEvent } from 'react-native'
-import { StyleProp } from './styles'
+import { GestureResponderEvent, StyleProp } from 'react-native'
 
 // @credit https://github.com/chodorowicz/ts-debounce/blob/master/src/index.ts
 /**
@@ -133,13 +132,13 @@ export function shouldComponentUpdate(
 }
 
 export function componentWillMount(cb: () => void) {
-  useMemo(cb, [])
+  return useMemo(cb, [])
 }
 
 export function componentDidMount(cb: () => void) {
-  useEffect(cb, [])
+  return useEffect(cb, [])
 }
 
 export function componentWillUnmount(cb: () => void) {
-  useEffect(() => cb, [])
+  return useEffect(() => cb, [])
 }
