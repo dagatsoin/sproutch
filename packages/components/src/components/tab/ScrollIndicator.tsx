@@ -2,14 +2,10 @@ import { GestureResponderEvent, Pressable, StyleSheet, View } from 'react-native
 import * as React from 'react'
 
 import { Theme } from '../../styles'
-import { getMaterialOverlayColor } from '../../styles/helpers'
+import { fitParent, getMaterialOverlayColor } from '../../styles/helpers'
 import { Fade } from '../fade'
 import { Emitter, Ripple } from '../ripple'
-import {
-  createScrollIndicatorOverlayStyle,
-  fitParent,
-  TabsBarStyle,
-} from './styles'
+import { createScrollIndicatorOverlayStyle, TabsBarStyle } from './styles'
 
 type Props = {
   style: TabsBarStyle['leftIndicator' | 'rightIndicator']

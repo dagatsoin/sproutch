@@ -2,12 +2,12 @@ import { useContext, useState, useRef } from 'react'
 import { LayoutRectangle, Pressable, StyleSheet, Text, TextStyle, Touchable, View } from 'react-native'
 
 import { componentDidMount, componentWillMount, componentWillUnmount } from '../../utils/utils.common'
-import { getMaterialOverlayColor } from '../../styles/helpers'
+import { fitParent, getMaterialOverlayColor } from '../../styles/helpers'
 import { ThemeContext } from '../../styles/ThemeContext'
 import { Fade } from '../fade'
 import { Ripple } from '../ripple'
 import Emitter from '../ripple/Emitter'
-import { fitParent, tabStyle, TabStyleOverride } from './styles'
+import { tabStyle, TabStyleOverride } from './styles'
 
 export type TabProps = {
   id: string

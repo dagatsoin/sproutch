@@ -47,6 +47,7 @@ try {
 
 const getStories = () => {
   return {
+    "./stories/animatedTransition/AnimatedTransition.stories.tsx": require("../stories/animatedTransition/AnimatedTransition.stories.tsx"),
     "./stories/backgroundImage/BackgroundImage.stories.tsx": require("../stories/backgroundImage/BackgroundImage.stories.tsx"),
     "./stories/button/Button.stories.tsx": require("../stories/button/Button.stories.tsx"),
     "./stories/fade/Fade.stories.tsx": require("../stories/fade/Fade.stories.tsx"),
