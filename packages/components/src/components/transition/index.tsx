@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React, { useEffect } from 'react';
 import { InterpolatorConfig, useTransition, useSpringRef, Interpolation, to, UseTransitionProps } from '@react-spring/core';
@@ -132,11 +131,7 @@ export function Transition<T>({
           transform: (Platform.OS === "web")
             ? to(
               transforms.map(([_, value]) => value),
-              (...args) => {
-                const s = args.reduce((str, value, i) =>`${str} ${transforms[i][0]}(${value})`, '')
-                console.log(s)
-                return s
-              }
+              (...args) => args.reduce<string>((str, value, i) =>`${str} ${transforms[i][0]}(${value})`, '')
             )
             : transforms.reduce<Style>((input, [key, value]) => {
               input.push({[key]: value})
