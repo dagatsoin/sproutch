@@ -79,20 +79,21 @@ export function Transition<T>({
     const transforms: Array<[keyof TranformAnimatableProps, Interpolation<number, string | number | readonly (string | number)[]> | SpringValue]> = []
     
     for (const key of transformKeys) {
-      if (props[key]) {
+      const value = props[key]
+      if (value) {
         switch(key) {
           case "translateX":
           case "translateY":
             transforms.push([key, Platform.OS === "web"
-              ? props[key].to(t => `${t}px`)
-              : props[key]
+              ? value.to(t => `${t}px`)
+              : value
             ])
             break;
           case "rotate":
           case "rotateX":
           case "rotateY":
           case "rotateZ":
-            transforms.push([key, props[key]
+            transforms.push([key, value
               .to(
                 (configuration.interpolatorConfig?.rotation ?? DEFAULT_INTERPOLATOR_CONFIG).range!,
                 (configuration.interpolatorConfig?.rotation ?? DEFAULT_INTERPOLATOR_CONFIG).output
@@ -103,11 +104,11 @@ export function Transition<T>({
           case "scaleX":
           case "scaleY":
           case "perspective":
-            transforms.push([key, props[key]])
+            transforms.push([key, value])
             break;
           case "skewX":
           case "skewY":
-            transforms.push([key, props[key]
+            transforms.push([key, value
               .to(
                 (configuration.interpolatorConfig?.skew ?? DEFAULT_INTERPOLATOR_CONFIG).range!,
                 (configuration.interpolatorConfig?.skew ?? DEFAULT_INTERPOLATOR_CONFIG).output
@@ -116,7 +117,7 @@ export function Transition<T>({
           break;
           case "matrix":
             console.warn("[Sproutch] matrix is not currently supported in animated transition")
-            transforms.push([key, props[key]])
+            transforms.push([key, value])
             break;
         }
       }

@@ -4,7 +4,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import FontAwesome from '@expo/vector-icons/build/FontAwesome';
 
 const meta: Meta<typeof Button> = {
-  title: 'Button',
+  title: 'Button/Basic',
   component: Button,
   decorators: [(Story) => <View style={{
     flexDirection: 'row',
