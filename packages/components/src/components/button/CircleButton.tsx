@@ -3,8 +3,6 @@ import * as React from 'react'
 import { Button, ButtonProps } from './Button'
 import { ButtonStyleOverride, createCircleButtonStyle } from './style'
 
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
-
 export type CircleButtonProps = Omit<ButtonProps, 'isDense'> & {
   radius?: number
   style?: ButtonStyleOverride

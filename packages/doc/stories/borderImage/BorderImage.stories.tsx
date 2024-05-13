@@ -33,7 +33,7 @@ const meta: Meta<typeof BorderImage> = {
 export default meta;
 type Story = StoryObj<typeof BorderImage>;
 
-export const Primary: Story = {
+export const Default: Story = {
   args: {
     uri: "https://i.ibb.co/Yhs3Ff5/btn-bg.png",
     borderWidth: 16,

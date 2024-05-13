@@ -48,8 +48,9 @@ try {
 const getStories = () => {
   return {
     "./stories/animatedTransition/AnimatedTransition.stories.tsx": require("../stories/animatedTransition/AnimatedTransition.stories.tsx"),
-    "./stories/backgroundImage/BackgroundImage.stories.tsx": require("../stories/backgroundImage/BackgroundImage.stories.tsx"),
+    "./stories/borderImage/BorderImage.stories.tsx": require("../stories/borderImage/BorderImage.stories.tsx"),
     "./stories/button/Button.stories.tsx": require("../stories/button/Button.stories.tsx"),
+    "./stories/button/CircleButton.stories.tsx": require("../stories/button/CircleButton.stories.tsx"),
     "./stories/fade/Fade.stories.tsx": require("../stories/fade/Fade.stories.tsx"),
     "./stories/paper/Paper.stories.tsx": require("../stories/paper/Paper.stories.tsx"),
     "./stories/ripple/Ripple.stories.tsx": require("../stories/ripple/Ripple.stories.tsx"),

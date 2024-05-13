@@ -1,14 +1,13 @@
-import { BorderImage, Button } from '@sproutch/ui'
+import { BorderImage, CircleButton } from '@sproutch/ui'
 import { View } from 'react-native'
 import { Meta, StoryObj } from '@storybook/react';
 import FontAwesome from '@expo/vector-icons/build/FontAwesome';
 
-const meta: Meta<typeof Button> = {
-  title: 'Button',
-  component: Button,
+const meta: Meta<typeof CircleButton> = {
+  title: 'CircleButton',
+  component: CircleButton,
   decorators: [(Story) => <View style={{
     flexDirection: 'row',
-    flex:1,
     flexWrap: 'wrap',
     justifyContent: 'center',
     alignItems: 'center',
@@ -19,46 +18,28 @@ const meta: Meta<typeof Button> = {
 }
 
 export default meta;
-type Story = StoryObj<typeof Button>;
+type Story = StoryObj<typeof CircleButton>;
 
 export const Palette: Story = {
   name: "Palette choice",
   args: {
     palette: "primary",
-    label: "PRIMARY"
+    iconSlot: _style => <FontAwesome name='check' style={_style}/>
   }
 }
 
 export const Disabled: Story = {
-  name: "Button can be disabled",
+  name: "Can be disabled",
   args: {
     isDisabled: true,
-    label: "Disabled"
+    iconSlot: _style => <FontAwesome name='check' style={_style}/>
   }
 }
 
 export const Elevation: Story = {
   args: {
-    label: "Elevation",
     elevation: 4,
-  }
-}
-
-export const WithIcon: Story = {
-  args: {
-    label: "With icon",
-    iconSlot: iconStyle => (
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      <FontAwesome style={iconStyle} name="search" />
-    )
-  }
-}
-
-export const Density: Story = {
-  args: {
-    isDense: true,
-    variant: "contained",
-    label: "Dense"
+    iconSlot: _style => <FontAwesome name='check' style={_style}/>
   }
 }
 
@@ -66,18 +47,17 @@ export const Variant: Story = {
   name: "Variant choice",
   args: {
     variant: "outlined",
-    label: "Out lined"
+    iconSlot: _style => <FontAwesome name='check' style={_style}/>
   }
 }
+
 
 export const WithBackground: Story = {
   name: "With background image",
   args: {
-    style:{
+    style: {
       root: {
         margin: 8,
-        height: 64,
-        width: 200,
         borderRadius: 32,
       },
       content: {
@@ -91,7 +71,6 @@ export const WithBackground: Story = {
       },
     },
     elevation: 10,
-    label: "CONTACT",
     iconSlot: iconStyle => <FontAwesome style={iconStyle} name="user" />,
     backgroundSlot: () => (
       <View
@@ -109,6 +88,6 @@ export const WithBackground: Story = {
           sliceWidth={127}
         />
       </View>
-    )
+    ),
   }
 }
