@@ -54,7 +54,8 @@
     }
   },
   "dependencies": {
-    "lodash.merge": "^4.6.2"
+    "lodash.merge": "^4.6.2",
+    "react-native-svg": "^15.2.0"
   },
   "peerDependencies": {
     "@react-spring/native": "^9.7.3",

@@ -202,7 +202,7 @@ const defaultTypography: Typography = {
   fontWeightMedium: '500',
 }
 
-const defaultDarkPalette: Palette = {
+const _defaultDarkPalette: Palette = {
   common: {
     black: '#000',
     white: '#fff'

@@ -54,6 +54,7 @@ const getStories = () => {
     "./stories/fade/Fade.stories.tsx": require("../stories/fade/Fade.stories.tsx"),
     "./stories/grid/Grid.stories.tsx": require("../stories/grid/Grid.stories.tsx"),
     "./stories/paper/Paper.stories.tsx": require("../stories/paper/Paper.stories.tsx"),
+    "./stories/radialGradient/RadialGradient.stories.tsx": require("../stories/radialGradient/RadialGradient.stories.tsx"),
     "./stories/ripple/Ripple.stories.tsx": require("../stories/ripple/Ripple.stories.tsx"),
     "./stories/tabs/Tabs.stories.tsx": require("../stories/tabs/Tabs.stories.tsx"),
   };

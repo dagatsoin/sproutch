@@ -28,7 +28,7 @@ function convertHexToRGB(color: string) {
     : match
 
   return colors
-    ? `rgb(${colors.map(n => n + n).map((n) => parseInt(n, 16)).join(', ')})`
+    ? `rgb(${colors.map((n) => parseInt(n, 16)).join(', ')})`
     : ''
 }
 
