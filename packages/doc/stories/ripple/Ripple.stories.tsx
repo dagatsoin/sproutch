@@ -1,8 +1,8 @@
 import * as React from 'react'
 
-import { IEmitter, Ripple } from '@sproutch/ui'
+import { IEmitter, Ripple } from '@sproutch/core'
 import { GestureResponderEvent, Pressable, StyleSheet, Text, View } from 'react-native'
-import { Story } from '@storybook/react-native';
+import { Meta } from '@storybook/react'
 
 function Playground() {
   const [isClicked, setIsClicked] = React.useState(false)
@@ -78,11 +78,11 @@ const style = StyleSheet.create({
   }
 })
 
-const RippleMeta = {
+const RippleMeta: Meta<typeof Ripple> = {
   title: 'Ripple',
   component: Playground,
   decorators: [
-    (Story: Story) => (
+    (Story) => (
       <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
         <Story />
       </View>

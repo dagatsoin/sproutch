@@ -1,16 +1,17 @@
 import * as React from 'react'
 import FontAwesome from '@expo/vector-icons/FontAwesome5';
-
+import { Animated, LayoutRectangle, StyleSheet, Text, View } from 'react-native';
 import {
   colorManipulator,
-  CustomTabBarCursorAnimation,
   DefaultTheme,
   easing,
+} from '@sproutch/core'
+import {
+  CustomTabBarCursorAnimation,
   TabBar,
   TabProps,
-} from '@sproutch/ui'
-import { Animated, LayoutRectangle, StyleSheet, Text, View } from 'react-native';
-import { Meta, StoryObj } from '@storybook/react-native';
+} from '@sproutch/tabs'
+import type{ Meta, StoryObj } from '@storybook/react';
 
 
 
@@ -238,24 +239,11 @@ export const Basic: Story = {
             label: props.firstTabLabel,
             isDisabled: props.isDisabled,
             badgeSlot: notification,
-            iconSlot: props.hasIcon ?
-              (iconStyle => (
-                <FontAwesome
-                  style={iconStyle}
-                  name="rocket"
-                  size={30}
-                />
-              )) : undefined,
+
           },
           ...Array.from(Array(props.numberOfTabs)).map<TabProps>((_, i) => ({
             id: i + 1 + '',
             label: `${props.otherTabBarLabel} ${i + 1}`,
-            iconSlot:
-              props.hasIcon
-              ? (iconStyle => (
-                <FontAwesome style={iconStyle} name="check" size={30} />
-              ))
-              : undefined,
           })),
         ]}
       />

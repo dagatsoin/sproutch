@@ -1,4 +1,4 @@
-import { BorderImage, CircleButton } from '@sproutch/ui'
+import { BorderImage, CircleButton } from '@sproutch/core'
 import { View } from 'react-native'
 import { Meta, StoryObj } from '@storybook/react';
 import FontAwesome from '@expo/vector-icons/build/FontAwesome';
@@ -24,7 +24,7 @@ export const Palette: Story = {
   name: "Palette choice",
   args: {
     palette: "primary",
-    iconSlot: _style => <FontAwesome name='check' style={_style}/>
+    iconSlot: iconStyle => <FontAwesome style={iconStyle} name="user" />,
   }
 }
 
@@ -32,14 +32,14 @@ export const Disabled: Story = {
   name: "Can be disabled",
   args: {
     isDisabled: true,
-    iconSlot: _style => <FontAwesome name='check' style={_style}/>
+    iconSlot: iconStyle => <FontAwesome style={iconStyle} name="user" />,
   }
 }
 
 export const Elevation: Story = {
   args: {
     elevation: 4,
-    iconSlot: _style => <FontAwesome name='check' style={_style}/>
+    iconSlot: iconStyle => <FontAwesome style={iconStyle} name="user" />,
   }
 }
 
@@ -47,7 +47,7 @@ export const Variant: Story = {
   name: "Variant choice",
   args: {
     variant: "outlined",
-    iconSlot: _style => <FontAwesome name='check' style={_style}/>
+    iconSlot: iconStyle => <FontAwesome style={iconStyle} name="user" />,
   }
 }
 

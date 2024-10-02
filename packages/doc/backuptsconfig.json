@@ -1,0 +1,11 @@
+{
+  "extends": ["../../tsconfig.json","expo/tsconfig.base"],
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "lib": ["es6"],
+    "baseUrl": ".",
+    "paths": {
+    },
+    "strict": true
+  },
+}

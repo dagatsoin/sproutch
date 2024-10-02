@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@sproutch/core/*": ["../core/src/*"]
+    }
+  },
+  "include": [
+    "src"
+  ]
+}

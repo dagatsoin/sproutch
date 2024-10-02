@@ -1,5 +1,4 @@
-import { Paper } from '@sproutch/ui'
-import * as React from 'react'
+import { Paper } from '@sproutch/core'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 
 const styles = {

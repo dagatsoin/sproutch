@@ -1,0 +1,5 @@
+{
+	"extends": ["../../.eslintrc.cjs"],
+	"ignorePatterns": ["stories.old", "storybook.old"],
+	"root": true
+}

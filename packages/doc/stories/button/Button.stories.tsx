@@ -1,4 +1,4 @@
-import { BorderImage, Button } from '@sproutch/ui'
+import { BorderImage, Button } from '@sproutch/core'
 import { View } from 'react-native'
 import { Meta, StoryObj } from '@storybook/react';
 import FontAwesome from '@expo/vector-icons/build/FontAwesome';
@@ -6,6 +6,7 @@ import FontAwesome from '@expo/vector-icons/build/FontAwesome';
 const meta: Meta<typeof Button> = {
   title: 'Button/Basic',
   component: Button,
+  tags: ['autodocs'],
   decorators: [(Story) => <View style={{
     flexDirection: 'row',
     flex:1,
@@ -19,7 +20,7 @@ const meta: Meta<typeof Button> = {
 }
 
 export default meta;
-type Story = StoryObj<typeof Button>;
+type Story = StoryObj<typeof meta>;
 
 export const Palette: Story = {
   name: "Palette choice",
@@ -47,10 +48,7 @@ export const Elevation: Story = {
 export const WithIcon: Story = {
   args: {
     label: "With icon",
-    iconSlot: iconStyle => (
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      <FontAwesome style={iconStyle} name="search" />
-    )
+    iconSlot: iconStyle => <FontAwesome style={iconStyle} name="search" />
   }
 }
 

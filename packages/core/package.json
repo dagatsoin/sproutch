@@ -1,0 +1,36 @@
+{
+  "name": "@sproutch/core",
+  "version": "0.0.5-alpha.0",
+  "description": "A cross platform UI kit for web and react native Android/iOS.",
+  "author": "Daniel Neveux",
+  "homepage": "https://dagatsoin.github.io/sproutch/",
+  "repository": "https://github.com/dagatsoin/sproutch",
+  "bugs": {
+    "url": "https://github.com/dagatsoin/sproutch/issues"
+  },
+  "main": "lib/index.js",
+  "module": "lib/index",
+  "types": "lib/index.d.ts",
+  "react-native": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "npm run clean && npm run compile",
+    "clean": "rimraf lib",
+    "dev": "npm run compile -- --watch",
+    "compile": "tsc --project prod.tsconfig.json"
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "@react-spring/native": "^9.7.4",
+    "@react-spring/web": "^9.7.4",
+    "react-dom": "^18.3.1",
+    "react-native-svg": "15.2.0",
+    "react-native-web": "~0.19.11"
+  },
+  "devDependencies": {
+    "@types/react-dom": "^18.3.0",
+    "rimraf": "^5.0.5"
+  }
+}
