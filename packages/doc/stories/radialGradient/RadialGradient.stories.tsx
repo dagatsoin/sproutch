@@ -4,6 +4,7 @@ import { View } from 'react-native'
 import { Meta, StoryObj } from '@storybook/react'
 
 const meta: Meta<typeof RadialGradient> = {
+  title: 'Core/Atoms/Radial gradient',
   component: RadialGradient,
   decorators: [(Story) => <View
     style={{

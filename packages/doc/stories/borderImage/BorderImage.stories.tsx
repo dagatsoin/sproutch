@@ -15,7 +15,7 @@ const style = StyleSheet.create({
 })
 
 const meta: Meta<typeof BorderImage> = {
-  title: 'BorderImage',
+  title: 'Core/Atoms/Border image',
   component: BorderImage,
   decorators: [
     (Story) => (

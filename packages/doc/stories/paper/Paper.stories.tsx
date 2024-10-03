@@ -20,7 +20,7 @@ const styles = {
 
 
 export default {
-  title: 'Paper',
+  title: 'Core/Atoms/Paper',
   component: () => (
     <ScrollView
       style={{ flex: 1 }}

@@ -72,7 +72,7 @@ const App = () => {
 }
 
 const TransitionMeta: Meta<typeof Transition> = {
-  title: 'Transition/Slide',
+  title: 'Advanced/Animated transition',
   component: () => {
     return (
       <>

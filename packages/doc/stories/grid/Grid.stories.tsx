@@ -3,6 +3,7 @@ import { Image, Text } from 'react-native'
 import { Meta, StoryObj } from '@storybook/react'
 
 const meta: Meta<typeof Grid> = {
+  title: 'Core/Layout/Grid',
   component: Grid,
 }
 

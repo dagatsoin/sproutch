@@ -4,7 +4,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import FontAwesome from '@expo/vector-icons/build/FontAwesome';
 
 const meta: Meta<typeof CircleButton> = {
-  title: 'Button/Circle',
+  title: 'Core/Molecule/Button/Circle',
   component: CircleButton,
   decorators: [(Story) => <View style={{
     flexDirection: 'row',
