@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build-storybook": "storybook build",
+    "build-storybook": "storybook build -c .storybook.web",
     "storybook-generate": "sb-rn-get-stories --config-path .storybook.native",
     "storybook:web": "storybook dev -p 6006 -c .storybook.web",
     "storybook:ios": "expo start --ios --reset-cache",
