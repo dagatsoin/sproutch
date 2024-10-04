@@ -6,7 +6,6 @@ import FontAwesome from '@expo/vector-icons/build/FontAwesome';
 const meta: Meta<typeof Button> = {
   title: 'Core/Molecule/Button/Regular',
   component: Button,
-  tags: ['autodocs'],
   decorators: [(Story) => <View style={{
     flexDirection: 'row',
     flex:1,
