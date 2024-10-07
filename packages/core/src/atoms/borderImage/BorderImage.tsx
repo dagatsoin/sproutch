@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { BorderImageProps } from './BorderImageProps'
 import { StyleSheet } from 'react-native'
 
-export default function BorderImage(props: BorderImageProps) {
+export function BorderImage(props: BorderImageProps) {
   const { borderWidth, uri, sliceWidth } = props
   const style = useMemo(function() {
     return StyleSheet.create({

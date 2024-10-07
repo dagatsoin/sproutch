@@ -1,4 +1,7 @@
-/** @type{import("@storybook/react-webpack5").StorybookConfig} */
+import { StorybookConfig } from "storybook/internal/types";
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
+import path from 'path'
+
 module.exports = {
   stories: [
     "../stories/**/*.stories.mdx",
@@ -12,9 +15,26 @@ module.exports = {
   ],
   framework: {
     name: "@storybook/react-webpack5",
-    options: {},
+    options: {
+ 
+    },
   },
-  docs: {
-    autodocs: true,
+  webpackFinal: async (config) => {
+    if (config.resolve) {
+      config.resolve.plugins = [
+        ...(config.resolve.plugins || []),
+        new TsconfigPathsPlugin({
+          configFile: "web.tsconfig.json",
+          
+        }),
+      ];
+      
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        '@sproutch/core': path.resolve(__dirname, '../core/src'),
+      };
+      return config;
+    }
+    return config;
   },
-};
+} as StorybookConfig;
