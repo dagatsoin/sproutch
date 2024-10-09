@@ -1,29 +1,17 @@
 import { BorderImage } from '@sproutch/core';
 import type { Meta, StoryObj } from '@storybook/react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
-const style = StyleSheet.create({
-  outer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  inner: {
-    width: 128,
-    height: 256,
-  }
-})
 
 const meta: Meta<typeof BorderImage> = {
   title: 'Core/Atoms/Border image',
   component: BorderImage,
   decorators: [
-    (Story) => (
+    (Story, context) => (
       <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-        <View style={style.outer}>
-          <View style={style.inner}>
-            <Story />
-          </View>
+        <View style={{ width: 128, height: 256, justifyContent: 'center', alignItems: 'center', borderWidth: context.args.borderWidth, borderColor: 'transparent' }}>
+          <Story />
+          <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: '#2C262155'}}/>
         </View>
       </View>
     ),

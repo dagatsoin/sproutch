@@ -1,0 +1,34 @@
+import { Canvas, Controls, Description, Meta } from '@storybook/blocks';
+
+import * as BorderImages from './BorderImage.stories';
+
+<Meta of={BorderImages} />
+
+## Border image
+
+<Canvas/>
+
+<Description/>
+
+### Props
+
+<Controls/>
+
+### Code example
+
+On the following example, you can see a view with an image as a border.
+
+The layout breakdown is:
+- a top container with with constrained size
+- a BorderImage children
+The center of the container is a background color
+
+```ts
+ <View style={{width: 128, height: 256,}}>
+    <BorderImage
+        borderWidth={16}
+        sliceWidth={127}
+        uri="https://i.ibb.co/Yhs3Ff5/btn-bg.png"
+    />
+</View>
+```

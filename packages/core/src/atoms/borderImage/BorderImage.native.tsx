@@ -5,9 +5,9 @@ import { BorderImageProps } from './BorderImageProps'
 
 
 // Declare a static object for style.
-const style = StyleSheet.create({ root: { flex: 1 } });
+const style = StyleSheet.create({ root: { left: 0, top: 0, bottom: 0, right: 0, position: "absolute" } });
 
-export default function BorderImage(props: BorderImageProps) {
+export function BorderImage(props: BorderImageProps) {
   const { uri, borderWidth, sliceWidth } = props
   const [layout, setLayout] = useState<LayoutRectangle>()
 
@@ -46,7 +46,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
         position: 'absolute',
         overflow: 'hidden',
         alignItems: 'center',
-        top: 0,
+        top: -borderWidth,
         right: 0,
         left: 0,
         height: borderWidth,
@@ -56,7 +56,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
         style={{
           height: borderWidth * 2,
           width: 1,
-          transform: [{ scaleX: layout.width - borderWidth * 2 }],
+          transform: [{ scaleX: layout.width }],
         }}
         resizeMode="cover"
         source={{ uri }}
@@ -69,8 +69,8 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
       style={{
         position: 'absolute',
         overflow: 'hidden',
-        top: 0,
-        right: 0,
+        top: -borderWidth,
+        right: -borderWidth,
         width: borderWidth,
         height: borderWidth,
       }}
@@ -96,7 +96,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
         overflow: 'hidden',
         justifyContent: 'center',
         top: 0,
-        right: 0,
+        right: -borderWidth,
         bottom: 0,
         width: borderWidth,
       }}
@@ -108,7 +108,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
           right: 0,
           width: borderWidth * 2,
           height: 1,
-          transform: [{ scaleY: layout.height - borderWidth * 2 }],
+          transform: [{ scaleY: layout.height }],
         }}
         resizeMode="cover"
         source={{uri}}
@@ -121,8 +121,8 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
       style={{
         position: 'absolute',
         overflow: 'hidden',
-        bottom: 0,
-        right: 0,
+        bottom: -borderWidth,
+        right: -borderWidth,
         width: borderWidth,
         height: borderWidth,
       }}
@@ -149,7 +149,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
         overflow: 'hidden',
         alignItems: 'center',
         right: 0,
-        bottom: 0,
+        bottom: -borderWidth,
         left: 0,
         height: borderWidth,
       }}
@@ -161,7 +161,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
           bottom: 0,
           height: borderWidth * 2,
           width: 1,
-          transform: [{ scaleX: layout.width - borderWidth * 2 }],
+          transform: [{ scaleX: layout.width }],
         }}
         resizeMode="cover"
         source={{uri}}
@@ -174,8 +174,8 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
       style={{
         position: 'absolute',
         overflow: 'hidden',
-        bottom: 0,
-        left: 0,
+        bottom: -borderWidth,
+        left: -borderWidth,
         width: borderWidth,
         height: borderWidth,
       }}
@@ -202,7 +202,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
         justifyContent: 'center',
         top: 0,
         bottom: 0,
-        left: 0,
+        left: -borderWidth,
         width: borderWidth,
       }}
     >
@@ -210,7 +210,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
         style={{
           width: borderWidth * 2,
           height: 1,
-          transform: [{ scaleY: layout.height - borderWidth * 2 }],
+          transform: [{ scaleY: layout.height }],
         }}
         resizeMode="cover"
         source={{uri}}
@@ -225,6 +225,8 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
         overflow: 'hidden',
         width: borderWidth,
         height: borderWidth,
+        left: -borderWidth,
+        top: -borderWidth,
       }}
     >
       <Image
