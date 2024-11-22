@@ -1,10 +1,7 @@
+// metro.config.js
 const path = require("path");
 const { getDefaultConfig } = require("expo/metro-config");
-const { generate } = require("@storybook/react-native/scripts/generate");
-
-generate({
-  configPath: path.resolve(__dirname, "./.storybook.native"),
-});
+const withStorybook = require('@storybook/react-native/metro/withStorybook');
 
 const projectRoot = __dirname;
 const workspaceRoot = path.resolve(projectRoot, '../../');
@@ -20,4 +17,11 @@ defaultConfig.resolver.nodeModulesPaths = [
 
 defaultConfig.transformer.unstable_allowRequireContext = true;
 
-module.exports = defaultConfig;
+
+module.exports = withStorybook(defaultConfig, {
+  // set to false to disable storybook specific settings
+  // you can use a env variable to toggle this
+  enabled: true,
+  // path to your storybook config folder
+  configPath: path.resolve(__dirname, "./.storybook.native"),
+});
