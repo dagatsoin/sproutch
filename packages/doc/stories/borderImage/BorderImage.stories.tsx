@@ -6,6 +6,7 @@ import { View } from 'react-native';
 const meta: Meta<typeof BorderImage> = {
   title: 'Core/Atoms/Border image',
   component: BorderImage,
+  tags:['!dev'],
   decorators: [
     (Story, context) => (
       <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>

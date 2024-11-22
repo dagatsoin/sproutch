@@ -21,6 +21,7 @@ const styles = {
 
 export default {
   title: 'Core/Atoms/Paper',
+  tags:['!dev'],
   component: () => (
     <ScrollView
       style={{ flex: 1 }}

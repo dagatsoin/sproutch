@@ -80,6 +80,7 @@ const style = StyleSheet.create({
 
 const RippleMeta: Meta<typeof Ripple> = {
   title: 'Core/Atoms/Ripple',
+  tags:['!dev'],
   component: Playground,
   decorators: [
     (Story) => (

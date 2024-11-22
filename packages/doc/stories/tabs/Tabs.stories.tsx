@@ -136,6 +136,7 @@ type TabBarPropsAndCustomArgs = React.ComponentProps<typeof TabBar> & {
 
 const meta: Meta<TabBarPropsAndCustomArgs> = {
   title: 'Advanced/Tabs bar',
+  tags:['!dev'],
   component: TabBar,
   argTypes: {
     palette: {

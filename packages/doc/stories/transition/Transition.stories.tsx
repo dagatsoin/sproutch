@@ -73,6 +73,7 @@ const App = () => {
 
 const TransitionMeta: Meta<typeof Transition> = {
   title: 'Advanced/Animated transition',
+  tags:['!dev'],
   component: () => {
     return (
       <>

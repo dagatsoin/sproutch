@@ -6,6 +6,7 @@ import { Meta, StoryObj } from '@storybook/react'
 const meta: Meta<typeof RadialGradient> = {
   title: 'Core/Atoms/Radial gradient',
   component: RadialGradient,
+  tags:['!dev'],
   decorators: [(Story) => <View
     style={{
       flex: 1,

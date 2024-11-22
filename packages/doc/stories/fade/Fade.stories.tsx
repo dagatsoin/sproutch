@@ -47,6 +47,7 @@ function Spoiler({ isVisible }: SpoilerProps) {
 
 const FadeMeta = {
   title: 'Core/Layout/Fading container',
+  tags:['!dev'],
   component: () => {
     const [isVisible, setIsVisible ] = useState(true)
     return (
