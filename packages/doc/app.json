@@ -1,0 +1,17 @@
+{
+  "name": "Sproutch UI doc",
+  "slug": "sproutch-ui-doc",
+  "extra": {
+    "eas": {
+      "projectId": "29b4794d-fe0b-48d8-8705-26b7751d96cd"
+    }
+  },
+  "runtimeVersion": {
+    "policy": "appVersion"
+  },
+  "updates": {
+    "url": "https://u.expo.dev/29b4794d-fe0b-48d8-8705-26b7751d96cd"
+  },
+  "android": {},
+  "ios": {}
+}
