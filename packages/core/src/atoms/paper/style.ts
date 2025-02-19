@@ -1,19 +1,9 @@
 import { Theme } from '../../styles'
-import { StyleProp, StyleSheet, ViewStyle } from 'react-native'
+import { BoxShadowValue, StyleProp, StyleSheet, ViewStyle } from 'react-native'
 
 export type PaperStyle = {
   root: ViewStyle
   content: ViewStyle
-}
-
-type ShadowProps = {
-  shadowColor: string
-  shadowOffset: {
-    width: number
-    height: number
-  }
-  shadowOpacity: number
-  shadowRadius: number
 }
 
 export type PaperStyleOverride = Partial<PaperStyle>
@@ -78,17 +68,31 @@ function createWebElevationShadows(...px: number[]) {
   ].join(',')
 }
 
-function createIOSElevationShadows(...px: number[]): ShadowProps {
-  const shadowColor = '#000'
-  return {
-    shadowColor,
-    shadowOffset: {
-      width: px[0],
-      height: px[1],
-    },
-    shadowOpacity: Number(shadowKeyUmbraOpacity),
-    shadowRadius: px[2],
-  }
+
+
+function createNativeElevationShadows(...px: number[]): BoxShadowValue[] {
+  return [{
+    color: `rgba(0,0,0,${shadowKeyUmbraOpacity})`,
+    offsetX: px[0],
+    offsetY: px[1],
+    blurRadius: px[2],
+    spreadDistance: px[3],
+    inset: false,
+  },
+  {
+    color: `rgba(0,0,0,${shadowKeyUmbraOpacity})`,
+    offsetX: px[4],
+    offsetY: px[5],
+    blurRadius: px[6],
+    spreadDistance: px[7],
+  },
+  {
+    color: `rgba(0,0,0,${shadowKeyUmbraOpacity})`,
+    offsetX: px[8],
+    offsetY: px[9],
+    blurRadius: px[10],
+    spreadDistance: px[11],
+  }]
 }
 
 export const shadows = {
@@ -120,29 +124,29 @@ export const shadows = {
     createWebElevationShadows(0, 11, 15, -7, 0, 24, 38, 3, 0, 9, 46, 8),
   ],
   native: [
-    createIOSElevationShadows(0, 1, 3, 0, 0, 1, 1, 0, 0, 2, 1, -1),
-    createIOSElevationShadows(0, 1, 5, 0, 0, 2, 2, 0, 0, 3, 1, -2),
-    createIOSElevationShadows(0, 1, 8, 0, 0, 3, 4, 0, 0, 3, 3, -2),
-    createIOSElevationShadows(0, 2, 4, -1, 0, 4, 5, 0, 0, 1, 10, 0),
-    createIOSElevationShadows(0, 3, 5, -1, 0, 5, 8, 0, 0, 1, 14, 0),
-    createIOSElevationShadows(0, 3, 5, -1, 0, 6, 10, 0, 0, 1, 18, 0),
-    createIOSElevationShadows(0, 4, 5, -2, 0, 7, 10, 1, 0, 2, 16, 1),
-    createIOSElevationShadows(0, 5, 5, -3, 0, 8, 10, 1, 0, 3, 14, 2),
-    createIOSElevationShadows(0, 5, 6, -3, 0, 9, 12, 1, 0, 3, 16, 2),
-    createIOSElevationShadows(0, 6, 6, -3, 0, 10, 14, 1, 0, 4, 18, 3),
-    createIOSElevationShadows(0, 6, 7, -4, 0, 11, 15, 1, 0, 4, 20, 3),
-    createIOSElevationShadows(0, 7, 8, -4, 0, 12, 17, 2, 0, 5, 22, 4),
-    createIOSElevationShadows(0, 7, 8, -4, 0, 13, 19, 2, 0, 5, 24, 4),
-    createIOSElevationShadows(0, 7, 9, -4, 0, 14, 21, 2, 0, 5, 26, 4),
-    createIOSElevationShadows(0, 8, 9, -5, 0, 15, 22, 2, 0, 6, 28, 5),
-    createIOSElevationShadows(0, 8, 10, -5, 0, 16, 24, 2, 0, 6, 30, 5),
-    createIOSElevationShadows(0, 8, 11, -5, 0, 17, 26, 2, 0, 6, 32, 5),
-    createIOSElevationShadows(0, 9, 11, -5, 0, 18, 28, 2, 0, 7, 34, 6),
-    createIOSElevationShadows(0, 9, 12, -6, 0, 19, 29, 2, 0, 7, 36, 6),
-    createIOSElevationShadows(0, 10, 13, -6, 0, 20, 31, 3, 0, 8, 38, 7),
-    createIOSElevationShadows(0, 10, 13, -6, 0, 21, 33, 3, 0, 8, 40, 7),
-    createIOSElevationShadows(0, 10, 14, -6, 0, 22, 35, 3, 0, 8, 42, 7),
-    createIOSElevationShadows(0, 11, 14, -7, 0, 23, 36, 3, 0, 9, 44, 8),
-    createIOSElevationShadows(0, 11, 15, -7, 0, 24, 38, 3, 0, 9, 46, 8),
+    createNativeElevationShadows(0, 1, 3, 0, 0, 1, 1, 0, 0, 2, 1, -1),
+    createNativeElevationShadows(0, 1, 5, 0, 0, 2, 2, 0, 0, 3, 1, -2),
+    createNativeElevationShadows(0, 1, 8, 0, 0, 3, 4, 0, 0, 3, 3, -2),
+    createNativeElevationShadows(0, 2, 4, -1, 0, 4, 5, 0, 0, 1, 10, 0),
+    createNativeElevationShadows(0, 3, 5, -1, 0, 5, 8, 0, 0, 1, 14, 0),
+    createNativeElevationShadows(0, 3, 5, -1, 0, 6, 10, 0, 0, 1, 18, 0),
+    createNativeElevationShadows(0, 4, 5, -2, 0, 7, 10, 1, 0, 2, 16, 1),
+    createNativeElevationShadows(0, 5, 5, -3, 0, 8, 10, 1, 0, 3, 14, 2),
+    createNativeElevationShadows(0, 5, 6, -3, 0, 9, 12, 1, 0, 3, 16, 2),
+    createNativeElevationShadows(0, 6, 6, -3, 0, 10, 14, 1, 0, 4, 18, 3),
+    createNativeElevationShadows(0, 6, 7, -4, 0, 11, 15, 1, 0, 4, 20, 3),
+    createNativeElevationShadows(0, 7, 8, -4, 0, 12, 17, 2, 0, 5, 22, 4),
+    createNativeElevationShadows(0, 7, 8, -4, 0, 13, 19, 2, 0, 5, 24, 4),
+    createNativeElevationShadows(0, 7, 9, -4, 0, 14, 21, 2, 0, 5, 26, 4),
+    createNativeElevationShadows(0, 8, 9, -5, 0, 15, 22, 2, 0, 6, 28, 5),
+    createNativeElevationShadows(0, 8, 10, -5, 0, 16, 24, 2, 0, 6, 30, 5),
+    createNativeElevationShadows(0, 8, 11, -5, 0, 17, 26, 2, 0, 6, 32, 5),
+    createNativeElevationShadows(0, 9, 11, -5, 0, 18, 28, 2, 0, 7, 34, 6),
+    createNativeElevationShadows(0, 9, 12, -6, 0, 19, 29, 2, 0, 7, 36, 6),
+    createNativeElevationShadows(0, 10, 13, -6, 0, 20, 31, 3, 0, 8, 38, 7),
+    createNativeElevationShadows(0, 10, 13, -6, 0, 21, 33, 3, 0, 8, 40, 7),
+    createNativeElevationShadows(0, 10, 14, -6, 0, 22, 35, 3, 0, 8, 42, 7),
+    createNativeElevationShadows(0, 11, 14, -7, 0, 23, 36, 3, 0, 9, 44, 8),
+    createNativeElevationShadows(0, 11, 15, -7, 0, 24, 38, 3, 0, 9, 46, 8),
   ],
 }

@@ -50,7 +50,7 @@ export default class Paper extends React.Component<PaperProps, State> {
           return (
             <View
               onLayout={this.onLayout}
-              style={[styles.root, shadow]}
+              style={[styles.root, {boxShadow: shadow}]}
               {...props}
             >
               <View style={styles.content} {...props} />

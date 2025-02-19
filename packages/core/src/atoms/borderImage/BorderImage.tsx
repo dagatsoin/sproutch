@@ -22,7 +22,7 @@ export function BorderImage(props: BorderImageProps) {
         borderStyle: 'solid',
         borderImageSource: `url(${uri})`,
         borderImageSlice: `${sliceWidth}`,
-      }
+      } as any
     })
   }, [borderWidth, sliceWidth, uri])
   return (
