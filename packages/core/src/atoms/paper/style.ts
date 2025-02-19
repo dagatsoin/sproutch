@@ -22,7 +22,7 @@ export function nativePaperStyle(
   return StyleSheet.create({
     root: {
       overflow: 'visible',
-      ...((style && style.root) as object),
+      ...(style && style.root),
     },
     isAndroid: {
       borderWidth: 0,
@@ -39,7 +39,7 @@ export function nativePaperStyle(
       backgroundColor: theme.palette.background.paper,
       overflow: 'hidden',
       borderRadius,
-      ...((style && style.content) as object),
+      ...(style && style.content),
     },
   })
 }

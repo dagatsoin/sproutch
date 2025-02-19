@@ -1,3 +1,3 @@
 export { default as Paper } from './Paper'
-export { PaperProps } from './PaperProps'
-export { PaperStyle, PaperStyleOverride } from './style'
+export type { PaperProps } from './PaperProps'
+export type { PaperStyle, PaperStyleOverride } from './style'
