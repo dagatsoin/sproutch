@@ -1,6 +1,5 @@
-import { useMemo } from 'react'
+import { CSSProperties, useMemo } from 'react'
 import { BorderImageProps } from './BorderImageProps'
-import { StyleSheet } from 'react-native'
 
 /**
  * A low level component which simulates *partially* the behavior of the CSS [border-image](https://developer.mozilla.org/en-US/docs/Web/CSS/border-image) properties.
@@ -13,19 +12,18 @@ import { StyleSheet } from 'react-native'
  */
 export function BorderImage(props: BorderImageProps) {
   const { borderWidth, uri, sliceWidth } = props
-  const style = useMemo(function() {
-    return StyleSheet.create({
-      root: {
-        position: 'absolute',
-        inset: -borderWidth,
-        borderWidth: borderWidth,
-        borderStyle: 'solid',
-        borderImageSource: `url(${uri})`,
-        borderImageSlice: `${sliceWidth}`,
-      } as any
-    })
+
+  const style = useMemo<CSSProperties>(function () {
+    return {
+      position: 'absolute',
+      inset: -borderWidth,
+      borderWidth: borderWidth,
+      borderStyle: 'solid',
+      borderImageSource: `url(${uri})`,
+      borderImageSlice: `${sliceWidth}`,
+    }
   }, [borderWidth, sliceWidth, uri])
   return (
-    <div style={style.root}/>
-  )    
+    <div style={style} />
+  )
 }
