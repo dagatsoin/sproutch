@@ -25,7 +25,7 @@ type Story = StoryObj<typeof BorderImage>;
 export const Default: Story = {
   args: {
     uri: "https://i.ibb.co/Yhs3Ff5/btn-bg.png",
-    borderWidth: 16,
+    borderWidth: 32,
     sliceWidth: 127,
   },
 };

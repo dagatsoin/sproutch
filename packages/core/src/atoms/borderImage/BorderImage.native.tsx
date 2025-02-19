@@ -55,7 +55,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
       <Image
         style={{
           height: borderWidth * 2,
-          width: 1,
+          width: 1.2,
           transform: [{ scaleX: layout.width }],
         }}
         resizeMode="cover"
@@ -107,7 +107,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
           overflow: 'hidden',
           right: 0,
           width: borderWidth * 2,
-          height: 1,
+          height: 1.01, // fix a weird bug where the value 1 produce gaps. Maybe a rounding related issue.
           transform: [{ scaleY: layout.height }],
         }}
         resizeMode="cover"
@@ -151,6 +151,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
         right: 0,
         bottom: -borderWidth,
         left: 0,
+        backgroundColor: 'red',
         height: borderWidth,
       }}
     >
@@ -160,7 +161,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
           overflow: 'hidden',
           bottom: 0,
           height: borderWidth * 2,
-          width: 1,
+          width: 1.2, // fix a weird bug where the value 1 produce gaps. Maybe a rounding related issue.
           transform: [{ scaleX: layout.width }],
         }}
         resizeMode="cover"
@@ -209,7 +210,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
       <Image
         style={{
           width: borderWidth * 2,
-          height: 1,
+          height: 1.01,
           transform: [{ scaleY: layout.height }],
         }}
         resizeMode="cover"
