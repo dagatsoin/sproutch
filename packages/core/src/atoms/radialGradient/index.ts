@@ -1,2 +1,2 @@
 export { default as RadialGradient } from './RadialGradient'
-export { RadialGradientProps } from './RadialGradientProps'
+export type { RadialGradientProps } from './RadialGradientProps'

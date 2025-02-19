@@ -1,3 +1,3 @@
 export * from './Button'
-export { default as CircleButton, CircleButtonProps } from './CircleButton'
-export { ButtonStyleOverride } from './style'
+export { default as CircleButton, type CircleButtonProps } from './CircleButton'
+export type { ButtonStyleOverride } from './style'

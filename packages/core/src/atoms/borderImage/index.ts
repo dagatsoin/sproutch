@@ -1,2 +1,2 @@
 export {BorderImage } from './BorderImage'
-export { BorderImageProps } from './BorderImageProps'
+export type { BorderImageProps } from './BorderImageProps'
