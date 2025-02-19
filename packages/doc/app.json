@@ -1,6 +1,7 @@
 {
   "name": "Sproutch UI doc",
   "slug": "sproutch-ui-doc",
+  "newArchEnabled": true,
   "extra": {
     "eas": {
       "projectId": "29b4794d-fe0b-48d8-8705-26b7751d96cd"
