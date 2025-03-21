@@ -397,7 +397,7 @@ class Tabs extends React.Component<CompleteProps, State> {
             this.props.theme
           )
         ) : (
-          <View style={style.cursor} />
+          <View style={style.cursorIndicator} />
         )}
       </Animated.View>
     )

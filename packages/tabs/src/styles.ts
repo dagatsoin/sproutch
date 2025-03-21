@@ -15,7 +15,7 @@ export type TabsBarStyle = {
   leftIndicator: ViewStyle
   rightIndicator: ViewStyle
   cursorAnimatedContainer: ViewStyle
-  cursor: ViewStyle
+  cursorIndicator: ViewStyle
   scrollView: ViewStyle
 }
 
@@ -301,17 +301,17 @@ export const tabsBarStyle = function({
         top: 0,
         bottom: 0,
       },
-      cursor: {
+      cursorIndicator: {
         height: 4,
         top: tabHeight - 4,
 
         backgroundColor: cursorColor,
 
-        ...(style.cursor as object),
+        ...(style.cursorIndicator as object),
         ...override(
           theme.overrides,
           'tabs',
-          'cursor'
+          'cursorIndicator'
         ),
       },
       scrollView: {
