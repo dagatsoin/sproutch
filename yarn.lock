@@ -2450,7 +2450,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@sproutch/tabs@workspace:packages/tabs"
   peerDependencies:
-    "@sproutch/core": "*"
+    "@sproutch/core": ^0.0.5-alpha.0
   languageName: unknown
   linkType: soft
 
@@ -2458,7 +2458,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@sproutch/transition@workspace:packages/transition"
   peerDependencies:
-    "@sproutch/core": "*"
+    "@sproutch/core": ^0.0.5-alpha.0
   languageName: unknown
   linkType: soft
 
