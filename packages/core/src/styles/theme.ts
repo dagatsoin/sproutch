@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Color, colors } from './colors'
-import { ViewStyle, TextStyle, ImageStyle } from 'react-native'
+import { ViewStyle, TextStyle, ImageStyle, ImageBackgroundProps } from 'react-native'
 
 export type Typography = {
   fontFamily: string
@@ -103,11 +103,16 @@ export type PaletteColor = {
   contrastText: string
 }
 
+type BackgroundTheme = {
+  container: ImageBackgroundProps['style']
+  image?: ImageBackgroundProps['imageStyle']
+}
+
 type Background = {
-  statusBar: string
-  appBar: string
-  default: string
-  paper: string
+  statusBar: BackgroundTheme
+  appBar: BackgroundTheme
+  default: BackgroundTheme
+  paper: BackgroundTheme
 }
 
 type Divider = string
@@ -142,18 +147,50 @@ export type OverlayOpacity = {
   dark: number
 }
 
-const lightBackground = {
-  statusBar: colors.grey[300],
-  appBar: colors.grey[100],
-  default: colors.grey[50],
-  paper: colors.white,
+const lightBackground: Background = {
+  statusBar: {
+    container: {
+      backgroundColor: colors.grey[300],
+    }
+  },
+  appBar: {
+    container: {
+      backgroundColor: colors.grey[100],
+    }
+  },
+  default: {
+    container: {
+      backgroundColor: colors.grey[50],
+    }
+  },
+  paper: {
+    container: {
+      backgroundColor: colors.white,
+    }
+  },
 }
 
-const darkBackground = {
-  statusBar: colors.black,
-  appBar: colors.grey[900], // #212121
-  default: colors.grey['A400'], // #333
-  paper: colors.grey[800], // #424242
+const darkBackground: Background = {
+  statusBar: {
+    container: {
+      backgroundColor: colors.black,
+    }
+  },
+  appBar: {
+    container: {
+      backgroundColor: colors.grey[900], // #212121
+    }
+  },
+  default:  {
+    container: {
+      backgroundColor: colors.grey['A400'], // #333
+    }
+  },
+  paper:  {
+    container: {
+      backgroundColor: colors.grey[800], // #424242
+    }
+  },
 }
 
 const hoverOverlayOpacity: OverlayOpacity = {

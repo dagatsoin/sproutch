@@ -15,7 +15,7 @@ export const DEFAULT_INTERPOLATOR_CONFIG: InterpolatorConfig = {
   output: ['0deg', '360deg'],
 }
 
-export const TRANSFORM_KEYS: AnimatedValueKeys[] = ['translateX', 'translateY', 'rotateX', 'rotateY', 'rotateZ', 'rotate', 'skewX', 'skewY', 'perspective', 'scale', 'scaleX', 'scaleY', 'matrix'] as TransformKeys[]
+export const TRANSFORM_KEYS: AnimatedValueKeys[] = ['translateX', 'translateY', 'rotateX', 'rotateY', 'rotateZ', 'rotate', 'skewX', 'skewY', 'perspective', 'scale', 'scaleX', 'scaleY', 'matrix']
 
 function isTransformKey(key: AnimatedValueKeys): key is TransformKeys {
   return TRANSFORM_KEYS.includes(key)

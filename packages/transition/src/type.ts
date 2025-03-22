@@ -1,5 +1,5 @@
-import { FilterKeysByProp, KeysOfUnion, UnionToIntersection, ArrayElementType, Is, IntersectionToUnion } from "@sproutch/core/utils/type"
-import { Animated, ViewStyle, TransformsStyle, AnimatableNumericValue } from "react-native"
+import { FilterKeysByProp, KeysOfUnion, UnionToIntersection, Is, IntersectionToUnion } from "@sproutch/core/utils/type"
+import { Animated, ViewStyle, TransformsStyle, AnimatableNumericValue, MatrixTransform, PerspectiveTransform, RotateTransform, RotateXTransform, RotateYTransform, RotateZTransform, ScaleTransform, ScaleXTransform, ScaleYTransform, SkewXTransform, SkewYTransform, TranslateXTransform, TranslateYTransform } from "react-native"
 
 /**
  * All keys of a style object which are animatable. Does not include the `tranform` property.
@@ -20,13 +20,19 @@ export type AnimatedValueKeys = ViewStyleAnimatableKeys | TransformKeys
 export type AnimatedValues = Partial<Record<AnimatedValueKeys, Animated.Value>>
 
 // Gather all tranformation types in an intersection type for easier manipulation
-type TransformTypes = UnionToIntersection<
-  Exclude<
-    ArrayElementType<TransformsStyle["transform"]>,
-    | string
-    | undefined
-  >
->
+type TransformTypes = PerspectiveTransform &
+  RotateTransform &
+  RotateXTransform &
+  RotateYTransform &
+  RotateZTransform &
+  ScaleTransform &
+  ScaleXTransform &
+  ScaleYTransform &
+  TranslateXTransform &
+  TranslateYTransform &
+  SkewXTransform &
+  SkewYTransform &
+  MatrixTransform
 
 
 export type TranformAnimatedStyle = {

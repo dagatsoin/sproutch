@@ -36,9 +36,9 @@ export function nativePaperStyle(
     },
     content: {
       flex: 1,
-      backgroundColor: theme.palette.background.paper,
       overflow: 'hidden',
       borderRadius,
+      ...(theme.palette.background.paper.container as ViewStyle),
       ...(style && style.content),
     },
   })
@@ -48,7 +48,7 @@ export function createWebPaperStyle(theme: Theme<unknown>) {
   return StyleSheet.create({
     root: {
       overflow: 'hidden',
-      backgroundColor: theme.palette.background.paper,
+      ...(theme.palette.background.paper.container as ViewStyle),
     }
   })
 }

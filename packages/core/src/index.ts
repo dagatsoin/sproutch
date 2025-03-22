@@ -8,6 +8,7 @@ export * from './molecules/button'
 
 export * from './layout/fade'
 export * from './layout/grid'
+export * from './layout/imageBackground'
 
 export * from './utils'
 
