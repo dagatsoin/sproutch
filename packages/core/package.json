@@ -1,6 +1,6 @@
 {
   "name": "@sproutch/core",
-  "version": "0.0.5-alpha.0",
+  "version": "0.1.0-alpha.0",
   "description": "A cross platform UI kit for web and react native Android/iOS.",
   "author": "Daniel Neveux",
   "homepage": "https://dagatsoin.github.io/sproutch/",
