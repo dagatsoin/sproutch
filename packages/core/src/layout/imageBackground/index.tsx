@@ -1,4 +1,4 @@
-import { ThemeContext } from '@/styles'
+import { ThemeContext } from '../../styles'
 import { useContext } from 'react'
 import { ImageBackground as RNImageBackground, type ImageBackgroundProps as RNImageBackgroundProps } from 'react-native'
 
