@@ -1,6 +1,19 @@
 {
-  "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true
-  }
+    "types": [
+      "vite/client"
+    ],
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
+    "esModuleInterop": true,
+    "strict": true,
+    "baseUrl": ".",
+    "jsx": "react-jsx",
+    "paths": {
+      "@sproutch/core": [
+        "../core/src"
+      ]
+    }
+  },
+  "extends": "expo/tsconfig.base"
 }

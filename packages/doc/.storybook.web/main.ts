@@ -1,40 +1,85 @@
 import { StorybookConfig } from "storybook/internal/types";
-import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
-import path from 'path'
+import { transform } from 'esbuild';
+import path from "path";
+import react from '@vitejs/plugin-react';
 
-module.exports = {
+const extensions = [
+  '.mjs',
+  '.web.tsx',
+  '.tsx',
+  '.web.ts',
+  '.ts',
+  '.web.jsx',
+  '.jsx',
+  '.web.js',
+  '.js',
+  '.css',
+  '.json',
+];
+
+export default {
   stories: [
     "../stories/**/*.mdx",
     "../stories/**/*.stories.@(js|jsx|ts|tsx)",
   ],
   addons: [
-    "@storybook/addon-links",
     "@storybook/addon-essentials",
-    "@storybook/addon-react-native-web",
-    "@storybook/addon-webpack5-compiler-babel",
+    "@storybook/addon-onboarding",
+    "@chromatic-com/storybook",
+    "@storybook/experimental-addon-test"
   ],
   framework: {
-    name: "@storybook/react-webpack5",
-    options: {
- 
-    },
+    "name": "@storybook/react-vite",
+    "options": {}
   },
-  webpackFinal: async (config) => {
-    if (config.resolve) {
-      config.resolve.plugins = [
-        ...(config.resolve.plugins || []),
-        new TsconfigPathsPlugin({
-          configFile: "web.tsconfig.json",
-          
-        }),
-      ];
-      
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        '@sproutch/core': path.resolve(__dirname, '../core/src'),
-      };
-      return config;
+  typescript: {
+    check: true,
+  },
+  viteFinal: async (config) => {
+    config.plugins.push(react())
+
+    config.plugins.push({
+      name: 'fix-expo-vector-icons-jsx',
+      enforce: 'pre',
+      async transform(code, id: string) {
+        if (id.match(/(@expo\/vector-icons|react-native-vector-icons).+js\b/gm)) {
+          const result = await transform(code, {
+            loader: 'jsx',
+            target: 'es2015',
+            sourcemap: true,
+          });
+          return { code: result.code, map: result.map };
+        }
+      },
+    });
+
+    // New plugin to transform object-utils.js to ESM exports
+    config.plugins.push({
+      name: 'cjs-to-esm-object-utils',
+      enforce: 'pre',
+      transform(code, id) {
+        if (id.match(/react-native-vector-icons\/lib\/object-utils.js/gm)) {
+          return code.replace(
+            /module\.exports\s*=\s*{([^}]+)}/,
+            (_, exportsContent) => `export {${exportsContent.trim()}};`
+          );
+        }
+      },
+    });
+    
+    config.resolve = {
+      ...config.resolve,
+      extensions,
+      alias: [
+          ...(Array.isArray(config.resolve.alias) ? config.resolve.alias : Object.entries(config.resolve.alias).map(([find, replacement]) => ({ find, replacement }))),
+          { find: '@sproutch/core', replacement: path.resolve(__dirname, '../../core/src') },
+          { find: 'react-native', replacement: 'react-native-web' },
+          { find: '@expo/vector-icons', replacement: '@expo/vector-icons/build/vendor/react-native-vector-icons'}
+      ],
     }
-    return config;
+
+    config.optimizeDeps.exclude = ['@expo/vector-icons', 'react-native-vector-icons']
+
+    return config
   },
 } as StorybookConfig;

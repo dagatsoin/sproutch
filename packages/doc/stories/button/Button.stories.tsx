@@ -1,7 +1,7 @@
 import { BorderImage, Button } from '@sproutch/core'
 import { View } from 'react-native'
 import { Meta, StoryObj } from '@storybook/react';
-import FontAwesome from '@expo/vector-icons/build/FontAwesome';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const meta: Meta<typeof Button> = {
   title: 'Core/Molecule/Button/Regular',

@@ -1,7 +1,7 @@
 import { BorderImage, CircleButton } from '@sproutch/core'
 import { View } from 'react-native'
 import { Meta, StoryObj } from '@storybook/react';
-import FontAwesome from '@expo/vector-icons/build/FontAwesome';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const meta: Meta<typeof CircleButton> = {
   title: 'Core/Molecule/Button/Circle',

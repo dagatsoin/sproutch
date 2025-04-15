@@ -2,7 +2,6 @@ import { ImageBackground } from '@sproutch/core';
 import type { Meta, StoryObj } from '@storybook/react';
 import { View } from 'react-native';
 
-
 const meta: Meta<typeof ImageBackground> = {
   title: 'Core/Atoms/Image background',
   component: ImageBackground,
@@ -11,7 +10,15 @@ const meta: Meta<typeof ImageBackground> = {
     Story => (
       <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
         <View style={{ width: 128, height: 256, justifyContent: 'center', alignItems: 'center', borderColor: 'transparent' }}>
-          <Story />
+          <ImageBackground 
+            source={{ uri: "https://i.ibb.co/Yhs3Ff5/btn-bg.png"}}
+            style={{
+              width: 128,
+              height: 128,
+              left: 64
+            }}
+            
+          />
           <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: '#2C262155'}}/>
         </View>
       </View>
