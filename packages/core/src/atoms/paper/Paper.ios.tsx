@@ -1,9 +1,8 @@
-import * as React from 'react'
-
 import { ThemeContext } from '../../styles/ThemeContext'
 import { PaperProps } from './PaperProps'
 import { nativePaperStyle, shadows } from './style'
 import { View } from 'react-native'
+import { useContext } from 'react'
 
 export default function Paper(props: PaperProps) {
   const { elevation, style = {}, ...otherProps } = props
@@ -11,18 +10,15 @@ export default function Paper(props: PaperProps) {
   const shadow = !!elevation && elevation > 0
       ? shadows.native[elevation - 1]
       : []
+  const theme = useContext(ThemeContext)
+  const styles = nativePaperStyle(theme, style, borderRadius)
 
-  return <ThemeContext.Consumer>
-    {theme => {
-      const styles = nativePaperStyle(theme, style, borderRadius)
-      return (
-        <View
-          style={[styles.root, {boxShadow: shadow}]}
-          {...otherProps}
-        >
-          <View style={styles.content} {...otherProps} />
-        </View>
-      )
-    }}
-  </ThemeContext.Consumer>
+  return (
+    <View
+      style={[styles.root, {boxShadow: shadow}]}
+      {...otherProps}
+    >
+      <View style={styles.content} {...otherProps} />
+    </View>
+  )
 }

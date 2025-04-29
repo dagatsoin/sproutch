@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react'
+import { PropsWithChildren, useContext } from 'react'
 import { View } from 'react-native'
 
 import { ThemeContext } from '../../styles/ThemeContext'
@@ -11,17 +11,13 @@ export default function Paper(props: PropsWithChildren<PaperProps>) {
 
   const { style = {}, ...rest} = props
 
+  const theme = useContext(ThemeContext)
+  const rootStyle = createWebPaperStyle(theme)
+
   return (
-    <ThemeContext.Consumer>
-      {theme => {
-        const rootStyle = createWebPaperStyle(theme)
-        return (
-          <View
-            style={[rootStyle.root, style.root, style.content, { boxShadow }]}
-            {...rest}
-          />
-        )
-      }}
-    </ThemeContext.Consumer>
+    <View
+      style={[rootStyle.root, style.root, style.content, { boxShadow }]}
+      {...rest}
+    />
   )
 }
