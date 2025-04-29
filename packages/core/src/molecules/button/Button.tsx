@@ -75,7 +75,7 @@ export const Button = React.forwardRef(function(
     },
   })
 
-  const ripple = React.useRef<Emitter>()
+  const ripple = React.useRef<Emitter>(undefined)
   const [spring, api] = useSpring(() => ({ from: { opacity: 0 }, duration: 75 }))
 
   const overlayFadeStyle = React.useMemo(() => ({...fitParent.root, ...spring}), [])

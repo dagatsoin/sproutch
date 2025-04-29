@@ -35,8 +35,8 @@ function noop() { }
 function Tab(props: CompleteProps & Omit<Touchable, 'onPointerDown'>) {
   const theme = useContext(ThemeContext)
   const [isHover, setIsHover] = useState(false)
-  const layout = useRef<LayoutRectangle>()
-  const ripple = useRef<Emitter>()
+  const layout = useRef<LayoutRectangle>(undefined)
+  const ripple = useRef<Emitter>(undefined)
   const isActionAllowed = useRef(false)
 
   const onLayout = useRef((newLayout: LayoutRectangle) => {

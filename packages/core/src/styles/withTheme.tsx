@@ -30,7 +30,7 @@ type PropInjector<InjectedProps, AdditionalProps = Record<string, any>> = <
   component: C
 ) => React.ComponentType<
   Omit<
-    JSX.LibraryManagedAttributes<C, React.ComponentProps<C>>,
+    React.JSX.LibraryManagedAttributes<C, React.ComponentProps<C>>,
     keyof InjectedProps
   > &
     AdditionalProps

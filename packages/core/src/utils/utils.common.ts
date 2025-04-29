@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { GestureResponderEvent, StyleProp } from 'react-native'
+import { GestureResponderEvent, ImageSourcePropType, StyleProp } from 'react-native'
 
 // @credit https://github.com/chodorowicz/ts-debounce/blob/master/src/index.ts
 /**
@@ -141,4 +141,20 @@ export function componentDidMount(cb: () => void) {
 
 export function componentWillUnmount(cb: () => void) {
   return useEffect(() => cb, [])
+}
+
+
+
+export function toBackgroundURL(source: ImageSourcePropType) {
+    if (Array.isArray(source)) {
+      console.warn("[BackgroundImage] Multiple source are not supported yet.")
+      return source[0]?.uri
+    }
+    if (typeof source === 'number') {
+      return source.toString()
+    }
+    return (
+      source.uri // for explicit source declaration
+      ?? source as string // in case of require/import use
+    )
 }

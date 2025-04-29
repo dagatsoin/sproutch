@@ -1,0 +1,27 @@
+{
+  "version": "v1",
+  "packages": {
+    "react-spring": {
+      "signature": "d3ee1f872ad14a4246cce5c1f9ccaa03",
+      "file": true
+    },
+    "@react-spring/animated": {
+      "signature": "5c20162d64c8a3a850d8ab56917ed3d2",
+      "file": true
+    },
+    "@react-spring/core": {
+      "signature": "c37ed889b80d1d1eaf36212a6aedd2e8",
+      "file": true
+    },
+    "@react-spring/native": {
+      "signature": "b48e0f857cc8e1186e5283076ec8ec6c",
+      "file": true,
+      "replaced": "^9.7.5"
+    },
+    "@react-spring/web": {
+      "signature": "84721fb66570d0b482677ed877a62c1c",
+      "file": true,
+      "replaced": "^9.7.5"
+    }
+  }
+}

@@ -203,10 +203,7 @@ export const tabsBarStyle = function({
 }): { style: TabsBarStyle, paddingHorizontal: number} {
   const tabHeight = options && options.hasIconOnTop ? 72 : 48
 
-  const tabBackgroundColor =
-    palette === undefined || palette === ''
-      ? theme.palette.primary.main
-      : theme.palette.background.default
+
 
   const paddingHorizontal = !!options && options.isScrollEnabled ? 52 : 0
 
@@ -231,7 +228,7 @@ export const tabsBarStyle = function({
         ),
       },
       container: {
-        backgroundColor: tabBackgroundColor,
+        backgroundColor: 'blue',
         paddingHorizontal,
         ...(style.container as object),
         ...override(
@@ -264,7 +261,7 @@ export const tabsBarStyle = function({
           },
         }),
 
-        backgroundColor: tabBackgroundColor,
+        backgroundColor: 'blue',
 
         ...(style.leftIndicator as object),
         ...override(
@@ -286,7 +283,7 @@ export const tabsBarStyle = function({
           },
         }),
 
-        backgroundColor: tabBackgroundColor,
+        backgroundColor: 'blue',
 
         ...(style.rightIndicator as object),
         ...override(

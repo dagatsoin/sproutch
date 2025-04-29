@@ -8,7 +8,7 @@ import { BorderImageProps } from './BorderImageProps'
 const style = StyleSheet.create({ root: { left: 0, top: 0, bottom: 0, right: 0, position: "absolute" } });
 
 export function BorderImage(props: BorderImageProps) {
-  const { uri, borderWidth, sliceWidth } = props
+  const { source, borderWidth, sliceWidth } = props
   const [layout, setLayout] = useState<LayoutRectangle>()
 
   // Prevent to create a function at each render
@@ -19,7 +19,7 @@ export function BorderImage(props: BorderImageProps) {
   const borders = useMemo(() => layout
    ? renderBorders(props, layout)
    : <></>,
-   [uri, borderWidth, sliceWidth, layout]
+   [source, borderWidth, sliceWidth, layout]
   )
 
   return (
@@ -36,7 +36,7 @@ export function BorderImage(props: BorderImageProps) {
 }
 
 function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
-  const { borderWidth, uri } = props
+  const { borderWidth, source } = props
 
   if (!layout) return <></> // wait to kwnow the View size
 
@@ -59,7 +59,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
           transform: [{ scaleX: layout.width }],
         }}
         resizeMode="cover"
-        source={{ uri }}
+        source={source}
       />
     </View>
   )
@@ -84,7 +84,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
           width: borderWidth * 2,
         }}
         resizeMode="cover"
-        source={{uri}}
+        source={source}
       />
     </View>
   )
@@ -111,7 +111,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
           transform: [{ scaleY: layout.height }],
         }}
         resizeMode="cover"
-        source={{uri}}
+        source={source}
       />
     </View>
   )
@@ -137,7 +137,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
           width: borderWidth * 2,
         }}
         resizeMode="cover"
-        source={{uri}}
+        source={source}
       />
     </View>
   )
@@ -165,7 +165,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
           transform: [{ scaleX: layout.width }],
         }}
         resizeMode="cover"
-        source={{uri}}
+        source={source}
       />
     </View>
   )
@@ -190,7 +190,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
           width: borderWidth * 2,
         }}
         resizeMode="cover"
-        source={{uri}}
+        source={source}
       />
     </View>
   )
@@ -214,7 +214,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
           transform: [{ scaleY: layout.height }],
         }}
         resizeMode="cover"
-        source={{uri}}
+        source={source}
       />
     </View>
   )
@@ -236,7 +236,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
           width: borderWidth * 2,
         }}
         resizeMode="cover"
-        source={{uri}}
+        source={source}
       />
     </View>
   )

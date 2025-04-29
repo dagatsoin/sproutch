@@ -176,7 +176,7 @@ type Story = StoryObj<TabBarPropsAndCustomArgs>;
 export default meta;
 
 export const Basic: Story = {
-  render: (props) => (
+  render: (props: any) => (
     <View
       style={{
         flex: 1,
@@ -197,7 +197,7 @@ export const Basic: Story = {
           ? renderCustomCursor
           : undefined
       }
-        leftScrollButton={theme => (
+        leftScrollButton={(theme: any) => (
           <View
             style={{
               flex: 1,
@@ -216,7 +216,7 @@ export const Basic: Story = {
             />
           </View>
         )}
-        rightScrollButton={theme => (
+        rightScrollButton={(theme: any) => (
           <View
             style={{
               flex: 1,

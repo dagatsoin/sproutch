@@ -81,7 +81,7 @@ export function Transition<T>({
   type Style = Partial<Record<keyof TranformAnimatableProps, Interpolation<number, string>>>[];
 
   return transitions((props, item, _state, key) => {
-    const {style, transformKeys} = splitStyle(props)
+    const {style, transformKeys} = splitStyle(props as any)
     const transforms: Array<[keyof TranformAnimatableProps, Interpolation<number, string | number | readonly (string | number)[]> | SpringValue]> = []
     
     for (const key of transformKeys) {
@@ -110,7 +110,7 @@ export function Transition<T>({
           case "scaleX":
           case "scaleY":
           case "perspective":
-            transforms.push([key, value])
+            transforms.push([key, value as any])
             break;
           case "skewX":
           case "skewY":
@@ -123,7 +123,7 @@ export function Transition<T>({
           break;
           case "matrix":
             console.warn("[Sproutch] matrix is not currently supported in animated transition")
-            transforms.push([key, value])
+            transforms.push([key, value as any])
             break;
         }
       }

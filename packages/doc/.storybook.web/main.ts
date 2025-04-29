@@ -1,4 +1,5 @@
 import { StorybookConfig } from "storybook/internal/types";
+import type { UserConfig } from 'vite'
 import { transform } from 'esbuild';
 import path from "path";
 import react from '@vitejs/plugin-react';
@@ -22,6 +23,7 @@ export default {
     "../stories/**/*.mdx",
     "../stories/**/*.stories.@(js|jsx|ts|tsx)",
   ],
+  staticDirs: ['../assets'],
   addons: [
     "@storybook/addon-essentials",
     "@storybook/addon-onboarding",
@@ -35,10 +37,10 @@ export default {
   typescript: {
     check: true,
   },
-  viteFinal: async (config) => {
-    config.plugins.push(react())
+  viteFinal: async (config: UserConfig) => {
+    config.plugins?.push(react())
 
-    config.plugins.push({
+    config.plugins?.push({
       name: 'fix-expo-vector-icons-jsx',
       enforce: 'pre',
       async transform(code, id: string) {
@@ -54,7 +56,7 @@ export default {
     });
 
     // New plugin to transform object-utils.js to ESM exports
-    config.plugins.push({
+    config.plugins?.push({
       name: 'cjs-to-esm-object-utils',
       enforce: 'pre',
       transform(code, id) {
@@ -71,14 +73,17 @@ export default {
       ...config.resolve,
       extensions,
       alias: [
-          ...(Array.isArray(config.resolve.alias) ? config.resolve.alias : Object.entries(config.resolve.alias).map(([find, replacement]) => ({ find, replacement }))),
+          ...(Array.isArray(config.resolve?.alias) ? config.resolve.alias : Object.entries(config.resolve?.alias as Record<string, unknown>).map(([find, replacement]) => ({ find, replacement }))),
           { find: '@sproutch/core', replacement: path.resolve(__dirname, '../../core/src') },
+          { find: '@sproutch/tabs', replacement: path.resolve(__dirname, '../../tabs') },
+          { find: '@sproutch/transition', replacement: path.resolve(__dirname, '../../transition') },
           { find: 'react-native', replacement: 'react-native-web' },
           { find: '@expo/vector-icons', replacement: '@expo/vector-icons/build/vendor/react-native-vector-icons'}
       ],
     }
 
-    config.optimizeDeps.exclude = ['@expo/vector-icons', 'react-native-vector-icons']
+    if(config.optimizeDeps)
+      config.optimizeDeps.exclude = ['@expo/vector-icons', 'react-native-vector-icons']
 
     return config
   },

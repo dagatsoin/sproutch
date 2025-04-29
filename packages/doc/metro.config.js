@@ -17,7 +17,6 @@ defaultConfig.resolver.nodeModulesPaths = [
 
 defaultConfig.transformer.unstable_allowRequireContext = true;
 
-
 module.exports = withStorybook(defaultConfig, {
   // set to false to disable storybook specific settings
   // you can use a env variable to toggle this

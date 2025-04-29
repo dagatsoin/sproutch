@@ -121,7 +121,7 @@ class Tabs extends React.Component<CompleteProps, State> {
     )
   }
 
-  get tabs(): React.ReactNodeArray {
+  get tabs(): React.ReactElement[] {
     return this.props.tabs.map(props => (
       <Tab key={props.id} {...props} {...this.bindTab(props.id)} />
     ))
@@ -421,7 +421,7 @@ class Tabs extends React.Component<CompleteProps, State> {
     return (
       <>
         <ScrollView
-          ref={(comp: ScrollView) => (this.scrollViewRef = comp)}
+          ref={(comp: ScrollView) => {this.scrollViewRef = comp}}
           scrollEnabled={isScrollEnabled && !isFrozen}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
@@ -857,4 +857,4 @@ function getFirstEntirelyDisplayedTab(
     .find(t => !isTabOutsideOnLeft(t, tabsLayout))
 }
 
-export default withTheme(Tabs)
+export default withTheme(Tabs) as any

@@ -12,6 +12,9 @@
     "paths": {
       "@sproutch/core": [
         "../core/src"
+      ],
+      "@sproutch/tabs": [
+        "../tabs/src"
       ]
     }
   },

@@ -1,30 +1,47 @@
-import { BorderImage } from '@sproutch/core';
+import { BackgroundImage, BorderImage } from '@sproutch/core';
 import type { Meta, StoryObj } from '@storybook/react';
-import { View } from 'react-native';
+import { ImageSourcePropType, View } from 'react-native';
+import BtnBorder from '../../assets/btn-bg.png'
+import SpeedFlask from '../../assets/flask_speed.png'
 
+type BorderImageCustomArgs = React.ComponentProps<typeof BorderImage> & {
+  viewWidth: number
+  viewHeight: number
+};
 
-const meta: Meta<typeof BorderImage> = {
+const meta: Meta<BorderImageCustomArgs> = {
   title: 'Core/Atoms/Border image',
   component: BorderImage,
   tags:['!dev'],
   decorators: [
-    (Story, context) => (
-      <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-        <View style={{ width: 128, height: 256, justifyContent: 'center', alignItems: 'center', borderWidth: context.args.borderWidth, borderColor: 'transparent' }}>
-          <Story />
-          <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: '#2C262155'}}/>
-        </View>
+    (Story) => (
+      <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>  
+        <Story />
       </View>
     ),
   ],
+  render: (args) => (
+    <View style={{ width: args.viewWidth, height: args.viewHeight, justifyContent: 'center', alignItems: 'center', borderWidth: args.borderWidth, borderColor: 'transparent', padding: args.borderWidth }}>
+      <BorderImage {...args}/>
+      <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: '#2C2621'}}>
+        <BackgroundImage source={SpeedFlask as ImageSourcePropType} size='contain' style={{flex: 1, height: '100%' }} position='50% 50%'/>
+      </View>
+    </View>
+  )
 };
 
 export default meta;
-type Story = StoryObj<typeof BorderImage>;
+type Story = StoryObj<BorderImageCustomArgs>;
 
 export const Default: Story = {
+  argTypes: {
+    viewWidth: { control: { type: 'range', min: 64, max: 512 }},
+    viewHeight: { control: { type: 'range', min: 64, max: 512 }},
+  },
   args: {
-    uri: "https://i.ibb.co/Yhs3Ff5/btn-bg.png",
+    viewHeight: 256,
+    viewWidth: 256,
+    source: BtnBorder as ImageSourcePropType,
     borderWidth: 32,
     sliceWidth: 127,
   },

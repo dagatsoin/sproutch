@@ -1,5 +1,6 @@
 import { CSSProperties, useMemo } from 'react'
 import { BorderImageProps } from './BorderImageProps'
+import { toBackgroundURL } from '../../utils'
 
 /**
  * A low level component which simulates *partially* the behavior of the CSS [border-image](https://developer.mozilla.org/en-US/docs/Web/CSS/border-image) properties.
@@ -11,7 +12,7 @@ import { BorderImageProps } from './BorderImageProps'
  * - The border are displayed outside the container so the width of the container does not include the border width.
  */
 export function BorderImage(props: BorderImageProps) {
-  const { borderWidth, uri, sliceWidth } = props
+  const { borderWidth, source, sliceWidth } = props
 
   const style = useMemo<CSSProperties>(function () {
     return {
@@ -19,10 +20,10 @@ export function BorderImage(props: BorderImageProps) {
       inset: -borderWidth,
       borderWidth: borderWidth,
       borderStyle: 'solid',
-      borderImageSource: `url(${uri})`,
+      borderImageSource: `url(${toBackgroundURL(source)})`,
       borderImageSlice: `${sliceWidth}`,
     }
-  }, [borderWidth, sliceWidth, uri])
+  }, [borderWidth, sliceWidth, source])
   return (
     <div style={style} />
   )
