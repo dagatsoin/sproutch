@@ -61,6 +61,7 @@ export const Default: Story = {
   tags: ['!dev'],
   args: { 
     source: Lava as ImageSourcePropType,
+    repeat: false,
     position: "5% 90%",
     size: 'cover',
     imageSize: "50px 50px",

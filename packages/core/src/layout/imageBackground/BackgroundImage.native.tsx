@@ -1,13 +1,22 @@
 import { ThemeContext } from '../../styles'
 import { useContext, useLayoutEffect, useRef, useState } from 'react'
-import { DimensionValue, Image, ImageResizeMode, View } from 'react-native'
+import { DimensionValue, Image, View } from 'react-native'
 import { BackgroundImageProps } from './BackgroundImageProps'
+import { getSize } from './business'
 
 export function BackgroundImage(props: React.PropsWithChildren<BackgroundImageProps>) {
   const theme = useContext(ThemeContext)
+  const imageNaturalSize = useRef<{width: number, height: number}>(undefined)
   const imageRef = useRef<Image>(null)
   const containerRef = useRef<View>(null)
-  const [imagePosition, setPos] = useState<{left: number, top: number}>()
+  const [computedStyle, setStyle] = useState<Partial<{
+    top: number
+    right: number
+    bottom: number
+    left: number
+    width: DimensionValue
+    height: DimensionValue
+  }>>()
 
   const {
     style,
@@ -22,13 +31,18 @@ export function BackgroundImage(props: React.PropsWithChildren<BackgroundImagePr
   * Compute image dimension
   */
   useLayoutEffect(() => {
-    containerRef.current?.measure((_containerX, _containerY, containerWidth, containerHeight) => {
+    containerRef.current?.measure((containerX, containerY, containerWidth, containerHeight) => {
       imageRef.current?.measure((_imageX, _imageY, imageWidth, imageHeight) => {
 
-        if (size === 'stretch') {
-          setPos({left: 0, top: 0})
+        if(!imageNaturalSize.current) {
+          imageNaturalSize.current = { width: imageWidth, height: imageHeight }
         }
 
+        const imageComputedSize = getSize(
+          { x: containerX, y: containerY, width: containerWidth, height: containerHeight },
+          imageNaturalSize.current,
+          size,
+        )
         const hasPositionInPercent = position?.includes('%')
 
         const pos = position?.match(/\d+/g) as DimensionValue[]
@@ -40,33 +54,19 @@ export function BackgroundImage(props: React.PropsWithChildren<BackgroundImagePr
              * (y offset value) = (container height - image height) * (position y%)
              * @spec https://drafts.csswg.org/css-backgrounds/#background-position
              */
-            const left = (containerWidth - imageWidth) * Number(pos[0]) / 100
-            const top = (containerHeight - imageHeight) * Number(pos[1]) / 100
-            setPos({left, top})
+            const left = (containerWidth - imageComputedSize[0]) * Number(pos[0]) / 100
+            const top = (containerHeight - imageComputedSize[1]) * Number(pos[1]) / 100
+            const right = left + imageComputedSize[0]
+            const bottom = top + imageComputedSize[1]
+
+            setStyle({left, top, right, bottom, width: imageComputedSize?.[0], height: imageComputedSize?.[1] })
           } else {
-            setPos({left: Number(pos[0]), top: Number(pos[1])})
+            setStyle({left: Number(pos[0]), top: Number(pos[1]),/*  right, bottom, */ width: imageComputedSize?.[0], height: imageComputedSize?.[1] })
           }
         }
       })
     })
-  }, [setPos, position, size])
-
-  const hasDimensions = size && /%|px/.test(size)
-
-  const imageSize = size
-    ? size.includes('%')
-      ? size.split(' ') as DimensionValue[]
-      : size.includes('px')
-        ? size.match(/\d+/g) as DimensionValue[]
-        : null
-    : null
-
-  const resizeMode = size
-    && /cover|contain|stretch/.test(size)
-    ? size as ImageResizeMode
-    : hasDimensions
-      ? 'stretch'
-      : undefined
+  }, [setStyle, position, size])
 
   return <View
     ref={containerRef}
@@ -77,15 +77,13 @@ export function BackgroundImage(props: React.PropsWithChildren<BackgroundImagePr
     {...restProps}
   >
     <Image
+      // Optimization. Instead of toggle it in the computed style, setting here
+      // fix several edge cases.
+      resizeMode='stretch'
       ref={imageRef}
       style={{
         position: 'absolute',
-        inset: 0,
-        left: imagePosition?.left,
-        top: imagePosition?.top,
-        resizeMode,
-        width: imageSize?.[0],
-        height: imageSize?.[1],
+        ...computedStyle,
         ...theme.palette.background.default.image as object,
       }}
       source={source}
