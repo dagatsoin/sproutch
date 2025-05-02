@@ -1,12 +1,15 @@
 import { Paper } from '@sproutch/core'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Meta, StoryObj } from '@storybook/react';
+import { StyleSheet, Text, View } from 'react-native'
+import { range } from '../../utils';
 
 const styles = {
   paper: StyleSheet.create({
     root: {
+      borderRadius: 4,
       margin: 15,
-      width: 120,
-      height: 60,
+      width: 256,
+      height: 128,
     }
   }),
   content: StyleSheet.create({
@@ -18,247 +21,36 @@ const styles = {
   })
 }
 
-
-export default {
-  title: 'Core/Atoms/Paper',
-  tags:['!dev'],
-  component: () => (
-    <ScrollView
-      style={{ flex: 1 }}
-    >
-      <View
-        style={{
-          flexWrap: 'wrap',
-          flexDirection: 'row',
-        }}
-      >
-        <Paper
-          style={styles.paper}
-          elevation={0}
-        >
-          <View style={styles.content.root}>
-            <Text>0dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={1}
-        >
-          <View style={styles.content.root}>
-            <Text>1dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={2}
-        >
-          <View style={styles.content.root}>
-            <Text>2dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={3}
-        >
-          <View style={styles.content.root}>
-            <Text>3dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={4}
-        >
-          <View style={styles.content.root}>
-            <Text>4dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={5}
-        >
-          <View style={styles.content.root}>
-            <Text>5dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={6}
-        >
-          <View style={styles.content.root}>
-            <Text>6dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={7}
-        >
-          <View style={styles.content.root}>
-            <Text>7dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={8}
-        >
-          <View style={styles.content.root}>
-            <Text>8dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={9}
-        >
-          <View style={styles.content.root}>
-            <Text>9dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={10}
-        >
-          <View style={styles.content.root}>
-            <Text>10dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={11}
-        >
-          <View style={styles.content.root}>
-            <Text>11dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={12}
-        >
-          <View style={styles.content.root}>
-            <Text>12dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={13}
-        >
-          <View style={styles.content.root}>
-            <Text>13dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={14}
-        >
-          <View style={styles.content.root}>
-            <Text>14dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={15}
-        >
-          <View style={styles.content.root}>
-            <Text>15dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={16}
-        >
-          <View style={styles.content.root}>
-            <Text>16dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={17}
-        >
-          <View style={styles.content.root}>
-            <Text>17dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={18}
-        >
-          <View style={styles.content.root}>
-            <Text>18dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={19}
-        >
-          <View style={styles.content.root}>
-            <Text>19dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={20}
-        >
-          <View style={styles.content.root}>
-            <Text>20dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={21}
-        >
-          <View style={styles.content.root}>
-            <Text>21dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={22}
-        >
-          <View style={styles.content.root}>
-            <Text>22dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={23}
-        >
-          <View style={styles.content.root}>
-            <Text>23dp</Text>
-          </View>
-        </Paper>
-
-        <Paper
-          style={styles.paper}
-          elevation={24}
-        >
-          <View style={styles.content.root}>
-            <Text>24dp</Text>
-          </View>
-        </Paper>
-      </View>
-    </ScrollView>
+const meta: Meta<typeof Paper> = {
+  title: 'Core/Layout/Paper',
+  component: Paper,
+  argTypes: {
+    elevation: range({min: 0, max: 24, step: 1}),
+  },
+  decorators: (Story) => (
+    <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+      <Story />
+    </View>
   )
 }
 
-export const Basic = {};
+export default meta;
+
+type Story = StoryObj<typeof Paper>;
+
+export const Default: Story = {
+  tags: ['!dev'],
+  args: {
+    elevation: 1
+  },
+  render: args => (
+    <Paper
+      style={styles.paper}
+      elevation={args.elevation}
+    >
+      <View style={styles.content.root}>
+        <Text>{args.elevation}dp</Text>
+      </View>
+    </Paper>
+  )
+}
