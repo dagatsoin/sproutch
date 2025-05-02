@@ -17,7 +17,7 @@ export function BorderImage(props: BorderImageProps) {
   const style = useMemo<CSSProperties>(function () {
     return {
       position: 'absolute',
-      inset: -borderWidth,
+      inset: 0,
       borderWidth: borderWidth,
       borderStyle: 'solid',
       borderImageSource: `url(${toBackgroundURL(source)})`,

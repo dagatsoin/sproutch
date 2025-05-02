@@ -70,6 +70,7 @@ export default function({
     paper: StyleSheet.create({
       root: {
         height,
+        margin: Number(style?.root?.['borderRadius']?.toString()) ?? theme.shape.borderRadius,
         borderRadius: style?.root?.['borderRadius'] ?? theme.shape.borderRadius,
         ...override(
           theme.overrides,

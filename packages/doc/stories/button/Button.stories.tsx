@@ -1,7 +1,8 @@
 import { BorderImage, Button } from '@sproutch/core'
-import { View } from 'react-native'
+import { ImageSourcePropType, View } from 'react-native'
 import { Meta, StoryObj } from '@storybook/react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import BtnBorder from '../../assets/btn-bg.png'
 
 const meta: Meta<typeof Button> = {
   title: 'Core/Molecule/Button/Regular',
@@ -91,21 +92,11 @@ export const WithBackground: Story = {
     label: "CONTACT",
     iconSlot: iconStyle => <FontAwesome style={iconStyle} name="user" />,
     backgroundSlot: () => (
-      <View
-        style={{
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-        }}
-      >
         <BorderImage
-          uri="https://i.ibb.co/Yhs3Ff5/btn-bg.png"
+          source={BtnBorder as ImageSourcePropType}
           borderWidth={32}
           sliceWidth={127}
         />
-      </View>
     )
   }
 }
