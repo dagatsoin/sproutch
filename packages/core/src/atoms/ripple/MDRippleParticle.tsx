@@ -1,124 +1,102 @@
-import * as React from 'react'
-
-import { colorManipulator, Theme } from '../../styles'
-import { ParticleProps } from './ParticleProps'
-import { rippleStyle } from './style'
-import { Animated, Easing, RegisteredStyle, StyleSheet, ViewStyle } from 'react-native'
-
-const fadeOutDuration = 150
-const scaleDuration = 225
-const easing = Easing.bezier(0.4, 0, 0.2, 1)
+import { Animated, Easing, Platform, StyleSheet } from "react-native";
+import { ParticleProps } from "./ParticleProps";
+import { useEffect, useRef } from "react";
+import { rippleStyle } from "./style";
+import { colorManipulator, Theme } from "../../styles";
 
 export type MDRippleParticleOptions = {
   theme: Theme<unknown>
   color: string
 }
 
-class Particle extends React.PureComponent<
-  ParticleProps<MDRippleParticleOptions>,
-  Record<string, unknown>
-> {
-  private animatedScale = new Animated.Value(1)
-  private animatedOpacity: any
-  private animatedStyle!: { root: RegisteredStyle<ViewStyle> }
-  private runningAnimation = false
+const fadeOutDuration = 150
+const scaleDuration = 225
+const easing = Easing.bezier(0.4, 0, 0.2, 1)
 
-  public componentWillMount() {
-    const { options } = this.props
-    const color = options.color || '#000'
-    const overlayLuminance = colorManipulator.getLuminance(color)
-    const pressedOverlayOpacity = options.theme.palette.state.pressed
-    const overlayOpacity =
-      overlayLuminance < 0.3
-        ? pressedOverlayOpacity.dark
-        : overlayLuminance < 0.7
+export default function Particle(props: ParticleProps<MDRippleParticleOptions>) {
+  const animatedScaleRef = useRef(new Animated.Value(1))
+  const runningAnimationRef = useRef(false)
+
+  const { options, emitterLayout, x, y } = props
+  
+  const isDyingRef = useRef(props.isDying)
+  isDyingRef.current = props.isDying
+
+  const color = options.color || '#000'
+  const overlayLuminance = colorManipulator.getLuminance(color)
+  const pressedOverlayOpacity = options.theme.palette.state.pressed
+  const overlayOpacity =
+    overlayLuminance < 0.3
+      ? pressedOverlayOpacity.dark
+      : overlayLuminance < 0.7
         ? pressedOverlayOpacity.medium
         : pressedOverlayOpacity.light
 
-    this.animatedOpacity = new Animated.Value(overlayOpacity)
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    this.animatedStyle = StyleSheet.create({
-      root: {
-        transform: [{ scale: this.animatedScale }],
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        opacity: this.animatedOpacity,
-      }
-    }) as any
-  }
+  const animatedOpacityRef = useRef(new Animated.Value(overlayOpacity))
 
-  public componentDidMount() {
-    this.runningAnimation = true
-    Animated.timing(this.animatedScale, {
-      toValue: this.radiusTo / this.radiusFrom,
+  const animatedStyleRef = useRef(StyleSheet.create({
+    root: {
+      transform: [{ scale: animatedScaleRef.current }],
+      opacity: animatedOpacityRef.current,
+    }
+  }))
+
+  const { width, height } = emitterLayout
+
+  const radiusFrom = Math.min(width, height) / 2
+  const radiusTo = Math.sqrt(width ** 2 + height ** 2)
+
+  useEffect(function(){
+    runningAnimationRef.current = true
+    Animated.timing(animatedScaleRef.current, {
+      toValue: radiusTo / radiusFrom,
       duration: scaleDuration,
-      useNativeDriver: true,
+      useNativeDriver: Platform.OS !== 'web',
       easing,
-    }).start(this.onAnimateRadiusEnd.bind(this))
-  }
-
-  public componentWillReceiveProps(
-    newProps: ParticleProps<MDRippleParticleOptions>
-  ) {
-    const { isDying: fading } = this.props
-    if (newProps.isDying !== fading && !this.runningAnimation) {
-      this.fadeOut()
-    }
-  }
-
-  public render() {
-    const { width, height } = this.props.emitterLayout
-    const radiusFrom = Math.min(width, height) / 2
-    const { options, x, y } = this.props
-    const { color } = options
-    const styleSheet = rippleStyle({
-      x,
-      y,
-      radius: radiusFrom,
-      color,
+    }).start(function() {
+      runningAnimationRef.current = false
+      if (isDyingRef.current) {
+        fadeOut()
+      }
     })
-    return (
-      <Animated.View
-        style={[
-          styleSheet.ripple,
-          {
-            left: x - 5,
-            top: y - 5
-          },
-          this.animatedStyle.root,
-        ]}
-      />
-    )
-  }
+  }, [])
 
-  private get radiusFrom() {
-    const { width, height } = this.props.emitterLayout
-    return Math.min(width, height) / 2
-  }
+  function fadeOut() {
+    if (runningAnimationRef.current) return // already fading
 
-  private get radiusTo() {
-    const { width, height } = this.props.emitterLayout
-    return Math.sqrt(width ** 2 + height ** 2)
-  }
-
-  private onAnimateRadiusEnd() {
-    this.runningAnimation = false
-    if (this.props.isDying) {
-      this.fadeOut()
-    }
-  }
-
-  private fadeOut() {
-    if (this.runningAnimation) return // already fading
-
-    this.runningAnimation = true
+    runningAnimationRef.current = true
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    Animated.timing(this.animatedOpacity, {
+    Animated.timing(animatedOpacityRef.current, {
       toValue: 0,
       duration: fadeOutDuration,
       easing: Easing.linear,
       useNativeDriver: true,
-    }).start(this.props.onDeath)
+    }).start(props.onDeath)
   }
-}
+  
+  useEffect(() => {
+    if (isDyingRef.current && !runningAnimationRef.current) {
+      fadeOut()
+    }
+  }, [isDyingRef.current])
 
-export default Particle
+  const styleSheet = rippleStyle({
+    x,
+    y,
+    radius: radiusFrom,
+    color,
+  })
+
+  return (
+    <Animated.View
+      style={[
+        styleSheet.ripple,
+        {
+          left: x - 5,
+          top: y - 5
+        },
+        animatedStyleRef.current.root,
+      ]}
+    />
+  )
+}
