@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ImageSourcePropType, View } from 'react-native';
 import BtnBorder from '../../assets/btn-bg.png'
 import SpeedFlask from '../../assets/flask_speed.png'
+import { range } from '../../utils';
 
 type BorderImageCustomArgs = React.ComponentProps<typeof BorderImage> & {
   viewWidth: number
@@ -35,8 +36,8 @@ type Story = StoryObj<BorderImageCustomArgs>;
 
 export const Default: Story = {
   argTypes: {
-    viewWidth: { control: { type: 'range', min: 64, max: 512 }},
-    viewHeight: { control: { type: 'range', min: 64, max: 512 }},
+    viewWidth: range({min: 64, max: 512, step: 1}),
+    viewHeight: range({min: 64, max: 512, step: 1}),
   },
   args: {
     viewHeight: 256,
