@@ -120,7 +120,7 @@ export const Button = React.forwardRef(function(
       {backgroundSlot?.(theme)}
       {iconSlot?.(styles.icon.root)}
       {label
-        ? <Text style={styles.label.root}>{label}</Text>
+        ? <Text selectable={false} style={styles.label.root}>{label}</Text>
         : <></>
       }
       {badgeSlot?.(theme)}
