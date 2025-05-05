@@ -6,6 +6,10 @@ import { componentDidMount } from '../../utils'
 
 export type FadeProps = React.PropsWithChildren<{
   isVisible: boolean
+  /**
+   * Auto start the animation.
+   * eg: isVisible is set to 'true', the component will fade in at mount.
+   */
   isAnimatedOnMount?: boolean
   duration?: number
   style?: StyleProp<ViewStyle>
@@ -14,7 +18,8 @@ export type FadeProps = React.PropsWithChildren<{
 
 /**
  * A container which fade in/out its children.
- * The whole DOM/native tree is removed after the fade out animation.
+ * - The whole DOM/native tree is removed after the fade out animation.
+ * - `isAnimatedOnMount` enables automatic animation on mount
  */
 export const Fade = function(props: FadeProps) {
   const [ state, setState ]= useState<Partial<{

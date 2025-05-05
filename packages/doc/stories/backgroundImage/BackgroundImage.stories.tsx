@@ -12,7 +12,6 @@ const meta: Meta<BackgroundImageCustomArgs> = {
   title: 'Core/Layout/Background Image',
   component: BackgroundImage,
   argTypes: {
-    // foo is the property we want to remove from the UI
     style: {
       control: {disable: true},
     },

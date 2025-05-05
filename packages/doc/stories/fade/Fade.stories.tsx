@@ -19,9 +19,12 @@ const styles = StyleSheet.create({
 const meta: Meta<typeof Fade> = {
   title: 'Core/Layout/Fading container',
   tags:['!dev'],
+  argTypes: {
+    isAnimatedOnMount: { control: false }
+  },
   component: Fade,
-  render: () => {
-    const [isVisible, setIsVisible ] = useState(false)
+  render: (args) => {
+    const [isVisible, setIsVisible ] = useState(args.isVisible)
     return (
       <View style={styles.root}>
         <Button
@@ -34,7 +37,7 @@ const meta: Meta<typeof Fade> = {
         <View style={styles.fadeContainer}>
           <Fade
             isVisible={isVisible}
-            isAnimatedOnMount={false}
+            isAnimatedOnMount={args.isAnimatedOnMount}
           >
             <View>
               <Text>Han shot first. Period.</Text>
@@ -49,4 +52,8 @@ const meta: Meta<typeof Fade> = {
 export default meta;
 type Story = StoryObj<typeof Fade>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    isAnimatedOnMount: true
+  }
+};
