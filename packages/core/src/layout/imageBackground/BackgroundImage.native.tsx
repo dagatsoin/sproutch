@@ -66,7 +66,7 @@ export function BackgroundImage(props: React.PropsWithChildren<BackgroundImagePr
         }
       })
     })
-  }, [setStyle, position, size])
+  }, [props])
 
   return <View
     ref={containerRef}
