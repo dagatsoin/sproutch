@@ -1,5 +1,6 @@
 import { Button, Fade } from '@sproutch/core'
-import { useEffect, useState } from 'react'
+import { Meta, StoryObj } from '@storybook/react'
+import { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
 const styles = StyleSheet.create({
@@ -15,41 +16,12 @@ const styles = StyleSheet.create({
     height: 50,
   }
 })
-
-type SpoilerProps = {
-  isVisible: boolean
-}
-
-function Spoiler({ isVisible }: SpoilerProps) {
-  const isAnimatedOnMount = true
-  const [isRunning, setIsRunning] = useState(isAnimatedOnMount)
-
-  useEffect(function() {
-    if (isVisible) {
-      setIsRunning(true)
-    }
-  }, [isVisible])
-
-  return (isVisible || (!isVisible && isRunning)) && (
-    <Fade
-      isVisible={isVisible}
-      isAnimatedOnMount={isVisible}
-      onAnimationEnd={() => {
-        setIsRunning(false)
-      }}
-    >
-      <View>
-        <Text>Han shot first. Period.</Text>
-      </View>
-    </Fade>
-  )
-}
-
-const FadeMeta = {
+const meta: Meta<typeof Fade> = {
   title: 'Core/Layout/Fading container',
   tags:['!dev'],
-  component: () => {
-    const [isVisible, setIsVisible ] = useState(true)
+  component: Fade,
+  render: () => {
+    const [isVisible, setIsVisible ] = useState(false)
     return (
       <View style={styles.root}>
         <Button
@@ -60,13 +32,21 @@ const FadeMeta = {
           }}
         />
         <View style={styles.fadeContainer}>
-          <Spoiler isVisible={isVisible} />
+          <Fade
+            isVisible={isVisible}
+            isAnimatedOnMount={false}
+          >
+            <View>
+              <Text>Han shot first. Period.</Text>
+            </View>
+          </Fade>
         </View>
       </View>
     )
   }
 }
 
-export default FadeMeta;
+export default meta;
+type Story = StoryObj<typeof Fade>;
 
-export const Basic = {};
+export const Default: Story = {};

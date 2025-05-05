@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { StyleProp, ViewStyle } from 'react-native'
 import { AnimatedView } from '../../atoms/animated'
 import { useSpring } from '@react-spring/core'
@@ -12,28 +12,36 @@ export type FadeProps = React.PropsWithChildren<{
   onAnimationEnd?: () => void
 }>
 
+/**
+ * A container which fade in/out its children.
+ * The whole DOM/native tree is removed after the fade out animation.
+ */
 export const Fade = function(props: FadeProps) {
-  const [ shouldBeVisible, toggle ] = useState(props.isVisible)
-
-  const prevProps = useRef<FadeProps>({...props})
+  const [ state, setState ]= useState<Partial<{
+    shouldBeVisible: boolean
+    isRunning: boolean
+  }>>({
+    shouldBeVisible: props.isVisible,
+    isRunning: !!props.isAnimatedOnMount
+  })
 
   const [spring, animation] = useSpring(() => {
     // Initial state of the spring
     const { isAnimatedOnMount } = props
 
     const opacityFrom = isAnimatedOnMount
-      ? shouldBeVisible
+      ? props.isVisible
         ? 0
         : 1
-      : shouldBeVisible
+      : props.isVisible
       ? 1
       : 0
 
     const opacityTo = isAnimatedOnMount
-    ? shouldBeVisible
+    ? props.isVisible
       ? 1
       : 0
-    : shouldBeVisible
+    : props.isVisible
     ? 0
     : 1
 
@@ -42,6 +50,10 @@ export const Fade = function(props: FadeProps) {
       to: { opacity: opacityTo },
       duration: props.duration,
       onRest: function() {
+        setState(state => ({
+          ...state,
+          isRunning: false,
+        }))
         props.onAnimationEnd?.()
       }
     }
@@ -56,12 +68,13 @@ export const Fade = function(props: FadeProps) {
   useEffect(function() {
     animation.stop()
     animation.update({to: {opacity: props.isVisible ? 1 : 0 }})
-    
-    toggle(props.isVisible || (!props.isVisible && shouldBeVisible))
-      
+
+    setState({
+      isRunning: true,
+      shouldBeVisible: props.isVisible
+    })
+
     void animation.start()
-      
-    prevProps.current = { ...props }
   }, [props.isVisible])
 
   const animatedStyle = useMemo(() => ({
@@ -69,5 +82,5 @@ export const Fade = function(props: FadeProps) {
     ...spring,
   }), [props.style])
 
-  return <AnimatedView style={animatedStyle}>{shouldBeVisible && props.children}</AnimatedView>
+  return (state.shouldBeVisible || (!state.shouldBeVisible && state.isRunning)) && <AnimatedView style={animatedStyle}>{props.children}</AnimatedView>
 }
