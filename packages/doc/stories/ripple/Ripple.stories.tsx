@@ -1,50 +1,8 @@
 import * as React from 'react'
 
-import { IEmitter, Ripple } from '@sproutch/core'
+import { IEmitter, Ripple, RippleProperties } from '@sproutch/core'
 import { GestureResponderEvent, Pressable, StyleSheet, Text, View } from 'react-native'
-import { Meta } from '@storybook/react'
-
-function Playground() {
-  const [isClicked, setIsClicked] = React.useState(false)
-
-  const ripple = React.useRef<IEmitter>()
-
-  return (
-    <View style={style[1]}>
-        <View
-          style={{
-            backgroundColor: 'white',
-            width: 232,
-            height: 132,
-          }}
-        >
-          <View style={style[3]}>
-            <View style={style[4]}>
-              <Text style={{ textAlign: 'center' }}>
-                {isClicked ? 'Clicked' : 'Click! Click!'}
-              </Text>
-            </View>
-            <Ripple
-            color="#ff0000"
-              onRef={(e: IEmitter) => (ripple.current = e)}
-            />
-              <Pressable
-                style={style[5]}
-                onPress={() => {
-                  setIsClicked(true)
-                }}
-                onPressIn={(e: GestureResponderEvent) => {
-                  ripple.current?.onPressIn(e)
-                }}
-                onPressOut={(e: GestureResponderEvent) => {
-                  ripple.current?.onPressOut(e)
-                }}
-              />
-          </View>
-        </View>
-    </View>
-  )
-}
+import { Meta, StoryObj } from '@storybook/react'
 
 const style = StyleSheet.create({
   1: {
@@ -78,10 +36,51 @@ const style = StyleSheet.create({
   }
 })
 
-const RippleMeta: Meta<typeof Ripple> = {
+const meta: Meta<typeof Ripple> = {
   title: 'Core/Atoms/Ripple',
   tags:['!dev'],
-  component: Playground,
+  component: Ripple,
+  render() {
+    const [isClicked, setIsClicked] = React.useState(false)
+  
+    const ripple = React.useRef<IEmitter>(null)
+  
+    return (
+      <View style={style[1]}>
+          <View
+            style={{
+              backgroundColor: 'white',
+              width: 232,
+              height: 132,
+            }}
+          >
+            <View style={style[3]}>
+              <View style={style[4]}>
+                <Text style={{ textAlign: 'center' }}>
+                  {isClicked ? 'Clicked' : 'Click! Click!'}
+                </Text>
+              </View>
+              <Ripple
+              color="#ff0000"
+                onRef={(e: IEmitter) => (ripple.current = e)}
+              />
+                <Pressable
+                  style={style[5]}
+                  onPress={() => {
+                    setIsClicked(true)
+                  }}
+                  onPressIn={(e: GestureResponderEvent) => {
+                    ripple.current?.onPressIn(e)
+                  }}
+                  onPressOut={(e: GestureResponderEvent) => {
+                    ripple.current?.onPressOut(e)
+                  }}
+                />
+            </View>
+          </View>
+      </View>
+    )
+  },
   decorators: [
     (Story) => (
       <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
@@ -91,6 +90,7 @@ const RippleMeta: Meta<typeof Ripple> = {
   ],
 }
 
-export default RippleMeta;
+export default meta;
+type Story = StoryObj<RippleProperties>;
 
-export const Basic = {};
+export const Default: Story = {}

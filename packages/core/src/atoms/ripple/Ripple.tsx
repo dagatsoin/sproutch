@@ -8,7 +8,10 @@ export type RippleProperties = {
   onRef?: (emitter: Emitter) => void
 }
 
-export default ({ onRef, ...props }: RippleProperties) => {
+/**
+ * Material design ripple effect.
+ */
+export function Ripple({ onRef, ...props }: RippleProperties) {
   const theme = useContext(ThemeContext)
   return (
     <Emitter
