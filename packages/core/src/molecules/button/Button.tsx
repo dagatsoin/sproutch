@@ -9,6 +9,7 @@ import {
   PressableProps,
   MouseEvent,
   StyleProp,
+  Animated,
 } from 'react-native'
 
 import { fitParent, getMaterialOverlayColor } from '../../styles'
@@ -18,7 +19,7 @@ import { Paper } from '../../atoms/paper'
 import { Ripple } from '../../atoms/ripple'
 import Emitter from '../../atoms/ripple/Emitter'
 import createButtonStyle, { ButtonStyleOverride } from './style'
-import { useSpring, AnimatedView } from '../../atoms/animated'
+import { useRef } from 'react'
 
 export type ButtonProps = {
   isDisabled?: boolean
@@ -76,19 +77,27 @@ export const Button = React.forwardRef(function(
   })
 
   const ripple = React.useRef<Emitter>(undefined)
-  const [spring, api] = useSpring(() => ({ from: { opacity: 0 }, duration: 75 }))
-
-  const overlayFadeStyle = React.useMemo(() => ({...fitParent.root, ...spring}), [])
+  const opacityRef = useRef(new Animated.Value(0))
+  
+  const overlayFadeStyle = React.useMemo(() => ({...fitParent.root, ...{opacity: opacityRef.current}}), [])
 
   function onHoverIn(e: MouseEvent) {
-    void api.start({ to: { opacity: 1 } })
+    Animated.timing(opacityRef.current, {
+      toValue: 1,
+      duration: 75,
+      useNativeDriver: true,
+    }).start()
     props.onHoverIn?.(e)
   }
 
   function onHoverOut(e: MouseEvent) {
     // When a touch is released outside we need to trigger the onPressOut here.
     ripple.current?.onPressOut()
-    void api.start({ to: { opacity: 0 } })
+    Animated.timing(opacityRef.current, {
+      toValue: 0,
+      duration: 75,
+      useNativeDriver: true,
+    }).start()
     props.onHoverOut?.(e)
   }
 
@@ -125,9 +134,9 @@ export const Button = React.forwardRef(function(
       }
       {badgeSlot?.(theme)}
       {!isDisabled && (
-        <AnimatedView style={overlayFadeStyle}>
+        <Animated.View style={overlayFadeStyle}>
           <View style={styles.overlay.root} />
-        </AnimatedView>
+        </Animated.View>
       )}
       {!isDisabled && (
         <Ripple
