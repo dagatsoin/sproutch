@@ -1,7 +1,5 @@
-import { useEffect, useState, useMemo } from 'react'
-import { StyleProp, ViewStyle } from 'react-native'
-import { AnimatedView } from '../../atoms/animated'
-import { useSpring } from '@react-spring/core'
+import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
+import { Animated, StyleProp, StyleSheet, ViewStyle } from 'react-native'
 import { componentDidMount } from '../../utils'
 
 export type FadeProps = React.PropsWithChildren<{
@@ -30,62 +28,83 @@ export const Fade = function(props: FadeProps) {
     isRunning: !!props.isAnimatedOnMount
   })
 
-  const [spring, animation] = useSpring(() => {
+  const initialValue = useMemo(() => {
     // Initial state of the spring
-    const { isAnimatedOnMount } = props
-
-    const opacityFrom = isAnimatedOnMount
-      ? props.isVisible
-        ? 0
-        : 1
-      : props.isVisible
-      ? 1
-      : 0
-
-    const opacityTo = isAnimatedOnMount
-    ? props.isVisible
-      ? 1
-      : 0
-    : props.isVisible
-    ? 0
-    : 1
+    const { isAnimatedOnMount, isVisible } = props
 
     return {
-      from: { opacity: opacityFrom },
-      to: { opacity: opacityTo },
-      duration: props.duration,
-      onRest: function() {
-        setState(state => ({
-          ...state,
-          isRunning: false,
-        }))
-        props.onAnimationEnd?.()
-      }
+      opacityFrom: isAnimatedOnMount
+        ? Number(!isVisible)
+        : Number(isVisible),
+      opacityTo: isAnimatedOnMount
+        ? Number(isVisible)
+        : Number(!isVisible)
     }
   }, [])
 
+  const fadeAnim = useRef(new Animated.Value(initialValue.opacityFrom));
+
+  const onEnd = useCallback(function() {
+    setState(state => ({
+      ...state,
+      isRunning: false,
+    }))
+    props.onAnimationEnd?.()
+  }, [props.onAnimationEnd])
+
   componentDidMount(function() {
     if (props.isAnimatedOnMount) {
-      void animation.start()
+      Animated.timing(fadeAnim.current, {
+        toValue: initialValue.opacityTo,
+        duration: props.duration,
+        useNativeDriver: true,
+      }).start(onEnd)
     }
   })
 
   useEffect(function() {
-    animation.stop()
-    animation.update({to: {opacity: props.isVisible ? 1 : 0 }})
+
+    fadeAnim.current.stopAnimation()
+
+    Animated.timing(fadeAnim.current, {
+      toValue: Number(props.isVisible),
+      duration: props.duration,
+      useNativeDriver: true,
+    }).start(onEnd)
 
     setState({
       isRunning: true,
       shouldBeVisible: props.isVisible
     })
 
-    void animation.start()
   }, [props.isVisible])
 
-  const animatedStyle = useMemo(() => ({
-    padding: 10,
-    ...spring,
-  }), [props.style])
-
-  return (state.shouldBeVisible || (!state.shouldBeVisible && state.isRunning)) && <AnimatedView style={animatedStyle}>{props.children}</AnimatedView>
+  return (state.shouldBeVisible || (!state.shouldBeVisible && state.isRunning)) &&<Animated.View
+  style={[
+    styles.fadingContainer,
+    {
+      // Bind opacity to animated value
+      opacity: fadeAnim.current,
+    },
+  ]}>{props.children}</Animated.View>
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  fadingContainer: {
+    padding: 20,
+    backgroundColor: 'powderblue',
+  },
+  fadingText: {
+    fontSize: 28,
+  },
+  buttonRow: {
+    flexBasis: 100,
+    justifyContent: 'space-evenly',
+    marginVertical: 16,
+  },
+});
