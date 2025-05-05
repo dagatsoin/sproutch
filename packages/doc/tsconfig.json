@@ -15,6 +15,9 @@
       ],
       "@sproutch/tabs": [
         "../tabs/src"
+      ],
+      "@sproutch/transition": [
+        "../transition/src"
       ]
     }
   },

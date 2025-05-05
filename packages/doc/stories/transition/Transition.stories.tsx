@@ -1,4 +1,3 @@
-import React from 'react'
 import { fitParent } from '@sproutch/core';
 import { Transition } from '@sproutch/transition';
 import { Meta } from '@storybook/react'

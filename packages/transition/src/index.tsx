@@ -7,7 +7,7 @@ import React, { useEffect } from 'react';
 import { InterpolatorConfig, useTransition, useSpringRef, Interpolation, to, UseTransitionProps } from '@react-spring/core';
 import { Platform, ViewStyle } from 'react-native';
 import { AnimatableProps, AnimatedValueKeys, AnimatedValues, TranformAnimatableProps, TransformKeys, ViewStyleAnimatableKeys } from './type';
-import { AnimatedView } from '@sproutch/core';
+import { AnimatedView } from './animated';
 import { SpringValue } from '@react-spring/web';
 
 export const DEFAULT_INTERPOLATOR_CONFIG: InterpolatorConfig = {

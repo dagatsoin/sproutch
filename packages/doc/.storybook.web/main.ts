@@ -75,8 +75,8 @@ export default {
       alias: [
           ...(Array.isArray(config.resolve?.alias) ? config.resolve.alias : Object.entries(config.resolve?.alias as Record<string, unknown>).map(([find, replacement]) => ({ find, replacement }))),
           { find: '@sproutch/core', replacement: path.resolve(__dirname, '../../core/src') },
-          { find: '@sproutch/tabs', replacement: path.resolve(__dirname, '../../tabs') },
-          { find: '@sproutch/transition', replacement: path.resolve(__dirname, '../../transition') },
+          { find: '@sproutch/tabs', replacement: path.resolve(__dirname, '../../tabs/src') },
+          { find: '@sproutch/transition', replacement: path.resolve(__dirname, '../../transition/src') },
           { find: 'react-native', replacement: 'react-native-web' },
           { find: '@expo/vector-icons', replacement: '@expo/vector-icons/build/vendor/react-native-vector-icons'}
       ],

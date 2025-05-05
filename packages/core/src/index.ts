@@ -1,4 +1,3 @@
-export * from './atoms/animated'
 export * from './atoms/borderImage'
 export * from './atoms/paper'
 export * from './atoms/radialGradient'

@@ -24,7 +24,7 @@ const meta: Meta<typeof Fade> = {
   },
   component: Fade,
   render: (args) => {
-    const [isVisible, setIsVisible ] = useState(args.isVisible)
+    const [isVisible, setIsVisible ] = useState(true)
     return (
       <View style={styles.root}>
         <Button
@@ -54,6 +54,6 @@ type Story = StoryObj<typeof Fade>;
 
 export const Default: Story = {
   args: {
-    isAnimatedOnMount: true
+    isAnimatedOnMount: false
   }
 };

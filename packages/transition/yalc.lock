@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "@react-spring/types": {
+      "signature": "66489a90d2ef043356eb750f8a78c0b5",
+      "file": true
+    }
+  }
+}

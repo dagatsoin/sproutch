@@ -8,6 +8,12 @@
   "bugs": {
     "url": "https://github.com/dagatsoin/sproutch/issues"
   },
+  "exports": {
+    ".": {
+      "default": "./lib/transition/src/index.js",
+      "types": "./lib/transition/src/index.d.ts"
+    }
+  },
   "files": [
     "lib",
     "LICENSE"
@@ -45,7 +51,12 @@
       "pre-commit": "npm run pretty-quick"
     }
   },
+  "devDependencies": {
+    "@react-spring/types": "file:.yalc/@react-spring/types"
+  },
   "peerDependencies": {
+    "@react-spring/native": "10.0.0-beta.0",
+    "@react-spring/web": "10.0.0-beta.0",
     "@sproutch/core": "^0.0.5-alpha.0"
   }
 }

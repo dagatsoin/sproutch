@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react'
-import { Animated, StyleProp, StyleSheet, ViewStyle } from 'react-native'
+import { Animated, StyleProp, ViewStyle } from 'react-native'
 import { componentDidMount } from '../../utils'
 
 export type FadeProps = React.PropsWithChildren<{
@@ -19,18 +19,21 @@ export type FadeProps = React.PropsWithChildren<{
  * - The whole DOM/native tree is removed after the fade out animation.
  * - `isAnimatedOnMount` enables automatic animation on mount
  */
-export const Fade = function(props: FadeProps) {
+export const Fade = function({
+  isAnimatedOnMount,
+  isVisible = false,
+  ...props
+}: FadeProps) {
   const [ state, setState ]= useState<Partial<{
     shouldBeVisible: boolean
     isRunning: boolean
   }>>({
-    shouldBeVisible: props.isVisible,
-    isRunning: !!props.isAnimatedOnMount
+    shouldBeVisible: isVisible,
+    isRunning: !!isAnimatedOnMount
   })
 
   const initialValue = useMemo(() => {
     // Initial state of the spring
-    const { isAnimatedOnMount, isVisible } = props
 
     return {
       opacityFrom: isAnimatedOnMount
@@ -42,7 +45,7 @@ export const Fade = function(props: FadeProps) {
     }
   }, [])
 
-  const fadeAnim = useRef(new Animated.Value(initialValue.opacityFrom));
+  const animatedValueRef = useRef(new Animated.Value(initialValue.opacityFrom));
 
   const onEnd = useCallback(function() {
     setState(state => ({
@@ -53,8 +56,8 @@ export const Fade = function(props: FadeProps) {
   }, [props.onAnimationEnd])
 
   componentDidMount(function() {
-    if (props.isAnimatedOnMount) {
-      Animated.timing(fadeAnim.current, {
+    if (isAnimatedOnMount) {
+      Animated.timing(animatedValueRef.current, {
         toValue: initialValue.opacityTo,
         duration: props.duration,
         useNativeDriver: true,
@@ -64,47 +67,23 @@ export const Fade = function(props: FadeProps) {
 
   useEffect(function() {
 
-    fadeAnim.current.stopAnimation()
+    animatedValueRef.current.stopAnimation()
 
-    Animated.timing(fadeAnim.current, {
-      toValue: Number(props.isVisible),
+    Animated.timing(animatedValueRef.current, {
+      toValue: Number(isVisible),
       duration: props.duration,
       useNativeDriver: true,
     }).start(onEnd)
 
     setState({
       isRunning: true,
-      shouldBeVisible: props.isVisible
+      shouldBeVisible: isVisible
     })
 
-  }, [props.isVisible])
+  }, [isVisible])
 
-  return (state.shouldBeVisible || (!state.shouldBeVisible && state.isRunning)) &&<Animated.View
-  style={[
-    styles.fadingContainer,
-    {
-      // Bind opacity to animated value
-      opacity: fadeAnim.current,
-    },
-  ]}>{props.children}</Animated.View>
+  return (state.shouldBeVisible || (!state.shouldBeVisible && state.isRunning)) && <Animated.View
+    style={{ ...props.style as object, opacity: animatedValueRef.current }}>
+      {props.children}
+    </Animated.View>
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  fadingContainer: {
-    padding: 20,
-    backgroundColor: 'powderblue',
-  },
-  fadingText: {
-    fontSize: 28,
-  },
-  buttonRow: {
-    flexBasis: 100,
-    justifyContent: 'space-evenly',
-    marginVertical: 16,
-  },
-});

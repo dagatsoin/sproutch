@@ -23,15 +23,12 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@react-spring/native": "^9.7.5",
-    "@react-spring/web": "^9.7.5",
     "react": "~19.0.0",
     "react-dom": "~19.0.0",
     "react-native-svg": "15.2.0",
     "react-native-web": "~0.20.0"
   },
   "devDependencies": {
-    "@react-spring/types": "file:.yalc/@react-spring/types",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "rimraf": "^5.0.5"

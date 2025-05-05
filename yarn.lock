@@ -2936,9 +2936,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-spring/types@file:.yalc/@react-spring/types::locator=%40sproutch%2Fcore%40workspace%3Apackages%2Fcore":
+"@react-spring/types@file:.yalc/@react-spring/types::locator=%40sproutch%2Ftransition%40workspace%3Apackages%2Ftransition":
   version: 9.7.5
-  resolution: "@react-spring/types@file:.yalc/@react-spring/types#.yalc/@react-spring/types::hash=2f8366&locator=%40sproutch%2Fcore%40workspace%3Apackages%2Fcore"
+  resolution: "@react-spring/types@file:.yalc/@react-spring/types#.yalc/@react-spring/types::hash=2f8366&locator=%40sproutch%2Ftransition%40workspace%3Apackages%2Ftransition"
   checksum: 10c0/6b4a4d8ced3e19ca45f0949e15909b1d6447efb3b575fb51e3b1219e993216b30ef3a6037e9d06e66b431ff93cb5b0de06594352a0a50141f6e23b85227252fc
   languageName: node
   linkType: hard
@@ -3189,13 +3189,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@sproutch/core@workspace:packages/core"
   dependencies:
-    "@react-spring/types": "file:.yalc/@react-spring/types"
     "@types/react": "npm:^19.1.2"
     "@types/react-dom": "npm:^19.1.2"
     rimraf: "npm:^5.0.5"
   peerDependencies:
-    "@react-spring/native": ^9.7.5
-    "@react-spring/web": ^9.7.5
     react: ~19.0.0
     react-dom: ~19.0.0
     react-native-svg: 15.2.0
@@ -3214,7 +3211,11 @@ __metadata:
 "@sproutch/transition@workspace:packages/transition":
   version: 0.0.0-use.local
   resolution: "@sproutch/transition@workspace:packages/transition"
+  dependencies:
+    "@react-spring/types": "file:.yalc/@react-spring/types"
   peerDependencies:
+    "@react-spring/native": 10.0.0-beta.0
+    "@react-spring/web": 10.0.0-beta.0
     "@sproutch/core": ^0.0.5-alpha.0
   languageName: unknown
   linkType: soft
