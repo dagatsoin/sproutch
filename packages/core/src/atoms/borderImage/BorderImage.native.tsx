@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState } from 'react'
-import { Image, LayoutChangeEvent, LayoutRectangle, StyleSheet, View } from 'react-native'
+import { useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { Image, StyleSheet, View } from 'react-native'
 
 import { BorderImageProps } from './BorderImageProps'
 
@@ -9,12 +9,15 @@ const style = StyleSheet.create({ root: { left: 0, top: 0, bottom: 0, right: 0, 
 
 export function BorderImage(props: BorderImageProps) {
   const { source, borderWidth, sliceWidth } = props
-  const [layout, setLayout] = useState<LayoutRectangle>()
+  const ref = useRef<View>(null)
+  const [layout, setLayout] = useState<{ width: number, height: number }>()
 
   // Prevent to create a function at each render
-  const onLayoutRef = useRef((e: LayoutChangeEvent) => {
-    setLayout(e.nativeEvent.layout)
-  })
+  useLayoutEffect(() => {
+    ref.current?.measure((_x, _y, width, height) => {
+      setLayout({ height, width})
+    })
+  }, [props])
 
   const borders = useMemo(() => layout
    ? renderBorders(props, layout)
@@ -23,22 +26,15 @@ export function BorderImage(props: BorderImageProps) {
   )
 
   return (
-    <View
-      // Passing a reference to the style instead of passing an object increases the performances.
-      // If we pass the object { flex: 1 }, at each render for each view in the application, a new oject will be created
-      // Internaly, each View instance will think this is a new object and will redraw and recompute itself.
-      style={style.root}
-      onLayout={onLayoutRef.current}
-    >
+    <View ref={ref} style={style.root}>
       {borders}
     </View>
   )
 }
 
-function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
-  const { borderWidth, source } = props
-
-  if (!layout) return <></> // wait to kwnow the View size
+function renderBorders(props: BorderImageProps, layout: { width: number, height: number }) {
+  const { growInside, borderWidth, source } = props
+  const borderOffset = growInside ? 0 : -borderWidth
 
   const borderTop = (
     <View
@@ -46,7 +42,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
         position: 'absolute',
         overflow: 'hidden',
         alignItems: 'center',
-        top: -borderWidth,
+        top: borderOffset,
         right: 0,
         left: 0,
         height: borderWidth,
@@ -56,7 +52,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
         style={{
           height: borderWidth * 2,
           width: 1.2,
-          transform: [{ scaleX: layout.width }],
+          transform: [{ scaleX: layout.width - (growInside ? borderWidth * 2 : 0)}],
         }}
         resizeMode="cover"
         source={source}
@@ -69,8 +65,8 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
       style={{
         position: 'absolute',
         overflow: 'hidden',
-        top: -borderWidth,
-        right: -borderWidth,
+        top: borderOffset,
+        right: borderOffset,
         width: borderWidth,
         height: borderWidth,
       }}
@@ -96,7 +92,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
         overflow: 'hidden',
         justifyContent: 'center',
         top: 0,
-        right: -borderWidth,
+        right: borderOffset,
         bottom: 0,
         width: borderWidth,
       }}
@@ -108,7 +104,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
           right: 0,
           width: borderWidth * 2,
           height: 1.01, // fix a weird bug where the value 1 produce gaps. Maybe a rounding related issue.
-          transform: [{ scaleY: layout.height }],
+          transform: [{ scaleY: layout.height - (growInside ? borderWidth * 2 : 0)}],
         }}
         resizeMode="cover"
         source={source}
@@ -121,8 +117,8 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
       style={{
         position: 'absolute',
         overflow: 'hidden',
-        bottom: -borderWidth,
-        right: -borderWidth,
+        bottom: borderOffset,
+        right: borderOffset,
         width: borderWidth,
         height: borderWidth,
       }}
@@ -149,9 +145,8 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
         overflow: 'hidden',
         alignItems: 'center',
         right: 0,
-        bottom: -borderWidth,
+        bottom: borderOffset,
         left: 0,
-        backgroundColor: 'red',
         height: borderWidth,
       }}
     >
@@ -162,7 +157,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
           bottom: 0,
           height: borderWidth * 2,
           width: 1.2, // fix a weird bug where the value 1 produce gaps. Maybe a rounding related issue.
-          transform: [{ scaleX: layout.width }],
+          transform: [{ scaleX: layout.width - (growInside ? borderWidth * 2 : 0)}],
         }}
         resizeMode="cover"
         source={source}
@@ -175,8 +170,8 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
       style={{
         position: 'absolute',
         overflow: 'hidden',
-        bottom: -borderWidth,
-        left: -borderWidth,
+        bottom: borderOffset,
+        left: borderOffset,
         width: borderWidth,
         height: borderWidth,
       }}
@@ -203,7 +198,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
         justifyContent: 'center',
         top: 0,
         bottom: 0,
-        left: -borderWidth,
+        left: borderOffset,
         width: borderWidth,
       }}
     >
@@ -211,7 +206,7 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
         style={{
           width: borderWidth * 2,
           height: 1.01,
-          transform: [{ scaleY: layout.height }],
+          transform: [{ scaleY: layout.height - (growInside ? borderWidth * 2 : 0)}],
         }}
         resizeMode="cover"
         source={source}
@@ -226,8 +221,8 @@ function renderBorders(props: BorderImageProps, layout: LayoutRectangle) {
         overflow: 'hidden',
         width: borderWidth,
         height: borderWidth,
-        left: -borderWidth,
-        top: -borderWidth,
+        left: borderOffset,
+        top: borderOffset,
       }}
     >
       <Image

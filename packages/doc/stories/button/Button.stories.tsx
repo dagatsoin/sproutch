@@ -92,11 +92,12 @@ export const WithBackground: Story = {
     label: "CONTACT",
     iconSlot: iconStyle => <FontAwesome style={iconStyle} name="user" />,
     backgroundSlot: () => (
-        <BorderImage
-          source={BtnBorder as ImageSourcePropType}
-          borderWidth={32}
-          sliceWidth={127}
-        />
+      <BorderImage
+        source={BtnBorder as ImageSourcePropType}
+        borderWidth={32}
+        sliceWidth={127}
+        growInside
+      />
     )
   }
 }

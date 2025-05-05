@@ -43,7 +43,8 @@ export const Default: Story = {
     viewHeight: 256,
     viewWidth: 256,
     source: BtnBorder as ImageSourcePropType,
-    borderWidth: 32,
+    borderWidth: 64,
     sliceWidth: 127,
+    growInside: false,
   },
 };

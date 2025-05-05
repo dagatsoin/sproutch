@@ -78,6 +78,7 @@ export const WithBackground: Story = {
         source={BtnBorder as ImageSourcePropType}
         borderWidth={32}
         sliceWidth={127}
+        growInside
       />
     ),
   }

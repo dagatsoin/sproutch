@@ -12,18 +12,18 @@ import { toBackgroundURL } from '../../utils'
  * - The border are displayed outside the container so the width of the container does not include the border width.
  */
 export function BorderImage(props: BorderImageProps) {
-  const { borderWidth, source, sliceWidth } = props
+  const { growInside, borderWidth, source, sliceWidth } = props
 
   const style = useMemo<CSSProperties>(function () {
     return {
       position: 'absolute',
-      inset: 0,
+      inset: growInside ? 0 : -borderWidth,
       borderWidth: borderWidth,
       borderStyle: 'solid',
       borderImageSource: `url(${toBackgroundURL(source)})`,
       borderImageSlice: `${sliceWidth}`,
     }
-  }, [borderWidth, sliceWidth, source])
+  }, [borderWidth, sliceWidth, source, growInside])
   return (
     <div style={style} />
   )
