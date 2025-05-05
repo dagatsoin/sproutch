@@ -1,0 +1,5 @@
+import{j as e}from"./extends-C7_UVhvk.js";import{F as n,V as s,s as u,B as m,T as f}from"./BackgroundImage-BQD4Zmgx.js";import{r as p}from"./index-R2V08a_e.js";const r=u.create({root:{flex:1,justifyContent:"center"},button:{flex:0},fadeContainer:{marginTop:50,height:50}}),x={title:"Core/Layout/Fading container",tags:["!dev"],argTypes:{isAnimatedOnMount:{control:!1}},component:n,render:d=>{const[o,c]=p.useState(!0);return e.jsxs(s,{style:r.root,children:[e.jsx(m,{style:{root:r.button},label:"Spoiler alert",onPress:()=>{c(!o)}}),e.jsx(s,{style:r.fadeContainer,children:e.jsx(n,{isVisible:o,isAnimatedOnMount:d.isAnimatedOnMount,children:e.jsx(s,{children:e.jsx(f,{children:"Han shot first. Period."})})})})]})}},t={args:{isAnimatedOnMount:!1}};var a,i,l;t.parameters={...t.parameters,docs:{...(a=t.parameters)==null?void 0:a.docs,source:{originalSource:`{
+  args: {
+    isAnimatedOnMount: false
+  }
+}`,...(l=(i=t.parameters)==null?void 0:i.docs)==null?void 0:l.source}}};const j=["Default"],b=Object.freeze(Object.defineProperty({__proto__:null,Default:t,__namedExportsOrder:j,default:x},Symbol.toStringTag,{value:"Module"}));export{b as F};
