@@ -4,11 +4,34 @@ import * as Ripple from './Ripple.stories';
 
 <Meta of={Ripple} />
 
-## Border image
+## Ripple
 
 <Canvas/>
 
 <Description/>
+
+Note that Ripple is passive and no event is bound out of the box. You need to manually trigger
+the Ripple.onPressIn Ripple.onPressOut event.
+
+```tsx
+<View>
+    <Ripple
+        color="#ff0000"
+        onRef={(e: IEmitter) => (ripple.current = e)}
+    />
+        <Pressable
+            onPress={() => {
+            setIsClicked(true)
+            }}
+            onPressIn={(e: GestureResponderEvent) => {
+            ripple.current?.onPressIn(e)
+            }}
+            onPressOut={(e: GestureResponderEvent) => {
+            ripple.current?.onPressOut(e)
+            }}
+        />
+</View>
+```
 
 ### Props
 
