@@ -9,7 +9,9 @@ const meta: Meta<typeof RadialGradient> = {
   tags:['!dev'],
   decorators: [(Story) => <View
     style={{
-      flex: 1,
+      width: 100,
+      height: 100,
+      display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
     }}
@@ -25,7 +27,6 @@ export const Radius: Story = {
   name: "Radius",
   argTypes: {
     radius: {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       options: [
         'closest-side',
         'closest-corner',
